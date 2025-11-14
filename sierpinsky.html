@@ -1,0 +1,15 @@
+<div class="contenido">
+  <h1>Fractales con JavaScript</h1>
+  <h2>Triángulo de Sierpinski</h2>
+  <div class="controles">
+    <label for="niveles">Nivel</label>
+    <input id="niveles" value="0" type="range" min="0" max="10" step="1" onchange="actualizarFractal(this.value)">
+    <input value="0" min="0" max="10" step="1" type="number" id="textInput" onchange="actualizarFractal(this.value)">
+    <div class="sep">
+      <input type="checkbox" onclick="animacion(this.checked)" id="animar">
+      <label for="animar">Animación</label>
+    </div>
+  </div>
+  <div class="cont">Cantidad de triángulos: <span id="cant">1</span></div>
+  <canvas id="myCanvas" width="401" height="401"></canvas>
+</div>
