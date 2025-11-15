@@ -4,5 +4,13 @@
 <body>
     <h1 id="cabecera" style="text-align: center;">Fontana de Trevi</h1>   
     <img src="Images/fontanaDeTrevi.jpg" alt="Fontana de Trevi" style="border-radius: 20px;display: block; margin-left: auto; margin-right: auto; width: 50%;">
+
+    <script>
+        document.getElementById("cabecera").style.color = "blue";
+        const encabezadoH1 = document.getElementById("cabecera");
+        alert("Tipo de nodo: " + encabezadoH1.nodeType + "\n" +
+            "Nombre del nodo: " + encabezadoH1.nodeName + "\n" +
+            "VAlor del nodo " + encabezadoH1.nodeValue );      
+    </script>
 </body>
 </html>
