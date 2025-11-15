@@ -3,16 +3,17 @@
 </head>
 <body>
     <h1 id="cabecera" style="text-align: center;">Fontana de Trevi</h1>   
-    <img src="Images/fontanaDeTrevi.jpg" alt="Fontana de Trevi" style="border-radius: 20px;display: block; margin-left: auto; margin-right: auto; width: 50%;">
+    <img src="Images/fontanaDeTrevi.jpg" alt="Fontana de Trevi" style="border-radius: 20px;display: block; margin-left: auto; margin-right: auto; width: 25%;">
 
     <script>
         document.getElementById("cabecera").style.color = "blue";
         const encabezadoH1 = document.getElementById("cabecera");
-        const textoEncabezadoH1 = encabezadoH1.firstChild;
+        //const textoEncabezadoH1 = encabezadoH1.firstChild;
         alert("Tipo de nodo: " + encabezadoH1.nodeType + "\n" +
             "Nombre del nodo: " + encabezadoH1.nodeName + "\n" +
             "VAlor del nodo " + encabezadoH1.nodeValue + "\n" +   
-            "El texto del encabezado es: " + textoEncabezadoH1.nodeValue);   
+            "El texto del encabezado es: " + encabezadoH1.firstChild.nodeValue + "\n" +
+            "El texto del encabezado es: " + encabezadoH1.innerHTML);
     </script>
     <p>La Fontana de Trevi es una fuente monumental situada en Roma, Italia.<br>
         Es una de las fuentes más famosas y emblemáticas del mundo, <br>
