@@ -1,0 +1,20 @@
+<html>  
+    <head charset="utf-8">
+    </head> 
+    <body>  
+        <h1 id="laCabecera" >La cabecera de la página</h1> 
+        <p>Jugamos con arrays en JavaScript.</p>  
+        <script>    
+            let mensaje ="";
+            const colores = ["Rojo", "Verde", "Azul", "Amarillo"];
+            colores[4]="negro"; //Añadir un nuevo color en la posición 4
+            colores.push("Blanco"); //Añadir un nuevo color al final del array
+            for (let i = 0; i < colores.length; i++) {
+                mensaje += "Color " + i + ": " + colores[i] + "\n";
+            }
+            alert(mensaje);
+        </script>
+
+    </body>
+
+</html>
