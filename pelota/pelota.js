@@ -3,8 +3,8 @@ let anchoVentana, altoVentana;
 let pelota;
 const tamanoPelota = 20;
 let pelotaX, pelotaY;
-let velocidadX = 4;
-let velocidadY = 4;
+let velocidadX = 1;
+let velocidadY = 1;
 
 window.addEventListener('load', iniciarJuego);
 
