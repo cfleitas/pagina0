@@ -18,7 +18,7 @@ function iniciarJuego() {
     pelota.style.display = 'block';
     pelota.style.left = pelotaX + 'px';
     pelota.style.top = pelotaY + 'px';
-    window.setInterval(moverPelota,1);
+    window.setInterval(moverPelota, 3);
 }
 
 function moverPelota() {
