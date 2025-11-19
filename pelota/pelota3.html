@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pelota Rebotando en DIV. 
+        </title>
+        
+        <style>            
+            #contenedor {
+                position: relative;
+                width: 50vw;
+                height: 50vh;
+                border: 2px solid black;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, 50%);                
+            }
+
+            #pelota {
+                position: absolute;
+                left: 100px;
+                top: 150px;
+            } 
+        </style>
+        <script src="pelota3.js">  </script> 
+    </head>
+    <body>
+        <p>Es un experimento para 
+            jugar con las coordenadas de la pelotita y ver en qué rangos se puede mover
+            jugando con la función "moverPelota"
+            Por lo pronto vemos que las coordenadas "pelotaX" y "pelotaY" son respecto
+            de la esquina superior izquierda del contenedor DIV
+            
+        </p>
+     <div id="contenedor">
+         <img id="pelota" src="bolaRoja.png"/>
+     </div>
+
+    </body>
+</html>
