@@ -6,12 +6,13 @@ let pelota;
 const tamanioPelota = 25;
 let pelotaX, pelotaY;
 let velocidadX = 1;
-let velocidadY = 1;
+let velocidadY =  1;
 
 window.addEventListener("load", iniciarJuego);
 
 function iniciarJuego() {
     contenedor = document.getElementById("contenedor");
+    mensajes = document.getElementById("mensajes");
     contenedorX = contenedor.getBoundingClientRect().left
     contenedorY = contenedor.getBoundingClientRect().top;
     anchoContenedor=contenedor.clientWidth;
@@ -23,19 +24,25 @@ function iniciarJuego() {
     pelota.style.display = "block";
     pelota.style.left = pelotaX + 'px';
     pelota.style.top = pelotaY + 'px';
-    window.setInterval(moverPelota, 1000); //lo uso para ver las coordenadas, no me interesa movimiento
+    window.setInterval(moverPelota, 1); //lo uso para ver las coordenadas, no me interesa movimiento
     }
 
 function moverPelota() {
-    pelotaX = 400;
-    pelotaY = 200;
+    pelotaX += velocidadX;
+    pelotaY += velocidadY;
+    if (pelotaX + tamanioPelota > anchoContenedor || pelotaX < 0) {
+        velocidadX = -velocidadX;
+    }
+    if (pelotaY + tamanioPelota > altoContenedor || pelotaY < 0) {
+        velocidadY = -velocidadY;
+    }
+        
     pelota.style.left = pelotaX + 'px';
     pelota.style.top = pelotaY + 'px';
    // contenedor.innerHTML = "Coordenadas pelotaX: " + pelotaX + " , pelotaY: " + pelotaY ; va bien pero borra la pelota
-   nuevoTexto = document.createElement("p");
+    nuevoTexto = document.getElementById("aviso");
+
 
     nuevoTexto.innerText = "Coordenadas pelotaX: " + pelotaX + " , pelotaY: " + pelotaY ;
-    contenedor.appendChild(nuevoTexto);
-
-    
+    //mensajes.appendChild(nuevoTexto);    
 }

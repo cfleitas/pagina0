@@ -20,6 +20,15 @@
                 left: 100px;
                 top: 150px;
             } 
+            #mensajes {
+                position: relative;
+                width: 20vw;
+                height: 20vh;
+                border: 5px solid blue;
+                top: 20%;
+                left: 30%;
+                transform: translate(-30%, 85%);                
+            }
         </style>
         <script src="pelota3.js">  </script> 
     </head>
@@ -29,11 +38,17 @@
             jugando con la función "moverPelota"
             Por lo pronto vemos que las coordenadas "pelotaX" y "pelotaY" son respecto
             de la esquina superior izquierda del contenedor DIV
-            
+
         </p>
+        
      <div id="contenedor">
          <img id="pelota" src="bolaRoja.png"/>
      </div>
+
+     <div id="mensajes">
+         <p id="aviso">Aquí se mostrarán las coordenadas de la pelota:</p> 
+    </div>
+
 
     </body>
 </html>
