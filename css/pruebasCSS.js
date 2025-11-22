@@ -35,12 +35,16 @@ function escribir(){
     let marginContenedor = estilosContenedor.margin;
 
 
-    
-    escribirParrafo.innerText ="mi texto nuevo";
-    escribirParrafo.innerHTML = "<br>mi texto con innerHTML<br>";
     escribirParrafo.style.color = "red";
 
-    escribirParrafo.innerText += "Ancho: " + anchoContenedor + ", Alto: " + altoContenedor + 
+    escribirParrafo.innerText ="mi texto nuevo";
+    escribirParrafo.innerHTML = "Aquí calculamos con:\n";
+    escribirParrafo.innerHTML += "estilosContenedor = window.getComputedStyle(contenedor)";
+    escribirParrafo.innerHTML +="anchoContenedor = estilosContenedor.width \n";
+
+    
+
+    escribirParrafo.innerText += "\n Ancho: " + anchoContenedor + ", Alto: " + altoContenedor + 
 ", Padding: " + paddingContenedor + ", Border: " + borderContenedor + 
 ", Margin: " + marginContenedor;
 
@@ -60,8 +64,11 @@ let altoDelContenedor= contenedor.clientHeight;
 
 otrasInformaciones.style.backgroundColor = "lightgreen";    
 
-
-otrasInformaciones.innerText = "El valor left boundingClientRect es: " + contenedorX +
+otrasInformaciones.innerText = "Haciendo uso de contenedor.getBoundingClientRect().left ...:\n";
+otrasInformaciones.innerText += "contenedor.clientWidth ...:\n";
+otrasInformaciones.innerText += "Todo esto obteniendo contenedor.:\n";
+otrasInformaciones.innerText += "contenedor=document.getElementById del Div\n";
+otrasInformaciones.innerText += "El valor left boundingClientRect es: " + contenedorX +
 " y el valor top boundingClientRect es: " + contenedorY;
 otrasInformaciones.innerText += "\n El ancho del contenedor es: " + anchoDelContenedor +
 " y el alto del contenedor es: " + altoDelContenedor;
