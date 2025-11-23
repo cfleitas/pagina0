@@ -2,6 +2,8 @@
 <head>
     <meta charset="utf-8">
     <title>Canvas Ejemplos básicos</title>
+    
+
 </head>
 <body>
     <h1>Ejemplos básicos de Canvas</h1>
@@ -9,8 +11,12 @@
     <canvas id="miCanvas" width="500" height="400" style="border:1px solid #000000;">
         Su navegador no soporta el elemento canvas de HTML5.
     </canvas>
+    <canvas id="canvas2" width="400" height="300" style="border: 10px solid crimson ;">
+        Su navegador no admite HTML5
+    </canvas>;
+    
 
-    <script>
+   <script>
         var canvas = document.getElementById("miCanvas");
         var ctx = canvas.getContext("2d");
 
@@ -33,7 +39,25 @@
         ctx.lineWidth = 5;
         ctx.stroke();
         ctx.closePath();
+
+        //dibujando otro segmento:
+        ctx.beginPath();
+        ctx.moveTo(300,150);
+        ctx.lineTo(450,350);
+        ctx.strokeStyle ="#F0F0F0";
+        ctx.lineWidth = 10;
+        ctx.stroke();
+        ctx.closePath();
+        
+        var canvas2 = document.getElementById("canvas2");
+        var ctx2 = canvas2.getContext("2d");
+        ctx2.fillStyle = "#0000FF";
+        ctx2.fillRect(50, 50, 150, 100);
+
+
     </script>
+
+     
 
     <div  id= "codigo" >
         <h2>Código Fuente</h2>
@@ -61,9 +85,19 @@
         ctx.lineWidth = 5;
         ctx.stroke();
         ctx.closePath();    
+
+        //dibujando otro segmento:
+        ctx.beginPath();
+        ctx.moveTo(300,150);
+        ctx.lineTo(450,350);
+        ctx.strokeStyle ="#F0F0F0";
+        ctx.lineWidth = 10;
+        ctx.stroke();
+        ctx.closePath();
         </pre>
+    </div>
 
-
+   
 
 
 </body>
