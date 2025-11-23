@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Canvas Ejemplos básicos</title>
+</head>
+<body>
+    <h1>Ejemplos básicos de Canvas</h1>
+
+    <canvas id="miCanvas" width="500" height="400" style="border:1px solid #000000;">
+        Su navegador no soporta el elemento canvas de HTML5.
+    </canvas>
+
+    <script>
+        var canvas = document.getElementById("miCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Dibujar un rectángulo azul
+        ctx.fillStyle = "#0000FF";
+        ctx.fillRect(50, 50, 150, 100);
+
+        // Dibujar un círculo rojo
+        ctx.beginPath();
+        ctx.arc(300, 150, 50, 0, 2 * Math.PI);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath();
+
+        // Dibujar una línea verde
+        ctx.beginPath();
+        ctx.moveTo(50, 200);
+        ctx.lineTo(450, 350);
+        ctx.strokeStyle = "#00FF00";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+        ctx.closePath();
+    </script>
+
+    <div  id= "codigo" >
+        <h2>Código Fuente</h2>
+        <pre>
+          El SCRIPT  
+        var canvas = document.getElementById("miCanvas");
+        var ctx = canvas.getContext("2d");
+
+        // Dibujar un rectángulo azul
+        ctx.fillStyle = "#0000FF";
+        ctx.fillRect(50, 50, 150, 100);
+
+        // Dibujar un círculo rojo
+        ctx.beginPath();
+        ctx.arc(300, 150, 50, 0, 2 * Math.PI);
+        ctx.fillStyle = "#FF0000";
+        ctx.fill();
+        ctx.closePath();
+
+        // Dibujar una línea verde
+        ctx.beginPath();
+        ctx.moveTo(50, 200);
+        ctx.lineTo(450, 350);
+        ctx.strokeStyle = "#00FF00";
+        ctx.lineWidth = 5;
+        ctx.stroke();
+        ctx.closePath();    
+        </pre>
+
+
+
+
+</body>
