@@ -42,6 +42,10 @@
             <input type="range" id="semiejeB" min="0" max="6" value="3" step="0.1" oninput="document.getElementById('valorB').innerText=this.value ; Context(); ">
             <label for="semiejeB"> Semieje b:</label>
         </div>
+        <div>
+            <input type="range" id="angulo" min="0" max="6.30" value="2" step="0.1" oninput="document.getElementById('valorAngulo').innerText=this.value ; Context(); ">
+            <label for="angulo"> Ángulo</label>
+        </div>
     
 
 
@@ -49,6 +53,7 @@
     
    <p id ="valorA">4</p>
    <p id="valorB">3</p>
+   <p id="valorAngulo">2</p>
 
 
    <script>
@@ -61,8 +66,13 @@
         
         var a = parseFloat(document.getElementById("semiejeA").value);
         var b = parseFloat(document.getElementById("semiejeB").value);
-        var aPixel = a*(w/(2*xmax));
-        var bPixel = b*(h/(2*ymax));
+        var angulo = parseFloat(document.getElementById("angulo").value);
+        var aPixel = a*(w/(2 * xmax));
+        var bPixel = b*(h/(2 * ymax));
+        var Px = a*Math.cos(angulo);
+        var Py = b*Math.sin(angulo);
+        var PxPixel = w/2 + w/(2 * xmax)*Px;
+        var PyPixel = h/2 - h/(2 * ymax)*Py;
 
 
         //var a =(parseFloat(document.getElementById("semiejeA").value) * 40;
@@ -74,9 +84,21 @@
          context.beginPath();
          context.strokeStyle = "blue";
          context.lineWidth = 2;
-         context.ellipse(400, 300, aPixel, bPixel, 0, 0, 2 * Math.PI, true)
+         context.ellipse(400, 300, aPixel, bPixel, 0, 0, 2 * Math.PI, true);
          context.stroke();
-         context.closePath();
+         
+        //no dibuja el arco, no sé por qué
+        context.beginPath();
+         context.strokeStyle = "green";
+        context.arc(PxPixel,PyPixel,5, 0, 6.30); 
+        context.fill();
+        context.stroke();
+        
+        context.closePath();
+                
+         
+         //context.ellipse(300, 200, aPixel, bPixel, 0, 0, 2 * Math.PI, true);
+         
       }
 
       function pintaEjes() {
