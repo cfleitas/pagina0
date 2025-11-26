@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Almacenar Path en Canvas</title> 
+</head>
+<body>
+
+    <p>Canvas y almacenar Path<a href="https://developer.mozilla.org/en-US/docs/Web/API/Path2D">Path2D</a></p>
+    <p>un enlace interesante para investigar cómo guardar un path para reutilizarlo</p>
+    <p>
+        <a href="https://hacks.mozilla.org/2015/01/canvas-2d-new-docs-path2d-hit-regions/" >enlace:</a>
+    </p>
+    <!-- <canvas id="almacenarPathCanvas" width="480" height="320" style="border:1px solid #000000;"></canvas> -->
+    <p> Lo que hacemos aquí es <br>
+        1. Al pinchar en el canvas marca el punto y añade las coordenadas a un array<br>
+        2. Dibuja la línea poligonal correpondiente y almacena las coordenadas en un array<br>
+         
+    </p>
+   <p>
+        El objetivo es entender cómo almacenar paths para reutilizarlos y optimizar el dibujo en canvas.    
+        PERO NO LO HE CONSEGUIDO AÚN <br>(en otra línea es intersante: <a href="https://stackoverflow.com/questions/66982586/how-do-i-save-a-drawn-path-on-a-canvas-as-a-function-in-javascript">Aquí</a>
+        permite ir dibujando en un canvas, preservar la versión anteriormente guardada y añadir la nueva o volver a la versión guardada). <br>
+        <br>El Canvas dibuja puntos al pulsr con el ratón sobre él. Además pinta los segmentos correspondientes <br>
+        Pero, ¿almacen todos los segmentos en un mismo path o reemplaza el path anterior que queda dibujando por defecto?
+   </p>
+
+    <canvas id="dibujarCanvas" width="300" height="300" style="border:1px solid #e20d0d"></canvas>
+
+    <p>Un segundo canvas para intentar hacer una copia de lo que se va dibujando en el primer canvas:</p>
+
+    <canvas id="dibujarCopiaCanvas" width="300" height="300" style="border:2px solid #3907af"></canvas>
+
+
+    <script src="almacenarPath.js">  </script>
+    <div>
+        <p id="infoPath">Texto a reemplazar</p>
+
+    </div>
+
+
+
+</body>
+
+</html>

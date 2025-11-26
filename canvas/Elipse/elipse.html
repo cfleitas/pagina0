@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <title>Reference API</title>
+   <style>
+      body {
+         margin: 10px;
+         padding: 10px;
+      }
+   </style>
+</head>
+<body onload="Context();">
+    <h1> Experimentando con elipses en Canvas con JS</h1>
+    
+        <ul>
+            <li>                Es muy fácil ver: <a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/ellipse">CanvasRenderingContext2D.ellipse()</a>    
+            </li>      
+            <li>
+              Otro ejemplo interactivo en: <a href="https://thiscouldbebetter.wordpress.com/2017/08/21/drawing-ellipses-ovals-to-an-html5-canvas-with-javascript/">JavaScript Canvas Draw Ellipse</a>
+            </li>
+            <li>
+               Un ejemplo  en: <a href="https://mdn.github.io/learning-area/javascript/apis/canvas/drawing-ellipses/">Drawing ellipses</a>
+            </li>
+            
+            
+        </ul>   
+        <p>
+        <a href="https://math.hws.edu/graphicsbook/">Libro libre sobre computación gráfica (entre otras cosas coordenadas, transformaciones)</a> 
+        </p>  
+        <p> 
+            Plan de trabajo: dibujar elipse deinida por deslizadores para los parámetros a y b. 
+        </p>
+        <p>
+            Después vendrá el asunto reflexiones
+        </p>
+
+        <div>
+            <input type="range" id="semiejeA" min="0" max="8" value="4" step="0.1" oninput="document.getElementById('valorA').innerText=this.value ; Context(); ">
+            <label for="semiejeA"> Semieje a:</label>
+        </div>
+        <div>
+            <input type="range" id="semiejeB" min="0" max="6" value="3" step="0.1" oninput="document.getElementById('valorB').innerText=this.value ; Context(); ">
+            <label for="semiejeB"> Semieje b:</label>
+        </div>
+    
+
+
+   <canvas id="canvas" width="800" height="600" style="border: 1px solid black;"></canvas>
+    
+   <p id ="valorA">4</p>
+   <p id="valorB">3</p>
+
+
+   <script>
+        var xmax =8;
+        var ymax =6;
+        var w= 800;
+        var h=600;
+
+      function Context() {
+        
+        var a = parseFloat(document.getElementById("semiejeA").value);
+        var b = parseFloat(document.getElementById("semiejeB").value);
+        var aPixel = a*(w/(2*xmax));
+        var bPixel = b*(h/(2*ymax));
+
+
+        //var a =(parseFloat(document.getElementById("semiejeA").value) * 40;
+        //var b = parseFloat(document.getElementById("semiejeB").value) * 40;
+         var canvas = document.getElementById("canvas");
+         var context = canvas.getContext("2d");
+         context.clearRect(0, 0, canvas.width, canvas.height);
+            pintaEjes();
+         context.beginPath();
+         context.strokeStyle = "blue";
+         context.lineWidth = 2;
+         context.ellipse(400, 300, aPixel, bPixel, 0, 0, 2 * Math.PI, true)
+         context.stroke();
+         context.closePath();
+      }
+
+      function pintaEjes() {
+         var canvas = document.getElementById("canvas");
+         var context = canvas.getContext("2d");
+         context.beginPath();
+         context.strokeStyle = "red";
+         context.lineWidth = 1;
+         
+         // Eje X
+         context.moveTo(0, h/2);
+         context.lineTo(w, h/2);
+         
+         // Eje Y
+         context.moveTo(w/2, 0);
+         context.lineTo(w/2, h);
+         
+        for(let i = -xmax; i <= xmax; i++) {
+            let xPixel = (i + xmax) * (w / (2 * xmax));
+            // Marcas en eje X
+            context.moveTo(xPixel, h/2 - 5);
+            context.lineTo(xPixel, h/2 + 5);
+        }
+        
+        for(let i = -xmax; i <= xmax; i++) {
+            let yPixel = ( ymax -i) * (h / (2 * ymax));
+            // Marcas en eje X
+            context.moveTo( w/2 - 5, yPixel);
+            context.lineTo( w/2 + 5, yPixel);
+        }
+
+         context.stroke();
+         context.closePath();
+      } 
+
+   </script>
+</body>
+</html>
