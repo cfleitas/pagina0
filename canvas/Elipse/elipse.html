@@ -32,8 +32,8 @@
         </p>
          <p> 
             Ya he puesto un punto móvil. También hay una función de<br>
-            conversión de coordenadas a pixel. Devuelve un array, tengo<br>
-            que hacer que devuelva un objeto (más eficiente). Solo la he usado<br>
+            conversión de coordenadas a pixel. un objeto (más eficiente que un array).<br>
+             Solo la he usado<br>
             para escribir abajo los pixel del punto.        
         
         </p>
@@ -86,7 +86,7 @@
         function coordenadasPixel(ptx, pty, xmax, ymax, ancho, alto){
             const pixelX = ancho/2 + (ancho/(2 * xmax)) * ptx;
             const pixelY = alto/2 - (alto/(2 * ymax)) * pty;
-            return [pixelX, pixelY];
+            return {x:pixelX, y:pixelY};
         }
       
       
@@ -110,10 +110,10 @@
         //Pixels funciona bien.
         //No lo he implementado a la hora de dibujar 
         //el punto móvil. Solo lo hago aquí
-        //me falta estudiar cómo hacer que la función devuelva un objeto,
+        //devuelve un objeto,
         //no un array
         //parece que es mucho más recomendable y eficiente
-        document.getElementById('coorApixel').innerText= "pixels del punto móvil: " + coordenadasPixel(Px, Py, 8, 6, 800,600)[0] +", "+ coordenadasPixel(Px, Py, 8, 6, 800,600)[1] ;
+        document.getElementById('coorApixel').innerText= "pixels del punto móvil: " + coordenadasPixel(Px, Py, 8, 6, 800,600).x +", "+ coordenadasPixel(Px, Py, 8, 6, 800,600).y ;
 
         
          var canvas = document.getElementById("canvas");
