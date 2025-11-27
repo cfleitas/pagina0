@@ -30,6 +30,20 @@
         <p> 
             Plan de trabajo: dibujar elipse deinida por deslizadores para los parámetros a y b. 
         </p>
+         <p> 
+            Ya he puesto un punto móvil. También hay una función de<br>
+            conversión de coordenadas a pixel. Devuelve un array, tengo<br>
+            que hacer que devuelva un objeto (más eficiente). Solo la he usado<br>
+            para escribir abajo los pixel del punto.        
+        
+        </p>
+        <p>
+            También hay que estudiar cómo añadir dos puntos en el interior de la elipse con el ratón,<br>
+            y dibujar la semirrecta correspondiente<br>
+            Punto de impacto y reflexión del rayo incidente.<br>
+            También ver cómo cambia el asunto (coordenadas) si el canvas tiene borde<br>
+            Esto ya lo he visto: el borde se añade hacia afuera
+        </p>
         <p>
             Después vendrá el asunto reflexiones
         </p>
@@ -43,17 +57,18 @@
             <label for="semiejeB"> Semieje b:</label>
         </div>
         <div>
-            <input type="range" id="angulo" min="0" max="6.30" value="2" step="0.1" oninput="document.getElementById('valorAngulo').innerText=this.value ; Context(); ">
+            <input type="range" id="angulo" min="0" max="6.28" value="2" step="0.01" oninput="document.getElementById('valorAngulo').innerText=this.value ; Context(); ">
             <label for="angulo"> Ángulo</label>
         </div>
     
 
 
-   <canvas id="canvas" width="800" height="600" style="border: 1px solid black;"></canvas>
+   <canvas id="canvas" width="800" height="600" style="border: 40px solid black;"></canvas>
     
    <p id ="valorA">4</p>
    <p id="valorB">3</p>
    <p id="valorAngulo">2</p>
+   <p id="coorApixel">33</p>
 
 
    <script>
@@ -62,7 +77,22 @@
         var w= 800;
         var h=600;
 
-      function Context() {
+     /*   
+    Para pasar de coordenadas a Pixels en una pantalla de 
+    ancho y alto dados en pixels
+    ejes cartesianos : -xmax .. xmax, -ymax ... ymax
+    y coordenadas (ptx, pty). Devuleve un objeto
+    */
+        function coordenadasPixel(ptx, pty, xmax, ymax, ancho, alto){
+            const pixelX = ancho/2 + (ancho/(2 * xmax)) * ptx;
+            const pixelY = alto/2 - (alto/(2 * ymax)) * pty;
+            return [pixelX, pixelY];
+        }
+      
+      
+      
+      
+        function Context() {
         
         var a = parseFloat(document.getElementById("semiejeA").value);
         var b = parseFloat(document.getElementById("semiejeB").value);
@@ -71,12 +101,21 @@
         var bPixel = b*(h/(2 * ymax));
         var Px = a*Math.cos(angulo);
         var Py = b*Math.sin(angulo);
+       
         var PxPixel = w/2 + w/(2 * xmax)*Px;
         var PyPixel = h/2 - h/(2 * ymax)*Py;
+        
+        // Esto es solo una prueba para ver que
+        // la función de conversión de coordenadas a
+        //Pixels funciona bien.
+        //No lo he implementado a la hora de dibujar 
+        //el punto móvil. Solo lo hago aquí
+        //me falta estudiar cómo hacer que la función devuelva un objeto,
+        //no un array
+        //parece que es mucho más recomendable y eficiente
+        document.getElementById('coorApixel').innerText= "pixels del punto móvil: " + coordenadasPixel(Px, Py, 8, 6, 800,600)[0] +", "+ coordenadasPixel(Px, Py, 8, 6, 800,600)[1] ;
 
-
-        //var a =(parseFloat(document.getElementById("semiejeA").value) * 40;
-        //var b = parseFloat(document.getElementById("semiejeB").value) * 40;
+        
          var canvas = document.getElementById("canvas");
          var context = canvas.getContext("2d");
          context.clearRect(0, 0, canvas.width, canvas.height);
