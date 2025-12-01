@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">    
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rotating Circle and Cycloid</title>
+    <style>
+       /*
+       body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+            */
+        
+        canvas {
+            border: 2px solid #333;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <p id="info">Información</p>
+    <canvas id="canvas" width="800" height="600" style="border:1px solid #000000;">
+        Su navegador no soporta el elemento canvas de HTML5.
+    </canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = 800;
+        canvas.height = 400;
+        
+        const radius = 30;
+        const speed = 0.02;
+        let angle = 0;
+        const points = [];
+        
+        function drawCircle(x, y, r) {
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.stroke();
+        }
+        
+        function animate() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            //coordenadas del centro de la circunferencia rodante
+            const x = angle * radius + radius;
+            const y = canvas.height / 2 - radius;     //- radius * Math.cos(angle);
+
+            const rodanteX = x - radius * Math.sin(angle);
+            const rodanteY = y +  radius * Math.cos(angle);
+            
+            points.push({ rodanteX, rodanteY });
+            document.getElementById('info').innerText = 'punto rodante: (' + rodanteX + ', ' + rodanteY + ')'; 
+            document.getElementById('info').innerText += `Puntos almacenados: ${points.length}`;
+            document.getElementById('info').innerText += ` | Ángulo: ${angle.toFixed(2)} rad`;
+            document.getElementById('info').innerText += ` | Centro: (${x.toFixed(2)}, ${y.toFixed(2)})`;
+            document.getElementById('info').innerText += ` | Punto rodante: (${rodanteX.toFixed(2)}, ${rodanteY.toFixed(2)})`;
+            document.getElementById('info').innerText += ` | Radio: ${radius}`;
+            document.getElementById('info').innerText += ` | Velocidad angular: ${speed} rad/frame`;
+
+
+            
+            // Draw cycloid curve
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 2;
+            //ctx.moveTo(points[0].rodanteX, points[0].rodanteY);
+            ctx.beginPath();
+            for (let i = 0; i < points.length; i++) {
+                if (i == 0) ctx.moveTo(points[i].rodanteX, points[i].rodanteY);
+                else ctx.lineTo(points[i].rodanteX, points[i].rodanteY);
+            }
+            //ctx.moveTo(rodanteX, rodanteY);
+            //ctx.lineTo(100, 300);
+            ctx.stroke();
+            
+            // Draw base line
+            ctx.strokeStyle = '#95a5a6';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height / 2);
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.stroke();
+            
+            // Draw rolling circle
+            ctx.strokeStyle = '#3498db';
+            ctx.lineWidth = 2;
+            drawCircle(x, y, radius);
+            
+            // Draw center point
+            ctx.fillStyle = '#3498db';
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw tracing point
+            ctx.fillStyle = '#e74c3c';
+            ctx.beginPath();
+            ctx.arc(rodanteX, rodanteY, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            angle += speed;
+            
+            if (angle < Math.PI * 6) {
+                requestAnimationFrame(animate);
+            }
+        }
+        
+        animate();
+    </script>
+</body>     
+</html>

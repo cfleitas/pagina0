@@ -6,6 +6,7 @@
     <title>Elipse Canvas</title>
 </head>
 <body>
+    <p id="info">Texto informativo:</p>
     <canvas id="canvas" width="800" height="600"></canvas>
     <script>
         const canvas = document.getElementById('canvas');
@@ -33,8 +34,8 @@
             array.push({x: xVal, y: yVal});
         }
         
-        for( i=0; i<= 16; i+=0.1){
-            almacenarPuntos( centroX - 60 * Math.sin((i/(Math.PI * 2))), centroY + 60 * Math.cos(i/(Math.PI * 2)), puntos);
+        for( i=0; i<= 1130; i+=5 ){
+            almacenarPuntos( pointX - 60 * Math.sin((i/60))+i, pointY + 60 * Math.cos(i/60), puntos);
         }
             
 
@@ -60,8 +61,17 @@
             ctx.beginPath();
             ctx.arc(centroX - 60 * Math.sin((centroX-pointX)/60), centroY + 60 * Math.cos((centroX-pointX)/60),8,0, Math.PI * 2);
             ctx.fill();
-
             
+            //¿la cicloide?
+            ctx.strokeStyle="blue";
+            ctx.lineWidth=2;    
+            ctx.beginPath();
+            ctx.moveTo(puntos[0].x, puntos[0].y);
+            for(i=1; i< puntos.length; i+=5){
+                ctx.lineTo(puntos[i].x+centroX + i, puntos[i].y);   
+                ctx.stroke();
+            }              
+            ctx.closePath();            
 
         }
 
