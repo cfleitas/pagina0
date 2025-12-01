@@ -16,6 +16,7 @@ function almacenarPath(xVal, yVal, array) {
 
 canvas.addEventListener("click", function(event){
     const rect = canvas.getBoundingClientRect();
+    //no se ha tenido en cuenta el margen: estudiar esto
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top; 
     almacenarPath(x, y, pathDatos);

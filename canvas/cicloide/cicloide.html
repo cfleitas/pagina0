@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elipse Canvas</title>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Draw circle
+        ctx.beginPath();
+        ctx.ellipse(100, 400, 150, 150, 0, 0, Math.PI * 2);
+        ctx.strokeStile = "red";
+        ctx.lineWidth=3;
+        ctx.fillStyle = 'lightblue';
+        ctx.fill();
+        ctx.stroke();
+
+        // Draggable point
+        let isDragging = false;
+        let pointX = 100;
+        let pointY = 400;
+        let centroX = pointX;
+        let centroY = pointY;
+
+        let puntos = [];
+
+        function almacenarPuntos(xVal, yVal, array){
+            array.push({x: xVal, y: yVal});
+        }
+        
+        for( i=0; i<= 16; i+=0.1){
+            almacenarPuntos( centroX - 60 * Math.sin((i/(Math.PI * 2))), centroY + 60 * Math.cos(i/(Math.PI * 2)), puntos);
+        }
+            
+
+        function drawPoint() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.ellipse(centroX, centroY, 60, 60, 0, 0, Math.PI * 2);
+            ctx.strokeStile = "red";
+            ctx.lineWidth=3;
+            ctx.fillStyle = 'lightblue';
+            ctx.fill();
+            ctx.stroke();
+            
+            
+            
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(centroX, centroY, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            //El punto móvil:
+            ctx.fillStyle="green";
+            ctx.beginPath();
+            ctx.arc(centroX - 60 * Math.sin((centroX-pointX)/60), centroY + 60 * Math.cos((centroX-pointX)/60),8,0, Math.PI * 2);
+            ctx.fill();
+
+            
+
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            if (Math.hypot(x - centroX, y - centroY) < 8) isDragging = true;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const rect = canvas.getBoundingClientRect();
+            centroX = e.clientX - rect.left;
+            //pointY = e.clientY - rect.top;
+            drawPoint();
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        drawPoint();
+        ctx.stroke();
+    </script>
+</body>
+</html>

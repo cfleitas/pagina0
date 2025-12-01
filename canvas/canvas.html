@@ -50,9 +50,12 @@
         ctx.closePath();
         
         var canvas2 = document.getElementById("canvas2");
-        var ctx2 = canvas2.getContext("2d");
-        ctx2.fillStyle = "#0000FF";
-        ctx2.fillRect(50, 50, 150, 100);
+        var ctx = canvas2.getContext("2d");
+        ctx.beginPath();
+        ctx.fillStyle = "#0000FF";
+        ctx.fillRect(50, 50, 150, 100);
+        ctx.stroke();
+        ctx.closePath();
 
 
     </script>
@@ -63,6 +66,7 @@
         <h2>Código Fuente</h2>
         <pre>
           El SCRIPT  
+        
         var canvas = document.getElementById("miCanvas");
         var ctx = canvas.getContext("2d");
 
@@ -84,7 +88,7 @@
         ctx.strokeStyle = "#00FF00";
         ctx.lineWidth = 5;
         ctx.stroke();
-        ctx.closePath();    
+        ctx.closePath();
 
         //dibujando otro segmento:
         ctx.beginPath();
@@ -94,6 +98,18 @@
         ctx.lineWidth = 10;
         ctx.stroke();
         ctx.closePath();
+        
+        var canvas2 = document.getElementById("canvas2");
+        var ctx = canvas2.getContext("2d");
+        ctx.beginPath();
+        ctx.fillStyle = "#0000FF";
+        ctx.fillRect(50, 50, 150, 100);
+        ctx.stroke();
+        ctx.closePath();
+
+
+    
+
         </pre>
     </div>
 
