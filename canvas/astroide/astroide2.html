@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astroid with Rolling Circle</title>
+    <style>
+        body {
+            margin: 10px;
+         padding: 10px;
+            background-color: #645252;
+        }
+        <!--canvas {
+            border: 1px solid #fff;
+            background-color: #000;
+        }
+        -->
+    </style>
+
+     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+</head>
+<body>
+<h1>Astroid Curve</h1>
+ <h2> When \(a \ne 0\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
+  \[x = {-b \pm \sqrt{b^2-4ac} \over 2a}.\]
+</h2>
+
+    <canvas id="canvas"  style=" padding:0 ; margin:auto ; display:block; border: 20px solid rgb(153, 188, 211); background-color: antiquewhite;"></canvas>
+   
+<p id="info">Otro párrafo</p>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 800;
+        canvas.height = 800;
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const a = 150; // Size of astroid
+
+        let t = 0;
+
+        function drawAstroid() {
+            ctx.strokeStyle = '#00ff00';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            for (let i = 0; i <= 2 * Math.PI; i += 0.01) {
+                const x = centerX + a * Math.pow(Math.cos(i), 3);
+                const y = centerY + a * Math.pow(Math.sin(i), 3);
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+
+        function drawRollingCircle() {
+            const radius = a / 4;
+            const angle = t;
+
+            // Circle rolls along astroid
+            const x = centerX + (a - radius) * Math.pow(Math.cos(angle), 3);
+            const y = centerY + (a - radius) * Math.pow(Math.sin(angle), 3);
+
+            // Draw circle
+            ctx.strokeStyle = '#ff0000';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // Draw dot on circle
+            ctx.fillStyle = '#ffff00';
+            ctx.beginPath();
+            ctx.arc(
+                x + radius * Math.cos(angle * 4),
+                y + radius * Math.sin(angle * 4),
+                4,
+                0,
+                Math.PI * 2
+            );
+            ctx.fill();
+        }
+
+        function animate() {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            drawAstroid();
+            drawRollingCircle();
+
+            t += 0.02;
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

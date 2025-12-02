@@ -26,7 +26,7 @@
 </head>
 <body>
     <p id="info">Información</p>
-    <canvas id="canvas" width="800" height="600" style="border:1px solid #000000;">
+    <canvas id="canvas" width="800" height="600" style="margin:auto ; display:block; border:1px solid #000000;">
         Su navegador no soporta el elemento canvas de HTML5.
     </canvas>
 
@@ -38,7 +38,7 @@
         canvas.height = 400;
         
         const radius = 30;
-        const speed = 0.02;
+        const speed = 0.05; // Velocidad angular en radianes por frame
         let angle = 0;
         const points = [];
         

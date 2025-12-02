@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generación de Astroide</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #222;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #fff;
+            background-color: #000;
+        }
+        #info {
+            position: absolute;
+            top: 20px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h2>Astroide</h2>
+        <p>Ecuación: x²/³ + y²/³ = a²/³</p>
+    </div>
+    <canvas id="canvas"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = 600;
+        canvas.height = 600;
+
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const a = 150;
+
+        ctx.strokeStyle = '#00ff00';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+
+        for (let t = 0; t <= 2 * Math.PI; t += 0.01) {
+            const x = a * Math.pow(Math.cos(t), 3);
+            const y = a * Math.pow(Math.sin(t), 3);
+            const canvasX = centerX + x;
+            const canvasY = centerY + y;
+
+            if (t === 0) {
+                ctx.moveTo(canvasX, canvasY);
+            } else {
+                ctx.lineTo(canvasX, canvasY);
+            }
+        }
+
+        ctx.closePath();
+        ctx.stroke();
+    </script>
+</body>
+</html>
