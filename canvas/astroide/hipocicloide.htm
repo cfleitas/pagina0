@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hypocycloid</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 1px solid #333;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="800" height="800"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const outerRadius = 300;
+        const innerRadius = 100;
+        
+        let angle = 0;
+        const points = [];
+        
+        function drawHypocycloid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw outer circle
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, outerRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            
+            // Calculate hypocycloid point
+            const ratio = outerRadius / innerRadius;
+            const x = (outerRadius - innerRadius) * Math.cos(angle) + 
+                      innerRadius * Math.cos(((outerRadius - innerRadius) / innerRadius) * angle);
+            const y = (outerRadius - innerRadius) * Math.sin(angle) - 
+                      innerRadius * Math.sin(((outerRadius - innerRadius) / innerRadius) * angle);
+            
+            points.push({ x: centerX + x, y: centerY + y });
+            
+            // Draw inner rotating circle
+            const innerCenterX = centerX + (outerRadius - innerRadius) * Math.cos(angle);
+            const innerCenterY = centerY + (outerRadius - innerRadius) * Math.sin(angle);
+            ctx.beginPath();
+            ctx.arc(innerCenterX, innerCenterY, innerRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = '#0066cc';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+            
+            // Draw hypocycloid curve
+            ctx.beginPath();
+            ctx.strokeStyle = '#ff0000';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < points.length; i++) {
+                if (i === 0) ctx.moveTo(points[i].x, points[i].y);
+                else ctx.lineTo(points[i].x, points[i].y);
+            }
+            ctx.stroke();
+            
+            // Draw current point
+            ctx.beginPath();
+            ctx.arc(points[points.length - 1].x, points[points.length - 1].y, 3, 0, Math.PI * 2);
+            ctx.fillStyle = '#ff0000';
+            ctx.fill();
+            
+            angle += 0.01;
+            
+            if (angle < 3*Math.PI * 2 * (innerRadius / outerRadius)) {
+                requestAnimationFrame(drawHypocycloid);
+            }
+        }
+        
+        drawHypocycloid();
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hipocicloide Experimento</title>
+    
+
+</head>
+<body>
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const c = canvas.getContext('2d'); // 'c' is the context
+        class Circle {
+  constructor(x, y, dx, dy, radius) {
+    this.x = x;
+    this.y = y;
+    this.dx = dx;
+    this.dy = dy;
+    this.radius = radius;
+  }
+
+  draw() {
+    c.beginPath();
+    // arc(x, y, radius, startAngle, endAngle)
+    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    c.fillStyle = 'blue';
+    c.fill();
+  }
+}
+
+const myCircle = new Circle(100, 100, 5, 5, 30);
+
+function animate() {
+  requestAnimationFrame(animate);
+  c.clearRect(0, 0, canvas.width, canvas.height);
+
+  myCircle.update();
+}
+
+// Add an update method to the Circle class
+Circle.prototype.update = function() {
+  if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+    this.dx = -this.dx;
+  }
+  if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+    this.dy = -this.dy;
+  }
+
+  this.x += this.dx;
+  this.y += this.dy;
+  this.draw();
+}
+
+// Start the animation
+animate();
+
+    </script>
+
+</body>
+
+
+
+
+
+
+
+
+
+
+</html>
