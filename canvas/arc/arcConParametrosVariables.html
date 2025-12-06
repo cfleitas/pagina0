@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas Arc with Parameter Sliders</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        canvas {
+            border: 1px solid #ddd;
+            display: block;
+            margin-bottom: 20px;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        label {
+            width: 120px;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 200px;
+        }
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+        }
+        .value-display {
+            width: 60px;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Experimentando con "arc" en un Canvas. Valores ajustables.</h2>
+        <p> Se puede experimentar y variar los valores de inicio </p>
+        <p>y final del arco, así como  con el sentido </p>
+        <p>(horario o antihorario) del dibujo del arco. </p>
+        </p>El sentido  por defecto es horario.</p>
+
+        <canvas id="canvas" width="400" height="400"></canvas>
+        <div class="controls">
+            <div class="control-group">
+                <label>Start Angle:</label>
+                <input type="range" id="startAngle" min="0" max="360" value="0" step="1">
+                <span class="value-display" id="startValue">0°</span>
+            </div>
+            <div class="control-group">
+                <label>End Angle:</label>
+                <input type="range" id="endAngle" min="0" max="360" value="180" step="1">
+                <span class="value-display" id="endValue">180°</span>
+            </div>
+            <div class="control-group">
+                <label>Counterclockwise:</label>
+                <input type="checkbox" id="counterclockwise">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const startAngleInput = document.getElementById('startAngle');
+        const endAngleInput = document.getElementById('endAngle');
+        const counterclockwiseInput = document.getElementById('counterclockwise');
+        const startValueDisplay = document.getElementById('startValue');
+        const endValueDisplay = document.getElementById('endValue');
+
+        function degreesToRadians(degrees) {
+            return (degrees * Math.PI) / 180;
+        }
+
+        function drawArc() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = 100;
+            const startAngle = degreesToRadians(startAngleInput.value);
+            const endAngle = degreesToRadians(endAngleInput.value);
+            const counterclockwise = counterclockwiseInput.checked;
+
+            // Draw circle outline
+            ctx.strokeStyle = '#ccc';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            ctx.stroke();
+
+            // Draw arc
+            ctx.strokeStyle = '#2563eb';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle, counterclockwise);
+            ctx.stroke();
+
+            // Draw center point
+            ctx.fillStyle = '#2563eb';
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 5, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        startAngleInput.addEventListener('input', () => {
+            startValueDisplay.textContent = startAngleInput.value + '°';
+            drawArc();
+        });
+
+        endAngleInput.addEventListener('input', () => {
+            endValueDisplay.textContent = endAngleInput.value + '°';
+            drawArc();
+        });
+
+        counterclockwiseInput.addEventListener('change', drawArc);
+
+        drawArc();
+    </script>
+</body>
+</html>
