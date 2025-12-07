@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Circunferencia móvil en Canvas</title>
+    <style>
+        body {
+            display: block;
+            justify-content: center;
+            align-items: center;
+            
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display:block;
+            border: 1px solid #5e0202;
+            background-color: #eec5c5;
+        }
+    </style>
+    </head>
+<body>
+    <p >Un Ejemplo muy sencillo con deslizadores y que muestra cómo usarlos y cómo mostrar su valor</p>
+    <p>Falta trabajar el asunto css para colocación de los objetos en la página</p>
+
+
+    <div id="controles" style="padding:0; margin:auto; border: 5px solid blue; display:block">
+        <div>
+        <lable>Abscisa del centro</lable>
+        <input type="range" id="xRango" min="0" max="400" value="200" />
+        <span id= "abscisa">50</span>
+        </div>
+        <div>
+        <lable>Ordenada del centro</lable>
+        <input type="range" id="yRango" min="0" max="400" value="200" />
+        <span id= "ordenada">50</span>    
+        </div>
+        <div>
+        <lable>Radio </lable>
+        <input type="range" id="radioRango" min="10" max="100" value="30" />
+        <span id= "radio">20</span>
+        </div>
+    </div>
+
+    <canvas id="myCanvas" width="400" height="400"  style="padding:0; margin:auto; border: 20px solid red; display:block "></canvas>
+
+    <!-- ------------------------------------------------ -->
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        /*
+        let x = canvas.width / 2;
+        let y = canvas.height / 2;
+        let radius = 20;
+        */
+
+        const centroX = document.getElementById('xRango');
+        const centroY = document.getElementById('yRango');
+        const radio = document.getElementById('radioRango');
+        const texto1 = document.getElementById('abscisa');
+        const texto2 = document.getElementById('ordenada');
+        const texto3 = document.getElementById('radio');
+
+        
+
+        function drawCircle() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const xC = parseInt(centroX.value);
+            const yC = parseInt(centroY.value);  
+            const radioC = parseInt(radio.value);
+
+
+            ctx.beginPath();
+            ctx.arc(xC, yC, radioC, 0, Math.PI * 2, false);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+         centroX.addEventListener('input', function() {
+            //x = parseInt(this.value);
+            texto1.textContent = centroX.value;
+            //document.getElementById('abscisa').textContent = centroX.value; va bien, pero es mejor declarando la variable texto1 por eficiencia
+
+
+            drawCircle();
+        }); 
+
+        centroY.addEventListener('input', function() {
+            //x = parseInt(this.value);
+            texto2.textContent = centroY.value;
+
+            drawCircle();
+        }); 
+        radio.addEventListener('input', function() {
+            texto3.textContent = radio.value;
+            //x = parseInt(this.value);
+            drawCircle();
+        }); 
+        
+
+       drawCircle();
+    </script>
+</body>
+</html>
