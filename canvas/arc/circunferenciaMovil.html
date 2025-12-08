@@ -18,32 +18,61 @@
             border: 1px solid #5e0202;
             background-color: #eec5c5;
         }
+        
+        label {
+            width: 150px;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 100px;
+        }
+        /*
+        .value-display {
+            width: 60px;
+            text-align: right;
+        }
+            */
+
     </style>
     </head>
 <body>
     <p >Un Ejemplo muy sencillo con deslizadores y que muestra cómo usarlos y cómo mostrar su valor</p>
-    <p>Falta trabajar el asunto css para colocación de los objetos en la página</p>
+    <p>Hay que incluir el valor de las coordenadas cambiantes y del radio en el canvas</p>
+    <p>Sobre colocación de divs en la página siguiente hay un ejemplo simple:  https://www.w3schools.com/html/html_div.asp <a href="https://www.w3schools.com/html/html_div.asp">https://www.w3schools.com/html/html_div.asp</a></p>    
 
+    
+        
+        
+        
+   
+    
+    
 
-    <div id="controles" style="padding:0; margin:auto; border: 5px solid blue; display:block">
-        <div>
+    <canvas id="myCanvas" width="400" height="400"  style="padding:0; margin:auto; border: 5px solid rgb(78, 51, 201); display:block "></canvas>
+    <div style="border:5px solid rgb(44, 44, 8); width: 400px; margin:auto">
+    <div  style="border:0px solid blue; padding:0px; width: 400px; margin:auto">
         <lable>Abscisa del centro</lable>
         <input type="range" id="xRango" min="0" max="400" value="200" />
         <span id= "abscisa">50</span>
         </div>
-        <div>
+        
+        <div style="border:0px solid blue; padding:0px; width: 400px; margin:auto">
         <lable>Ordenada del centro</lable>
         <input type="range" id="yRango" min="0" max="400" value="200" />
         <span id= "ordenada">50</span>    
         </div>
-        <div>
+        
+        <div style="border:0px solid blue; padding:0px; width: 400px; margin:auto">
         <lable>Radio </lable>
         <input type="range" id="radioRango" min="10" max="100" value="30" />
         <span id= "radio">20</span>
         </div>
     </div>
+        
 
-    <canvas id="myCanvas" width="400" height="400"  style="padding:0; margin:auto; border: 20px solid red; display:block "></canvas>
+
+
+
 
     <!-- ------------------------------------------------ -->
 
