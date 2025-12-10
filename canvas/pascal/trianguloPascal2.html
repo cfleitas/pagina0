@@ -16,7 +16,7 @@
         canvas {
             display:block;
             border: 1px solid #080808;
-            background-color: #eccece;
+            background-color: #ffffff;
         }
         
         label {
@@ -49,14 +49,14 @@
    <div style="border:5px solid rgb(44, 44, 8); width: 400px; margin:auto">
     <div  style="border:0px solid blue; padding:0px; width: 400px; margin:auto">
         <lable>Número de filas</lable>
-        <input type="range" id="nrFilasVisibles" min="4" max="300" value="50" step="1"/>
-        <span id= "nrFilasV">50</span>
+        <input type="range" id="nrFilasVisibles" min="4" max="300" value="200" step="1"/>
+        <span id= "nrFilasV">200</span>
         </div>
         
         <div style="border:0px solid blue; padding:0px; width: 400px; margin:auto">
         <lable>División módulo n</lable>
-        <input type="range" id="moduloN" min="2" max="11" value="50" step="1"/>
-        <span id= "moduloNV">50</span>    
+        <input type="range" id="moduloN" min="2" max="11" value="5" step="1"/>
+        <span id= "moduloNV">5</span>    
         </div>        
         
     </div>
@@ -155,7 +155,7 @@
                             color = 'brown';
                             break;
                         case 7:
-                            color = 'black';
+                            color = 'midnightblue';
                             break;
                         case 8:
                             color = 'cyan';
@@ -188,55 +188,7 @@
         
 
         
-        /*
-        const centroX = document.getElementById('xRango');
-        const centroY = document.getElementById('yRango');
-        const radio = document.getElementById('radioRango');
-        const texto1 = document.getElementById('abscisa');
-        const texto2 = document.getElementById('moduloNV');
-        const texto3 = document.getElementById('radio');
-
         
-        
-        function drawCircle() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            const xC = parseInt(centroX.value);
-            const yC = parseInt(centroY.value);  
-            const radioC = parseInt(radio.value);
-
-
-            ctx.beginPath();
-            ctx.arc(xC, yC, radioC, 0, Math.PI * 2, false);
-            ctx.fillStyle = 'red';
-            ctx.fill();
-            ctx.closePath();
-        }
-
-         centroX.addEventListener('input', function() {
-            //x = parseInt(this.value);
-            texto1.textContent = centroX.value;
-            //document.getElementById('abscisa').textContent = centroX.value; va bien, pero es mejor declarando la variable texto1 por eficiencia
-
-
-            drawCircle();
-        }); 
-
-        centroY.addEventListener('input', function() {
-            //x = parseInt(this.value);
-            texto2.textContent = centroY.value;
-
-            drawCircle();
-        }); 
-        radio.addEventListener('input', function() {
-            texto3.textContent = radio.value;
-            //x = parseInt(this.value);
-            drawCircle();
-        }); 
-        
-
-       drawCircle();
-       */
     </script>
 </body>
 </html>
