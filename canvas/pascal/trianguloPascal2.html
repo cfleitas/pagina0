@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Coloreando el Triángulo de Pascal</title>
+    <style>
+        body {
+            display: block;
+            justify-content: center;
+            align-items: center;
+            
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display:block;
+            border: 1px solid #080808;
+            background-color: #eccece;
+        }
+        
+        label {
+            width: 150px;
+            font-weight: bold;
+        }
+        input[type="range"] {
+            width: 100px;
+        }
+        /*
+        .value-display {
+            width: 60px;
+            text-align: right;
+        }
+            */
+
+    </style>
+    </head>
+<body>
+    <h1>Triángulo de Pascal: coloreando en base al valor de cada elemento módulo n, n =2, 3 , 5,..,</h1>
+    <p >Asignamos colores en función del resto de la división de cada número del triángulo binomial por valores distintos cada vez</p>
+    <p>Se pueden elegir el número de filas del triángulo y el valor del módulo n</p>
+    <p>Pendiente: implementarlo con cuadraditos coloreados</p>
+        
+
+    
+        
+        
+        
+   <div style="border:5px solid rgb(44, 44, 8); width: 400px; margin:auto">
+    <div  style="border:0px solid blue; padding:0px; width: 400px; margin:auto">
+        <lable>Número de filas</lable>
+        <input type="range" id="nrFilasVisibles" min="4" max="300" value="50" step="1"/>
+        <span id= "nrFilasV">50</span>
+        </div>
+        
+        <div style="border:0px solid blue; padding:0px; width: 400px; margin:auto">
+        <lable>División módulo n</lable>
+        <input type="range" id="moduloN" min="2" max="11" value="50" step="1"/>
+        <span id= "moduloNV">50</span>    
+        </div>        
+        
+    </div>
+    
+    
+
+    <canvas id="myCanvas" width="800" height="800"  style="padding:0; margin:auto; border: 5px solid rgb(0, 0, 0); display:block "></canvas>
+    
+        
+
+
+
+
+
+    <!-- ------------------------------------------------ -->
+
+    <script>
+
+    const nrFilasActuales=document.getElementById('nrFilasVisibles');
+    const moduloNActual=document.getElementById('moduloN');
+    const textoNrFilas=document.getElementById('nrFilasV');
+    const textoModuloN=document.getElementById('moduloNV');
+    textoNrFilas.textContent= nrFilasActuales.value;
+    textoModuloN.textContent= moduloNActual.value;
+
+    nrFilasActuales.addEventListener('input', function() {
+        textoNrFilas.textContent= nrFilasActuales.value;
+        generaYdibujaTriangulo();
+    });
+
+    moduloNActual.addEventListener('input', function() {
+        textoModuloN.textContent= moduloNActual.value;
+        generaYdibujaTriangulo();
+    });
+    function generaYdibujaTriangulo() {
+        const numFilas = parseInt(nrFilasActuales.value);
+        const moduloN = parseInt(moduloNActual.value);
+        const triangulo = [];
+
+        for (let i = 0; i < numFilas; i++) {
+            triangulo[i] = [];
+            for (let j = 0; j <= i; j++) {
+                if (j === 0 || j === i) {
+                    triangulo[i][j] = 1;
+                } else {
+                    triangulo[i][j] = triangulo[i - 1][j - 1] + triangulo[i - 1][j];
+                    triangulo[i][j]= triangulo[i][j]%moduloN; // Módulo n
+                }
+            }
+        }
+
+        despliegaTriangulo(triangulo);
+        console.log(triangulo);
+    }
+        function despliegaTriangulo(triangulo) {
+            const canvas = document.getElementById('myCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            //OK:  const filaAltura = 30;
+            const filaAltura = 3.75;
+            const centroX = canvas.width / 2;
+            
+
+            triangulo.forEach((row, rowIndex) => {
+                //OK: const y = rowIndex * filaAltura + 20;
+                const y = rowIndex * filaAltura + 2.5;
+
+                const rowLength = row.length;
+                row.forEach((value, colIndex) => {
+                    //=K: const x = centroX - (rowLength - 1) * 15 + colIndex * 30;
+                    const x = centroX - (rowLength - 1) * 1.875 + colIndex * 3.75;
+
+                    // Asignar color según el valor
+                    let color;
+                    switch (value) {
+                        case 0:
+                            color = 'red';
+                            break;
+                        case 1:
+                            color = 'blue';
+                            break;
+                        case 2:
+                            color = 'black';
+                            break;
+                        case 3:
+                            color = 'green';
+                            break;
+                        case 4:
+                            color = 'orange';
+                            break;
+                        case 5:
+                            color = 'purple';
+                            break;
+                        case 6:
+                            color = 'brown';
+                            break;
+                        case 7:
+                            color = 'black';
+                            break;
+                        case 8:
+                            color = 'cyan';
+                            break;
+                        case 9:
+                            color = 'magenta';
+                            break;
+                        case 10:
+                            color = 'yellow';
+                            break;
+                        default:
+                            color = 'gray';
+                    }
+
+
+                    // Dibujar el valor
+                    ctx.fillStyle = color;
+                    ctx.font = '5px Arial';
+                    ctx.fillText(value, x, y);
+                });
+            });
+        }
+
+        generaYdibujaTriangulo();
+
+
+
+
+
+        
+
+        
+        /*
+        const centroX = document.getElementById('xRango');
+        const centroY = document.getElementById('yRango');
+        const radio = document.getElementById('radioRango');
+        const texto1 = document.getElementById('abscisa');
+        const texto2 = document.getElementById('moduloNV');
+        const texto3 = document.getElementById('radio');
+
+        
+        
+        function drawCircle() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const xC = parseInt(centroX.value);
+            const yC = parseInt(centroY.value);  
+            const radioC = parseInt(radio.value);
+
+
+            ctx.beginPath();
+            ctx.arc(xC, yC, radioC, 0, Math.PI * 2, false);
+            ctx.fillStyle = 'red';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+         centroX.addEventListener('input', function() {
+            //x = parseInt(this.value);
+            texto1.textContent = centroX.value;
+            //document.getElementById('abscisa').textContent = centroX.value; va bien, pero es mejor declarando la variable texto1 por eficiencia
+
+
+            drawCircle();
+        }); 
+
+        centroY.addEventListener('input', function() {
+            //x = parseInt(this.value);
+            texto2.textContent = centroY.value;
+
+            drawCircle();
+        }); 
+        radio.addEventListener('input', function() {
+            texto3.textContent = radio.value;
+            //x = parseInt(this.value);
+            drawCircle();
+        }); 
+        
+
+       drawCircle();
+       */
+    </script>
+</body>
+</html>
