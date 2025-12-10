@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triángulo de Pascal: coloreando en función de valor del resto de las divisiones entre n</title>
+    <style>
+        body {
+            
+            justify-content: center;
+            align-items: center;
+            
+            margin: 0;
+            background-color: #ecdfdf;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #fff;
+            background-color: #000;
+        }
+        #controls {
+            
+            color: #070707;
+        }
+        input {
+            margin: 5px;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Triángulo de Pascal: coloreando en función del valor del resto de las divisiones entre n</h1>
+    <p>Se colorea cada elemento del triángulo de Pascal según el valor del resto de su división por un número n especificado.</p>
+    <p>Hay errores que subsanar</p>
+
+
+    <!--<div id="controls" style="border:2px solid brown; width:300px; margin:auto; padding:10px; text-align:center ">  -->
+        <div style="width:300px; border:2px solid rgb(27, 4, 4); margin:auto; display:block">
+        <label >Módulo: <input type="number" id="modulo" value="2" min="2"></label>
+        <button onclick="redraw()">Redraw</button>
+         
+         </div>
+         <div style="width:300px; border:2px solid rgb(238, 18, 18); margin:auto; display:block">
+            <lable>Número de filas que desea ver:</lable>
+            <input type="range" id="nrFilas" min="100" max="400" value="200" step="1"/>
+        <span id= "filas">200</span> 
+        </div>
+    <!-- </div> -->
+    <canvas id="canvas" width="1000" height="1000" style="border:1px saddlebrown ;margin:auto; display:block "></canvas>
+    
+    <h2>Observaciones adicionales:</h2>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        var rows=document.getElementById('nrFilas').value;
+        var modulo= parseInt(document.getElementById('modulo').value) || 2;
+
+
+        //array de arrays para guardar los valores del triángulo de Pascal módulo n
+        //const triang=[];
+
+        //añadimos el listener para el control del número de filas a mostrar
+        document.getElementById('nrFilas').addEventListener('input', function() {
+            rows = parseInt(this.value);
+            document.getElementById('filas').textContent = rows;
+            redraw();
+        });
+        // añadimos el listener para el control del valor del módulo
+        document.getElementById('modulo').addEventListener('change', redraw);
+
+        function calcularTrianguloPascalModular(n, modulo) {
+            const triangulo = [];
+            for (let i = 0; i < n; i++) {
+                triangulo[i] = [];
+                for (let j = 0; j <= i; j++) {
+                    if (j === 0 || j === i) {
+                        triangulo[i][j] = 1 % modulo;
+                    } else {
+                        triangulo[i][j] = (triangulo[i - 1][j - 1] + triangulo[i - 1][j]) % modulo;
+                    }
+                }
+            }
+            return triangulo;
+        }   
+
+        function calculaColor(valor) {
+            const resto = valor % modulo;
+            const hue = (resto / modulo) * 360;
+            return `hsl(${hue}, 100%, 50%)`;
+        }   
+
+
+
+
+        function redraw() {
+            modulo= parseInt(document.getElementById('modulo').value) || 2;
+            const triangulo = calcularTrianguloPascalModular(rows, modulo);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const pixelSize = 4;
+            const startX = canvas.width / 2;
+            const startY = 20;
+
+            triangulo.forEach((row, rowIndex) => {
+                row.forEach((value, colIndex) => {
+                    const color = calculaColor(value);
+                    const x = startX + (colIndex - rowIndex / 2) * pixelSize;
+                    const y = startY + rowIndex * pixelSize;
+
+                    ctx.fillStyle = color;
+                    ctx.fillRect(x, y, pixelSize - 1, pixelSize - 1);
+                });
+            });
+        }   
+
+        redraw();
+        
+    </script>
+</body>
+</html>
