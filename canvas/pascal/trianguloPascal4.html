@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Triángulo de Pascal: coloreando en función de valor del resto de las divisiones entre n</title>
+    <title>Triángulo de Pascal: coloreando en función de que los números sean divisibles entre n o no</title>
     <style>
         body {
             
@@ -30,9 +30,9 @@
 </head>
 <body>
 
-    <h1>Triángulo de Pascal: coloreando en función del valor del resto de las divisiones entre n</h1>
-    <p>Se colorea cada elemento del triángulo de Pascal según el valor del resto de su división por un número n especificado.</p>
-    <p>Hay errores que subsanar</p>
+    <h1>Triángulo de Pascal: coloreando en función de que los números sean divisibles entre n o no</h1>
+    <p>Se usan solo dos colores</p>
+    
 
 
     
@@ -42,7 +42,7 @@
          </div>
 
         <div style="width:300px; border:2px solid rgb(238, 18, 18); margin:auto; display:block">
-            <lable>Número de filas que desea ver:</lable>
+            <lable>Número de filas:</lable>
             <input type="range" id="nrFilas" min="100" max="600" value="400" step="1"/>
         <span id= "filas">400</span> 
         </div>
@@ -63,7 +63,7 @@
         const ctx = canvas.getContext('2d');
         
         var rows=document.getElementById('nrFilas').value;
-        var modulo= parseInt(document.getElementById('modulo').value) || 2;
+        var modulo= parseInt(document.getElementById('modulo').value) ;
         var pixelSize= parseInt(document.getElementById('tamanioRectangulos').value);
 
 
@@ -101,8 +101,12 @@
 
         function calculaColor(valor) {
             const resto = valor % modulo;
-            const hue = (resto / modulo) * 360;
-            return `hsl(${hue}, 100%, 50%)`;
+            if(resto === 0){
+                return '#000000'; // negro
+            } else {
+                return '#FFFFFF'; // blanco 
+            }
+            
         }   
 
 
