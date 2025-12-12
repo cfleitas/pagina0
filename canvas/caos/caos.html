@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaos Game - Sierpinski Triangle</title>
+    <style>
+        body {
+            /*display: flex;*/
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #0e0101;
+            font-family: Arial, sans-serif;
+        }
+        #canvas {
+            border: 2px solid #db2222;
+            background-color: #000;
+        }
+        #info {
+            /* position: absolute; 
+            top: 20px; */
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h2>Juego del Caos: Triángulo de Sierpinsky como atractor</h2>
+        <p>Generando puntos mediante el método del juego del caos.</p>
+        <p>Pendiente de retoques: los puntos se añaden muy lentamente</p>
+        <p>Será mejor almacenar los puntos en un array y dibujarlos todos de una vez cuando el array se haya cargado?</p>
+        <p>O ir haciéndolo por etapas: cálculo continuo del array, dibujo del canvas cada cierto tiempo, cada vez con más puntos</p>
+        <p id="points">Puntos: </p>
+    </div>
+    <canvas id="canvas" width="800" height="700" style="margin:auto; display:block"></canvas>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const pointsDisplay = document.getElementById('points');
+
+        // Triangle vertices
+        const vertices = [
+            { x: canvas.width / 2, y: 50 },
+            { x: 50, y: canvas.height - 50 },
+            { x: canvas.width - 50, y: canvas.height - 50 }
+        ];
+
+        // Draw triangle outline
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(vertices[0].x, vertices[0].y);
+        ctx.lineTo(vertices[1].x, vertices[1].y);
+        ctx.lineTo(vertices[2].x, vertices[2].y);
+        ctx.closePath();
+        ctx.stroke();
+
+        // Start with random point
+        let current = {
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height
+        };
+
+        let pointCount = 0;
+
+        function drawPoint() {
+            // Pick random vertex
+            const vertex = vertices[Math.floor(Math.random() * 3)];
+
+            // Move halfway toward vertex
+            current.x = (current.x + vertex.x) / 2;
+            current.y = (current.y + vertex.y) / 2;
+
+            // Plot point
+            ctx.fillStyle = '#00ff00';
+            ctx.fillRect(current.x, current.y, 1, 1);
+
+            pointCount++;
+            if(pointCount % 1000 === 0) {
+                pointsDisplay.textContent = `Puntos: ${pointCount}`; 
+            }   
+
+                //pointsDisplay.textContent = `Puntos: ${pointCount}`;
+
+            if (pointCount < 100000) {
+                requestAnimationFrame(drawPoint);
+            }
+        }
+
+        drawPoint();
+    </script>
+</body>
+</html>
