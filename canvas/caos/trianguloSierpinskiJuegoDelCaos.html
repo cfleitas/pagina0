@@ -82,7 +82,9 @@
                 const vertice = obtenVerticeAleatorio();
                 puntoActual.x = (puntoActual.x + vertice.x) / 2;
                 puntoActual.y = (puntoActual.y + vertice.y) / 2;
-                dibujaPunto(puntoActual);
+                if(puntosCalculados >= 10){
+                    dibujaPunto(puntoActual);
+            }
                 puntosCalculados++;
             }
             puntosInfo.textContent = `Puntos: ${puntosCalculados}`;
