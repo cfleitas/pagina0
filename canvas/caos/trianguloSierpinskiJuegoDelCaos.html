@@ -1,0 +1,97 @@
+!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego del Caos: Triángulo de Sierpinski</title>
+    <style>
+        body {
+            /*display: flex;*/
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #0e0101;
+            font-family: Arial, sans-serif;
+        }
+        #canvas {
+            border: 2px solid #db2222;
+            background-color: #000;
+        }
+        #info {
+            /* position: absolute; 
+            top: 20px; */
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="info">
+        <h2>Juego del Caos: Secuencia de puntos que tiene  el Triángulo de Sierpinsky como atractor</h2>
+        <p>Generando puntos mediante el método del juego del caos. Se van añadiendo los puntos en secuencias de 
+            1000 para acelerar el proceso de dibujo. </p>
+        <p>Pendiente de retoques: a) los vértices se deberán mover con el ratón 
+            y b) el número de vértices deberá ser variable para poder usar otros polígonos como atractores
+        </p>
+        
+        <p id="points">Puntos: </p>
+    </div>
+    <canvas id="canvas" width="800" height="700" style="margin:auto; display:block"></canvas>
+
+    
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const puntosInfo = document.getElementById('points');
+
+        // Vértices del triángulo. Habrá que modificar el asunto para poderlos mover con el ratón 
+        // Y para para que el polígono inicial pueda ser cualquiera
+        const vertices = [
+            { x: canvas.width / 2, y: 50 },
+            { x: 50, y: canvas.height - 50 },
+            { x: canvas.width - 50, y: canvas.height - 50 }
+        ];
+        // Draw triangle outline
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(vertices[0].x, vertices[0].y);
+        ctx.lineTo(vertices[1].x, vertices[1].y);
+        ctx.lineTo(vertices[2].x, vertices[2].y);
+        ctx.closePath();
+        ctx.stroke();
+        // Punto aleatorio inicial dentro del canvas
+        let puntoActual = {
+            x: Math.random() * (canvas.width - 100) + 50,
+            y: Math.random() * (canvas.height - 100) + 50
+        };  
+        let puntosCalculados = 0;
+        function obtenVerticeAleatorio() {
+            const index = Math.floor(Math.random() * vertices.length);
+            return vertices[index];
+        }   
+
+        function dibujaPunto(point) {
+            ctx.fillStyle = '#00ff00';
+            ctx.fillRect(point.x, point.y, 1, 1);
+        }
+        function iteracionJuegoDelCaos() {
+            for (let i = 0; i < 1000 && puntosCalculados <50000; i++) { // Draw 100 points per iteration
+                const vertice = obtenVerticeAleatorio();
+                puntoActual.x = (puntoActual.x + vertice.x) / 2;
+                puntoActual.y = (puntoActual.y + vertice.y) / 2;
+                dibujaPunto(puntoActual);
+                puntosCalculados++;
+            }
+            puntosInfo.textContent = `Puntos: ${puntosCalculados}`;
+            requestAnimationFrame(iteracionJuegoDelCaos);
+        }
+            
+        iteracionJuegoDelCaos();
+                   
+    </script>
+
+</body>
+</html>
