@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puntos Móviles</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            /* display: flex; */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: white;
+            cursor: grab;
+        }
+        canvas:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body>
+    <p>Aproximación inicial. No sirve </p>   
+        <canvas id="canvas" style="margin:auto; display:block"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = 600;
+        canvas.height = 600;
+        
+        const gridSize = 60;
+        const pointRadius = 6;
+        const gridPoints = [];
+        const dragPoint = { x: canvas.width / 2, y: canvas.height / 2, radius: 8, isDragging: false };
+        
+        // Generate grid points
+        for (let x = gridSize; x < canvas.width; x += gridSize) {
+            for (let y = gridSize; y < canvas.height; y += gridSize) {
+                gridPoints.push({ x, y });
+            }
+        }
+        
+        // Draw function
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid points
+            ctx.fillStyle = '#3498db';
+            gridPoints.forEach(point => {
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, pointRadius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // Draw draggable point
+            ctx.fillStyle = '#e74c3c';
+            ctx.beginPath();
+            ctx.arc(dragPoint.x, dragPoint.y, dragPoint.radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Mouse events
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            const dx = mouseX - dragPoint.x;
+            const dy = mouseY - dragPoint.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < dragPoint.radius + 5) {
+                dragPoint.isDragging = true;
+            }
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            if (dragPoint.isDragging) {
+                const rect = canvas.getBoundingClientRect();
+                dragPoint.x = e.clientX - rect.left;
+                dragPoint.y = e.clientY - rect.top;
+                draw();
+            }
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            dragPoint.isDragging = false;
+        });
+        
+        canvas.addEventListener('mouseleave', () => {
+            dragPoint.isDragging = false;
+        });
+        
+        draw();
+    </script>
+</body>
+</html>

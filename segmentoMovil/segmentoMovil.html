@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Canvas Segments</title>
+    <style>
+        body {
+            margin: 0;
+            /*display: flex;*/
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: white;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+    <p>Segmentos móviles con posiciones restringidas a un rectángulo interior al canvas. Experimentos ...</p>
+    <canvas id="canvas" width="800" height="600" style="margin:auto; display:block"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Define segments with extreme points (start and end positions allowed)
+        const segments = [
+            {
+                id: 1,
+                x1: 100, y1: 100,
+                x2: 200, y2: 150,
+                minX: 50, minY: 50,
+                maxX: 300, maxY: 400,
+                dragging: false,
+                offsetX: 0, offsetY: 0
+            },
+            {
+                id: 2,
+                x1: 350, y1: 200,
+                x2: 450, y2: 100,
+                minX: 300, minY: 50,
+                maxX: 500, maxY: 350,
+                dragging: false,
+                offsetX: 0, offsetY: 0
+            },
+            {
+                id: 3,
+                x1: 550, y1: 350,
+                x2: 700, y2: 300,
+                minX: 500, minY: 250,
+                maxX: 750, maxY: 500,
+                dragging: false,
+                offsetX: 0, offsetY: 0
+            }
+        ];
+
+        const SEGMENT_WIDTH = 4;
+        const HANDLE_RADIUS = 8;
+
+        function drawSegments() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            segments.forEach(seg => {
+                // Draw constraint box
+                ctx.strokeStyle = '#ddd';
+                ctx.lineWidth = 1;
+                ctx.strokeRect(seg.minX, seg.minY, seg.maxX - seg.minX, seg.maxY - seg.minY);
+
+                // Draw segment
+                ctx.strokeStyle = seg.dragging ? '#ff6b6b' : '#333';
+                ctx.lineWidth = SEGMENT_WIDTH;
+                ctx.beginPath();
+                ctx.moveTo(seg.x1, seg.y1);
+                ctx.lineTo(seg.x2, seg.y2);
+                ctx.stroke();
+
+                // Draw handles
+                [seg.x1, seg.y1, seg.x2, seg.y2].forEach((_, i) => {
+                    const x = i % 2 === 0 ? (i < 2 ? seg.x1 : seg.x2) : null;
+                    const y = i % 2 === 1 ? (i < 2 ? seg.y1 : seg.y2) : null;
+                    if (x !== null && y !== null) {
+                        ctx.fillStyle = seg.dragging ? '#ff6b6b' : '#4CAF50';
+                        ctx.beginPath();
+                        ctx.arc(x, y, HANDLE_RADIUS, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                });
+            });
+        }
+
+        function getSegmentAtPoint(x, y) {
+            for (let seg of segments) {
+                const dist1 = Math.hypot(x - seg.x1, y - seg.y1);
+                const dist2 = Math.hypot(x - seg.x2, y - seg.y2);
+                if (dist1 < HANDLE_RADIUS || dist2 < HANDLE_RADIUS) {
+                    return { seg, handle: dist1 < dist2 ? 0 : 1 };
+                }
+            }
+            return null;
+        }
+
+        function clampToBox(x, y, seg) {
+            return {
+                x: Math.max(seg.minX, Math.min(seg.maxX, x)),
+                y: Math.max(seg.minY, Math.min(seg.maxY, y))
+            };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const result = getSegmentAtPoint(x, y);
+            if (result) {
+                result.seg.dragging = true;
+                result.seg.offsetX = x;
+                result.seg.offsetY = y;
+                result.seg.handle = result.handle;
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            segments.forEach(seg => {
+                if (seg.dragging) {
+                    const handle = seg.handle;
+                    const clamped = clampToBox(x, y, seg);
+                    
+                    if (handle === 0) {
+                        seg.x1 = clamped.x;
+                        seg.y1 = clamped.y;
+                    } else {
+                        seg.x2 = clamped.x;
+                        seg.y2 = clamped.y;
+                    }
+                }
+            });
+            drawSegments();
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            segments.forEach(seg => seg.dragging = false);
+            drawSegments();
+        });
+
+        drawSegments();
+    </script>
+</body>
+</html>
