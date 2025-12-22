@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puntos Móviles</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            /* display: flex; */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: white;
+            cursor: grab;
+        }
+        canvas:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body>
+<p>Experimentando con puntos móviles que se pueden arrastrar a las posiciones de una rejilla</p>
+<p>Lo primero que quiero es restringir el movimiento del punto rojo para que no pueda salirse del canvas a -10 px del border </p>
+    <p id="info"></p>
+
+    <canvas id="canvas" style="margin:auto; display:block"></canvas>
+
+     <!--JavaScript code: -->
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const info = document.getElementById('info');
+        canvas.width = 600;
+        canvas.height = 600;
+        const gridSize = 80;
+        const pointRadius = 8;  
+        const gridPoints = [];
+        // Generate fixed grid points   
+        for (let x = gridSize; x < canvas.width; x += gridSize) {
+            for (let y = gridSize; y < canvas.height; y += gridSize) {
+                gridPoints.push({ x, y });
+            }
+        }
+        // Draggable point
+        let draggablePoint = { x: gridPoints[0].x, y: gridPoints[0].y };
+        let originalPoint = { ...draggablePoint };  
+        let isDragging = false;
+        function findNearestGridPoint(x, y) {
+            let nearestPoint = gridPoints[0];
+            let minDist = Infinity;
+            for (const point of gridPoints) {
+                const dist = Math.hypot(point.x - x, point.y - y);
+                if (dist < minDist) {
+                    minDist = dist;
+                    nearestPoint = point;
+                }
+            }
+            return nearestPoint;
+        }
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Draw grid points
+            ctx.fillStyle = 'lightgray';
+            for (const point of gridPoints) {
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, 4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            // Draw draggable point
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(draggablePoint.x, draggablePoint.y, pointRadius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            const distToPoint = Math.hypot(mouseX - draggablePoint.x, mouseY - draggablePoint.y);
+            if (distToPoint < pointRadius) {
+                isDragging = true;
+                originalPoint = { ...draggablePoint };
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                if (mouseX < 10 || mouseX > canvas.width - 10 ||  
+                    mouseY < 10 || mouseY > canvas.height-10) { 
+                        draggablePoint.x = mouseX;
+                        draggablePoint.y = mouseY;
+                    } else {
+                        //draggablePoint = { ...originalPoint };
+                    }
+                draw();
+            
+        });
+
+        canvas.addEventListener('mouseup', (e) => {
+            if (isDragging) {
+                isDragging = false;
+                const rect = canvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                const nearestPoint = findNearestGridPoint(mouseX, mouseY);
+                const distToNearest = Math.hypot(nearestPoint.x - mouseX, nearestPoint.y - mouseY);
+                //Aquí hay que modificar para que si se sale del canvas no se mueva el punto
+                //hay algo que no está bien
+                /*                
+                if (draggablePoint.x < 0 || draggablePoint.x > canvas.width ||  
+                    draggablePoint.y < 0 || draggablePoint.y > canvas.height) {                      
+                                         
+                    draggablePoint = { ...originalPoint };
+                    } else {
+                    draggablePoint = nearestPoint;
+                    }
+                    */
+
+                /*
+                if (distToNearest < gridSize / 3) {
+                    draggablePoint.x = nearestPoint.x;
+                    draggablePoint.y = nearestPoint.y;
+                } else {
+                   
+                }*/
+                draw();
+            }
+        });
+
+
+
+
+
+
+
+        draw();
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!-- En este archivo HTML se crea un canvas donde el usuario puede mover un punto rojo dentro de un rectángulo delimitado.
+El punto se "engancha" a los puntos de una rejilla azul cuando se suelta el ratón. 
+Por fin parece que la cosa va bien y en buen camino! -->
+
+<!-- Lo siguiente: Lo mismo con segmentos en los que se puede arrastrar desde un extremo u otro
+hasta posiciones restringidas dentro de un rectángulo interior al canvas y que se "enganchen" a una rejilla de puntos. 
+-->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movable Point in Canvas</title>
+    <style>
+        body {
+            
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: white;
+            cursor: move;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Punto móvil restringido a un rectángulo interior al canvas y que se "engancha" a una rejilla de puntos azules.</h1>
+     <p>En este archivo HTML se crea un canvas donde el usuario puede mover un punto rojo dentro de un rectángulo delimitado.
+    El punto se "engancha" a los puntos de una rejilla azul cuando se suelta el ratón. 
+    Por fin parece que la cosa va bien y en buen camino! </p>
+    <p>
+    Lo siguiente: Lo mismo con segmentos en los que se puede arrastrar desde un extremo u otro
+    hasta posiciones restringidas dentro de un rectángulo interior al canvas y que se "enganchen" a una rejilla de puntos. 
+    </p>
+
+
+    <canvas id="canvas" width="600" height="600" style="margin:auto; display:block"></canvas>
+
+    <script>
+        //acceso al canvas y contexto:  
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Definimos el rectángulo interior al canvas y en el que el usuario trabajará:
+        const rectangle = { x: 100, y: 100, width: 400, height: 400 };
+
+        // Definimos el punto móvil:
+        const punto = { x: 300, y: 200, radius: 8 };
+        
+        //puntos de la rejilla, ancho es el espacio entre puntos:
+        const anchoRejilla = 50;
+        const puntosRejilla = [];
+        const filas = Math.floor(rectangle.height / anchoRejilla) -1;
+        const columnas = Math.floor(rectangle.width / anchoRejilla) - 1;
+        for (let i = 1; i <= columnas; i++) {   
+            for (let j = 1; j <= filas; j++) {
+                puntosRejilla.push({
+                    x: rectangle.x + i * anchoRejilla,
+                    y: rectangle.y + j * anchoRejilla
+                });
+            }
+        }  
+        //añado un segundo punto a la derecha del punto móvil inicial:
+        //es pensando en trabajar con segmentos móviles después:
+        const punto2 = { x: punto.x + 100, y: punto.y, radius: 8 };
+
+
+
+        let isDragging = false;
+
+        function dibujaEscena() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            //Dibuja el rectángulo interior:
+            ctx.strokeStyle = '#0000ff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+
+            //Pinta puntos de la rejilla
+            ctx.fillStyle = 'blue'; 
+            puntosRejilla.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            
+            
+            // -dibuja el punto móvil:
+            ctx.fillStyle = '#ff0000';
+            ctx.beginPath();
+            ctx.arc(punto.x, punto.y, punto.radius, 0, Math.PI * 2);
+            ctx.fill();
+        } //fin del dibujaEscena
+
+        function estaPuntoEnRectangulo(px, py) {
+            return px >= rectangle.x && px <= rectangle.x + rectangle.width &&
+                   py >= rectangle.y && py <= rectangle.y + rectangle.height;
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const distance = Math.sqrt((x - punto.x) ** 2 + (y - punto.y) ** 2);
+            if (distance < punto.radius + 5) {
+                isDragging = true;
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            if (estaPuntoEnRectangulo(x, y)) {
+                punto.x = x;
+                punto.y = y;
+            }
+
+            dibujaEscena();
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            //Al soltar el ratón, se detiene el arrastre:
+            //Y aquí voy a hacer que el punto se acerque al punto de la rejilla más cercano:
+            let nearestPoint = null;
+            let minDistance = Infinity;
+            puntosRejilla.forEach(p => {
+                const distance = Math.hypot(punto.x - p.x, punto.y - p.y);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestPoint = p;
+                }
+            });
+            if (nearestPoint) {
+                punto.x = nearestPoint.x;
+                punto.y = nearestPoint.y;
+            }   
+            
+            isDragging = false;
+            dibujaEscena();
+        });
+
+        dibujaEscena();
+    </script>
+</body>
+</html>

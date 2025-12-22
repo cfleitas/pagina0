@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draggable Point Canvas</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: white;
+            cursor: grab;
+        }
+        canvas:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas" width="600" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        const point = { x: 150, y: 100, radius: 8 };
+        const restrictedArea = { x: 50, y: 50, width: 500, height: 300 };
+        let isDragging = false;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        function drawScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw restricted rectangle
+            ctx.strokeStyle = '#ccc';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(restrictedArea.x, restrictedArea.y, restrictedArea.width, restrictedArea.height);
+
+            // Draw point
+            ctx.fillStyle = '#3498db';
+            ctx.beginPath();
+            ctx.arc(point.x, point.y, point.radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function isPointInArea(x, y) {
+            const minX = restrictedArea.x + point.radius;
+            const maxX = restrictedArea.x + restrictedArea.width - point.radius;
+            const minY = restrictedArea.y + point.radius;
+            const maxY = restrictedArea.y + restrictedArea.height - point.radius;
+
+            return x >= minX && x <= maxX && y >= minY && y <= maxY;
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const distance = Math.hypot(x - point.x, y - point.y);
+            if (distance <= point.radius) {
+                isDragging = true;
+                offsetX = x - point.x;
+                offsetY = y - point.y;
+                canvas.style.cursor = 'grabbing';
+            }
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left - offsetX;
+                const y = e.clientY - rect.top - offsetY;
+
+                if (isPointInArea(x, y)) {
+                    point.x = x;
+                    point.y = y;
+                }
+                drawScene();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            isDragging = false;
+            canvas.style.cursor = 'grab';
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+            isDragging = false;
+            canvas.style.cursor = 'grab';
+        });
+
+        drawScene();
+    </script>
+</body>
+</html>

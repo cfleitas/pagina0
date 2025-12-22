@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puntos Móviles</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            /* display: flex; */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: white;
+            cursor: grab;
+        }
+        canvas:active {
+            cursor: grabbing;
+        }
+    </style>
+</head>
+<body>
+    <h1>Modificando el archivo inicial. Ahora va bien, pero hay problemas si el punto móvil lo arrastro hasta el borde del canvas. Voy a empezarlo de nuevo</h1>   
+    <h2>Voy a empezar dibujando el grid y poniendo el punto rojo sin restricciones pero controlando que no pueda rebasar la posicíon -10 px desde el borde</h2>
+    <p id="info"></p>
+
+    <canvas id="canvas" style="margin:auto; display:block"></canvas>
+
+     <!--JavaScript code: -->
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = 600;
+        canvas.height = 600;
+        
+        const gridSize = 60;
+        const pointRadius = 6;
+        let gridPoints = [];
+        let dragPoint = { x: canvas.width / 2, y: canvas.height / 2, radius: 8, isDragging: false };
+        let ultimaPosicion = {...dragPoint};
+
+        // Generate grid points
+        for (let x = gridSize; x < canvas.width; x += gridSize) {
+            for (let y = gridSize; y < canvas.height; y += gridSize) {
+                gridPoints.push({ x, y });
+            }
+        }
+        
+
+        function puntoMasProximo(x, y) {
+            let minDist = Infinity;
+            let puntoMasCercano  = null;
+            gridPoints.forEach(point => {
+                const dx = x - point.x;
+                const dy = y - point.y;
+                const dist = Math.sqrt(dx * dx + dy * dy);
+                if (dist < minDist) {
+                    minDist = dist;
+                    puntoMasCercano = point;
+                }
+            });
+            
+            //return minDist < gridSize/2 ? puntoMasCercano : null;  
+            return puntoMasCercano;            
+            
+        }   
+
+
+
+        // Draw function
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grid points
+            ctx.fillStyle = '#3498db';
+            gridPoints.forEach(point => {
+                ctx.beginPath();
+                ctx.arc(point.x, point.y, pointRadius, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            // Draw draggable point
+            ctx.fillStyle = '#e74c3c';
+            ctx.beginPath();
+            ctx.arc(dragPoint.x, dragPoint.y, dragPoint.radius, 0, Math.PI * 2);
+            ctx.fill();
+        }
+        
+        // Mouse events
+        // al bajar el ratón a una distancia pequeña del punto rojo, se activa el arrastre:
+        // isDragging se pone a true
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
+            
+            const dx = mouseX - dragPoint.x;
+            const dy = mouseY - dragPoint.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            //el ratón engancha el punto rojo si está cerca de él
+            if (distance < dragPoint.radius + 5) {
+                ultimaPosicion.x = dragPoint.x;
+                ultimaPosicion.y = dragPoint.y;
+                dragPoint.isDragging = true;
+            }
+        });
+        
+        /*versión inicial:      
+        canvas.addEventListener('mousemove', (e) => {
+            //al mover el ratón, si isDragging es true, se mueve el punto rojo
+            if (dragPoint.isDragging) {
+                const rect = canvas.getBoundingClientRect();
+                dragPoint.x = e.clientX - rect.left;
+                dragPoint.y = e.clientY - rect.top; 
+                 const puntoCercano = puntoMasProximo(dragPoint.x, dragPoint.y);               
+                draw();
+            }
+        }); */
+        
+        //versión corregida:
+        canvas.addEventListener('mousemove', (e) => {
+            //al mover el ratón, si isDragging es true, se mueve el punto rojo
+            if (dragPoint.isDragging) {
+                const rect = canvas.getBoundingClientRect();
+                if(5<= e.clientX - rect.left && e.clientX - rect.left <= canvas.width -5){
+                    dragPoint.x = e.clientX - rect.left;}
+                    else{ 
+                        if(e.clientX - rect.left <5){
+                            dragPoint.x =5;
+                        } else{
+                            dragPoint.x = canvas.width -5;
+                        }
+                    }
+                if(5<= e.clientY - rect.top && e.clientY - rect.top <= canvas.height -5){
+                    dragPoint.y = e.clientY - rect.top;}
+                    else{ 
+                        if(e.clientY - rect.top <5){
+                            dragPoint.y =5;
+                        } else{
+                            dragPoint.y = canvas.height -5;
+                        }
+                    }
+                const puntoCercano = puntoMasProximo(dragPoint.x, dragPoint.y);               
+                draw();
+            }
+        }); 
+
+
+        canvas.addEventListener('mouseup', () => {
+            //dragPoint.x = puntoMasProximo(dragPoint.x, dragPoint.y).x;
+            //dragPoint.y = puntoMasProximo(dragPoint.x, dragPoint.y).y;
+             //Hay que afinar el asunto para que si no hay ningún punto cercano, el punto rojo vuelva a su posición anterior
+            const puntoCercano = puntoMasProximo(dragPoint.x, dragPoint.y);
+            if (puntoCercano === null) {
+                dragPoint.x = ultimaPosicion.x;
+                dragPoint.y = ultimaPosicion.y;
+            }   else{
+                dragPoint.x = puntoCercano.x;
+                dragPoint.y = puntoCercano.y;
+            }
+            draw(); 
+            dragPoint.isDragging = false;
+           
+            
+        });
+        
+        
+        canvas.addEventListener('mouseleave', () => {
+            dragPoint.isDragging = false;
+        });
+        
+        
+        draw();
+    </script>
+</body>
+</html>
