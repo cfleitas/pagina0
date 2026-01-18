@@ -1,0 +1,282 @@
+<!-- En este archivo HTML se crea un canvas donde el usuario puede mover un punto rojo dentro de un rectángulo delimitado.
+El punto se "engancha" a los puntos de una rejilla azul cuando se suelta el ratón. 
+Por fin parece que la cosa va bien y en buen camino! -->
+
+<!-- Lo siguiente: Lo mismo con segmentos en los que se puede arrastrar desde un extremo u otro
+hasta posiciones restringidas dentro de un rectángulo interior al canvas y que se "enganchen" a una rejilla de puntos. 
+-->
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructura de puntos móviles en un Canvas</title>
+    <style>
+        body {
+            
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid #333;
+            background-color: white;
+            cursor: move;
+        }
+        #informacion {            
+            width: 800px;
+            height: 500px;
+            background-color: lightblue;
+            border: 20px solid rgb(128, 0, 66);
+            padding: 10px;
+            margin: 100px auto;
+            text-align: left;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            color: darkblue;
+        }   
+
+        
+    </style>
+</head>
+<body>
+
+    <h1>Punto móvil restringido a un rectángulo interior al canvas y que se "engancha" a una rejilla de puntos azules.</h1>
+     <p>En este archivo HTML se crea un canvas donde el usuario puede mover un punto rojo dentro de un rectángulo delimitado.
+    El punto se "engancha" a los puntos de una rejilla azul cuando se suelta el ratón. 
+    Por fin parece que la cosa va bien y en buen camino! </p>
+    <p>
+    Lo siguiente: Lo mismo con segmentos en los que se puede arrastrar desde un extremo u otro
+    hasta posiciones restringidas dentro de un rectángulo interior al canvas y que se "enganchen" a una rejilla de puntos. 
+    </p>
+    <div id="informacion">
+    <p id="info"> </p>
+    </div>
+
+
+    <canvas id="canvas" width="600" height="600" style="margin:auto; display:block"></canvas>
+
+    <script>
+       
+       /*CONTINÚO CON EL ARCHIVO ANTERIOR: pruebaPuntoMovilRestringido.html
+        Para conseguir los dos objetivos siguientes:      
+        1. Restringir el movimiento del punto principal para que no pueda rebasar por la derecha
+        de la posición del último punto de la rejilla por la derecha.(para que el segundo punto no se salga del rectángulo        
+        2. Hacer que si se pulsa sobre el segundo punto (verde) este lleve el movimiento y no el punto rojo (primer  punto)
+        PARA ELLO VOY A USAR UN OBJETO CON TRES PUNTOS Y ....
+        
+        */
+
+
+        //acceso al canvas y contexto:  
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Definimos el rectángulo interior al canvas y en el que el usuario trabajará:
+        const rectangle = { x: 100, y: 100, width: 400, height: 400 };
+        const anchoRejilla = 50;
+        const puntosRejilla = [];
+        let nrPuntoSeleccionado = -1; //para saber qué punto se está moviendo
+        // Definimos LOS PUNTOS MÓVILES:
+        let puntos = [];
+        //Aquí almacenaremos el vector de desplazamiento definido por:
+        //la posición previa (ultimasPosiciones) y la posición actual recogida 
+        //del punto activo (indicado por el índice: nrPuntoSeleccionado)
+        // del movimiento por el event del mousemove:
+        let vectorDesplazamiento = [];
+        vectorDesplazamiento.push({x: 0, y: 0});
+
+        const punto1 = { x: 300, y: 200, radius: 8 };
+        puntos.push(punto1);
+        const punto2 = { x: punto1.x + anchoRejilla, y: punto1.y, radius: 8 };
+        puntos.push(punto2);
+        const punto3 = { x: punto1.x , y: punto1.y + anchoRejilla, radius: 8 };
+        puntos.push(punto3);
+        //almaceno la última posición de los puntos:
+        // en realidad son las posiciones anteriores a la última recogida por el evento correspondiente del mousemove
+        const ultimasPosiciones = [];
+        ultimasPosiciones.push( { x: punto1.x, y: punto1.y } );
+        ultimasPosiciones.push( { x: punto2.x, y: punto2.y } );
+        ultimasPosiciones.push( { x: punto3.x, y: punto3.y } );
+
+        //aquí almacenaremos las últimas posiciones de los puntos en la rejilla
+        //damos por hecho que la pieza rígida que movemos tiene los puntos que
+        //la definen sobre la rejilla.
+        const ultimasPosicionesEnRejilla=[];
+        ultimasPosicionesEnRejilla.push( { x: punto1.x, y: punto1.y } );
+        ultimasPosicionesEnRejilla.push( { x: punto2.x, y: punto2.y } );
+        ultimasPosicionesEnRejilla.push( { x: punto3.x, y: punto3.y } );
+        
+
+
+       
+        //puntos de la rejilla, ancho es el espacio entre puntos:
+        
+        const filas = Math.floor(rectangle.height / anchoRejilla) -1;
+        const columnas = Math.floor(rectangle.width / anchoRejilla) - 1;
+        for (let i = 1; i <= columnas; i++) {   
+            for (let j = 1; j <= filas; j++) {
+                puntosRejilla.push({
+                    x: rectangle.x + i * anchoRejilla,
+                    y: rectangle.y + j * anchoRejilla
+                });
+            }
+        }  
+        
+        // Variables para el arrastre:
+        let isDragging = false;
+
+        function dibujaEscena() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            //Dibuja el rectángulo interior:
+            ctx.strokeStyle = '#0000ff';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+
+            //Pinta puntos de la rejilla
+            ctx.fillStyle = 'blue'; 
+            puntosRejilla.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+                        
+            // dibuja los puntos móviles:
+            for(let i =0; i<= puntos.length-1; i++){
+                ctx.fillStyle = '#ff0000';
+                ctx.beginPath();
+                ctx.arc(puntos[i].x, puntos[i].y, puntos[i].radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+        }  //fin del dibujaEscena
+
+        function estaPuntoEnRectangulo(punt) {
+            for(let i =0; i<= punt.length -1; i++){
+                const px = punt[i].x;
+                const py = punt[i].y;
+                if (!(px >= rectangle.x && px <= rectangle.x + rectangle.width &&
+                    py >= rectangle.y && py <= rectangle.y + rectangle.height)) {
+                    return false;
+                }
+            }  
+            return true;            
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            //document.getElementById("info").innerText= "hola"; //a este punto llega el programa
+
+            for(let i =0; i<= puntos.length -1; i++){
+                //const punto = puntos[i];
+                const distance = Math.sqrt((x - puntos[i].x) ** 2 + (y - puntos[i].y) ** 2);
+
+                if (distance <  10) {
+                    //hay que actualizar la última posición de todos los puntos!!!!! con un bucle j y luego ya va el isDragging
+                    for(let j =0; j<= puntos.length -1; j++){
+                        //los textos de control se añaden en el bucle del índice i del punto clicado pq es el más pròximo al puntero
+                        document.getElementById("info").innerText += "\nEstoy en la vuelta de i =  "+i + "\n ";
+                        ultimasPosiciones[j] = {x:puntos[j].x, y:puntos[j].y}; //aquí ESTAMOS!
+                        ultimasPosicionesEnRejilla[j]={x:puntos[j].x, y:puntos[j].y}; //ultma posición sobre rejilla
+                        document.getElementById("info").innerText +=   "\nvalores de puntos[j] en la vuelta j= "+j+"] = " + puntos[j].x+ " "+puntos[j].y;
+                        document.getElementById("info").innerText +=   "\n  directametne leo variable útimas posic: "+ ultimasPosiciones[j].x + " "+ ultimasPosiciones[j].y + "\n";
+                    }   
+                    //señalar el punto seleccionado: el índice en puntos
+                    document.getElementById("info").innerText +=   "control "+i;
+                    nrPuntoSeleccionado = i;
+                    document.getElementById("info").innerText += "\níndice del punto seleccionado: "+ nrPuntoSeleccionado;
+                    isDragging = true;
+                    return; //salgo del evento mousedown
+                }
+            }           
+        });
+        //hasta aquí parece que todo va bien. Veamos ahora el mousemove
+
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            if (estaPuntoEnRectangulo(puntos)) {
+                //hay que hacer un bucle para actualizar la posición de todos los puntos:
+                document.getElementById("info").innerText +=   "\nestoy en la función estaEnRectangulO\n";
+                document.getElementById("info").innerText += "Estoy en el bucle if, el índice seleccionado: " + nrPuntoSeleccionado ;
+                vectorDesplazamiento[0].x = x-puntos[nrPuntoSeleccionado].x ;  
+                vectorDesplazamiento[0].y = y-puntos[nrPuntoSeleccionado].y;
+                document.getElementById("info").innerText += "\nEl vector desplazamineto: " + vectorDesplazamiento[0].x;
+                for(let i = 0; i<= puntos.length -1; i++){
+                    document.getElementById("info").innerText += "\nEstoy en el for " ;
+                    if(i != nrPuntoSeleccionado){
+                        puntos[i].x = ultimasPosiciones[i].x + vectorDesplazamiento[0].x;
+                        puntos[i].y = ultimasPosiciones[i].y + vectorDesplazamiento[0].y;
+                        //actualizar última posición
+                        document.getElementById("info").innerText += "\nEstoy en el bucle if " ;
+                        ultimasPosiciones[i].x = puntos[i].x;
+                        ultimasPosiciones[i].y = puntos[i].y;
+                    }
+                    else{ //aquí i es el índice del punto seleccionado:
+                        document.getElementById("info").innerText += "\nEstoy en el bucle else " ;
+                        puntos[i].x = x; 
+                        puntos[i].y = y; 
+                        //actualizar última posición.
+                        ultimasPosiciones[i].x = puntos[i].x;
+                        ultimasPosiciones[i].y = puntos[i].y;
+
+
+                    }
+                }
+                 
+                       
+                
+            } //hay que ver qué hacer cuando uno de los puntos se sale del rectángulo ¿volver a la última posición anterior?
+            //cuando se atasca la cosa por ese motivo levantas el ratón y ya la cosa va con el mouseup
+            //y hab´ria que hacer que vuelvan a la última posición de la rejilla
+            //Aquí estamos: 23-12-2015
+            dibujaEscena();
+        }); 
+
+        canvas.addEventListener('mouseup', () => {
+            //Al soltar el ratón, se detiene el arrastre:
+            //Y aquí voy a hacer que el punto se acerque al punto de la rejilla más cercano:
+            let puntoMasProximo = null;
+            let minDistance = Infinity;
+            puntosRejilla.forEach(p => {
+                const distance = Math.hypot(punto.x - p.x, punto.y - p.y);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    puntoMasProximo = p;
+                }
+            });
+            if (puntoMasProximo && minDistance <= anchoRejilla / 3) {
+                punto.x = puntoMasProximo.x;
+                punto.y = puntoMasProximo.y;
+            } 
+            else {
+                //si no hay ningún punto cercano, el punto vuelve a su última posición válida:
+                punto.x = ultimaPosicionPunto.x;
+                punto.y = ultimaPosicionPunto.y;    
+            }  
+            punto2.x = punto.x + anchoRejilla; //mantengo el segundo punto a la derecha del primero
+            punto2.y = punto.y;
+            
+            isDragging = false;
+            dibujaEscena();
+        });
+
+        dibujaEscena();
+    </script>
+</body>
+</html>

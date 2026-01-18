@@ -47,6 +47,20 @@ hasta posiciones restringidas dentro de un rectángulo interior al canvas y que 
     <canvas id="canvas" width="600" height="600" style="margin:auto; display:block"></canvas>
 
     <script>
+       
+       /*HASTA AQUÍ TODO BIEN.
+       LO QUE PONGO A CONTINUACIÓN LO HARÉ EN UN ARCHIVO NUEVO PARA NO LIARME.
+       
+       Hay dos cosas pendientes de momento:
+
+        1. Restringir el movimiento del punto principal para que no pueda rebasar por la derecha
+        de la posición del último punto de la rejilla por la derecha.(para que el segundo punto no se salga del rectángulo
+        
+        2. Hacer que si se pulsa sobre el segundo punto (verde) este lleve el movimiento y no el punto rojo (primer  punto)
+        
+        */
+
+
         //acceso al canvas y contexto:  
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
@@ -56,6 +70,8 @@ hasta posiciones restringidas dentro de un rectángulo interior al canvas y que 
 
         // Definimos el punto móvil:
         const punto = { x: 300, y: 200, radius: 8 };
+        //almaceno la última posición del punto para poder calcular el retorno en caso necesario:
+        let ultimaPosicionPunto = { x: punto.x, y: punto.y };
         
         //puntos de la rejilla, ancho es el espacio entre puntos:
         const anchoRejilla = 50;
@@ -71,8 +87,8 @@ hasta posiciones restringidas dentro de un rectángulo interior al canvas y que 
             }
         }  
         //añado un segundo punto a la derecha del punto móvil inicial:
-        //es pensando en trabajar con segmentos móviles después:
-        const punto2 = { x: punto.x + 100, y: punto.y, radius: 8 };
+        //esto es pensando en trabajar con segmentos móviles después:
+        const punto2 = { x: punto.x + anchoRejilla, y: punto.y, radius: 8 };
 
 
 
@@ -94,13 +110,18 @@ hasta posiciones restringidas dentro de un rectángulo interior al canvas y que 
                 ctx.fill();
             });
 
-            
-            
+                        
             // -dibuja el punto móvil:
             ctx.fillStyle = '#ff0000';
             ctx.beginPath();
             ctx.arc(punto.x, punto.y, punto.radius, 0, Math.PI * 2);
             ctx.fill();
+            //dibuja el segundo punto (pensando en segmentos móviles después):
+            ctx.fillStyle = '#00aa00';
+            ctx.beginPath();
+            ctx.arc(punto2.x, punto2.y, punto2.radius, 0, Math.PI * 2);
+            ctx.fill();
+
         } //fin del dibujaEscena
 
         function estaPuntoEnRectangulo(px, py) {
@@ -115,6 +136,8 @@ hasta posiciones restringidas dentro de un rectángulo interior al canvas y que 
 
             const distance = Math.sqrt((x - punto.x) ** 2 + (y - punto.y) ** 2);
             if (distance < punto.radius + 5) {
+                ultimaPosicionPunto.x = punto.x;
+                ultimaPosicionPunto.y = punto.y;    
                 isDragging = true;
             }
         });
@@ -129,6 +152,9 @@ hasta posiciones restringidas dentro de un rectángulo interior al canvas y que 
             if (estaPuntoEnRectangulo(x, y)) {
                 punto.x = x;
                 punto.y = y;
+                punto2.x = x + anchoRejilla; //mantengo el segundo punto a la derecha del primero
+                punto2.y = y;
+                
             }
 
             dibujaEscena();
@@ -137,19 +163,26 @@ hasta posiciones restringidas dentro de un rectángulo interior al canvas y que 
         canvas.addEventListener('mouseup', () => {
             //Al soltar el ratón, se detiene el arrastre:
             //Y aquí voy a hacer que el punto se acerque al punto de la rejilla más cercano:
-            let nearestPoint = null;
+            let puntoMasProximo = null;
             let minDistance = Infinity;
             puntosRejilla.forEach(p => {
                 const distance = Math.hypot(punto.x - p.x, punto.y - p.y);
                 if (distance < minDistance) {
                     minDistance = distance;
-                    nearestPoint = p;
+                    puntoMasProximo = p;
                 }
             });
-            if (nearestPoint) {
-                punto.x = nearestPoint.x;
-                punto.y = nearestPoint.y;
-            }   
+            if (puntoMasProximo && minDistance <= anchoRejilla / 3) {
+                punto.x = puntoMasProximo.x;
+                punto.y = puntoMasProximo.y;
+            } 
+            else {
+                //si no hay ningún punto cercano, el punto vuelve a su última posición válida:
+                punto.x = ultimaPosicionPunto.x;
+                punto.y = ultimaPosicionPunto.y;    
+            }  
+            punto2.x = punto.x + anchoRejilla; //mantengo el segundo punto a la derecha del primero
+            punto2.y = punto.y;
             
             isDragging = false;
             dibujaEscena();

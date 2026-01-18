@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conjunto de Mandelbrot - Zoom Interactivo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            margin-bottom: 10px;
+        }
+        #canvas {
+            border: 2px solid #fff;
+            cursor: crosshair;
+            display: block;
+            background-color: #000;
+        }
+        .info {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+        .controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        button:hover {
+            background-color: #0052a3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Conjunto de Mandelbrot</h1>
+    <canvas id="canvas" width="800" height="600"></canvas>
+    <div class="info">
+        <p>Haz clic y arrastra para seleccionar un área y hacer zoom</p>
+        <p id="coordinates">Coordenadas: X: 0, Y: 0</p>
+    </div>
+    <div class="controls">
+        <button onclick="resetZoom()">Reiniciar</button>
+        <button onclick="changeIterations(50)">Más detalles</button>
+        <button onclick="changeIterations(-50)">Menos detalles</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        let mandelbrotParams = {
+            minReal: -2.5,
+            maxReal: 1.0,
+            minImaginary: -1.25,
+            maxImaginary: 1.25,
+            //lo siguente fue una prueba para ver que la imagen no saliera invertida en el eje Y
+            //ver los cambios que hice en la función pixelToComplex
+           // minImaginary: -0.5,
+            //maxImaginary: 2.0,
+
+
+            maxIterations: 100 //estaba a 100 he probado con  500 y va bien
+        };
+
+        let isSelecting = false;
+        let selectionStart = { x: 0, y: 0 };
+        let selectionEnd = { x: 0, y: 0 };
+
+        function mandelbrot(c, maxIter) {
+            let z = { real: 0, imaginary: 0 };
+            for (let i = 0; i < maxIter; i++) {
+                const real2 = z.real * z.real;
+                const imag2 = z.imaginary * z.imaginary;
+                if (real2 + imag2 > 4) return i;
+                z.imaginary = 2 * z.real * z.imaginary + c.imaginary;
+                z.real = real2 - imag2 + c.real;
+            }
+            return maxIter;
+        }
+
+        function pixelToComplex(pixelX, pixelY) {
+            const realRange = mandelbrotParams.maxReal - mandelbrotParams.minReal;
+            const imagRange = mandelbrotParams.maxImaginary - mandelbrotParams.minImaginary;
+            return {
+                real: mandelbrotParams.minReal + (pixelX / canvas.width) * realRange,
+                //comento la línea siguiente y habilito la de abajo para invertir el eje Y
+                //imaginary: mandelbrotParams.minImaginary + (pixelY / canvas.height) * imagRange
+                imaginary: mandelbrotParams.maxImaginary - (pixelY / canvas.height) * imagRange
+            };
+        }
+
+        function draw() {
+            const imageData = ctx.createImageData(canvas.width, canvas.height);
+            const data = imageData.data;
+
+            for (let y = 0; y < canvas.height; y++) {
+                for (let x = 0; x < canvas.width; x++) {
+                    const c = pixelToComplex(x, y);
+                    const iterations = mandelbrot(c, mandelbrotParams.maxIterations);
+                    const color = getColor(iterations, mandelbrotParams.maxIterations);
+
+                    const index = (y * canvas.width + x) * 4;
+                    data[index] = color.r;
+                    data[index + 1] = color.g;
+                    data[index + 2] = color.b;
+                    data[index + 3] = 255;
+                }
+            }
+            ctx.putImageData(imageData, 0, 0);
+        }
+
+        function getColor(iterations, maxIterations) {
+            if (iterations === maxIterations) {
+                return { r: 0, g: 0, b: 0 };
+            }
+            const hue = (iterations / maxIterations) * 360;
+            const rgb = hslToRgb(hue, 100, 50);
+            return { r: rgb[0], g: rgb[1], b: rgb[2] };
+        }
+
+        function hslToRgb(h, s, l) {
+            s /= 100;
+            l /= 100;
+            const k = n => (n + h / 30) % 12;
+            const a = s * Math.min(l, 1 - l);
+            const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+            return [
+                Math.round(255 * f(0)),
+                Math.round(255 * f(8)),
+                Math.round(255 * f(4))
+            ];
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            isSelecting = true;
+            const rect = canvas.getBoundingClientRect();
+            selectionStart.x = e.clientX - rect.left;
+            selectionStart.y = e.clientY - rect.top;
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const c = pixelToComplex(x, y);
+            document.getElementById('coordinates').textContent = 
+                `Coordenadas: Real: ${c.real.toFixed(4)}, Imaginario: ${c.imaginary.toFixed(4)}`;
+
+            if (isSelecting) {
+                selectionEnd.x = x;
+                selectionEnd.y = y;
+                drawSelectionBox();
+            }
+        });
+
+        canvas.addEventListener('mouseup', () => {
+            if (isSelecting && Math.abs(selectionEnd.x - selectionStart.x) > 10) {
+                zoomToSelection();
+            }
+            isSelecting = false;
+        });
+
+        function drawSelectionBox() {
+            draw();
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.7)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(
+                selectionStart.x,
+                selectionStart.y,
+                selectionEnd.x - selectionStart.x,
+                selectionEnd.y - selectionStart.y
+            );
+        }
+
+        function zoomToSelection() {
+            const c1 = pixelToComplex(selectionStart.x, selectionStart.y);
+            const c2 = pixelToComplex(selectionEnd.x, selectionEnd.y);
+
+            mandelbrotParams.minReal = Math.min(c1.real, c2.real);
+            mandelbrotParams.maxReal = Math.max(c1.real, c2.real);
+            mandelbrotParams.minImaginary = Math.min(c1.imaginary, c2.imaginary);
+            mandelbrotParams.maxImaginary = Math.max(c1.imaginary, c2.imaginary);
+            mandelbrotParams.maxIterations += 50;
+
+            draw();
+        }
+
+        function resetZoom() {
+            mandelbrotParams = {
+                minReal: -2.5,
+                maxReal: 1.0,
+                minImaginary: -1.25,
+                maxImaginary: 1.25,
+                maxIterations: 100
+            };
+            draw();
+        }
+
+        function changeIterations(delta) {
+            mandelbrotParams.maxIterations = Math.max(10, mandelbrotParams.maxIterations + delta);
+            draw();
+        }
+
+        draw();
+    </script>
+</body>
+</html>

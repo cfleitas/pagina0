@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prueba de Cálculo Numérico Diseñada desde Cero</title>    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background:whitesmoke;
+        }
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        h1.encabezado {
+            margin:auto;
+            text-align: center;
+            color: #333;
+        }
+
+        .contenedor {
+            max-width: 600px;
+            margin:auto;
+            background: #f9f9f9;
+            padding: 30px;
+            border-radius: 40px;
+            box-shadow: 10px 10px 10px rgba(0,0,0,0.1);
+        }
+        .explicaciones {
+            margin: 40px 100px 40px 100px;
+        }
+        .estadisticas {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .estadistica{
+            text-align: center;
+        }
+        .etiqueta-estadistica {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .valor-estadistica {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top:5px;
+        }
+
+        .correctos {
+            color: green;
+        }   
+        .fallos {
+            color: red;
+        }   
+        .total {
+            color: blue;
+        }
+        .ejercicio {
+            background: #f6f6f6;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .problema {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .respuesta {
+            display:flex;
+            justify-content: center;
+            gap:10px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        input[type="number"] {
+            padding: 8px;
+            font-size: 16px;
+            width: 150px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="number"]:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }   
+
+
+
+
+        /* lo siguiente es para quitar las flechitas de los input de tipo numero */
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+         -moz-appearance: textfield;
+    }
+        
+    </style>
+</head>
+<body>
+    <h1 class="encabezado">🧮Prueba de Cálculo Numérico Diseñada desde Cero 🧑‍🎓</h1>
+
+    <div class="explicaciones">
+        <h2>Instrucciones:</h2>
+        <p>Esta es una prueba sencilla de cálculo numérico . Se presentan problemas básicos de aritmética y el usuario debe ingresar la respuesta correcta.</p>
+        <p>Se lleva un registro de aciertos, fallos y el total de preguntas respondidas.</p>
+        <p>¡Buena suerte!</p>
+    </div>
+   
+
+
+    <div class="contenedor">
+        <h1>🧮Prueba de Cálculo Numérico Diseñada desde Cero 🧑‍🎓</h1>
+        
+        <div class="estadisticas">
+            <div class="estadistica">         
+                <div class="etiqueta-estadistica">Aciertos</div>
+                <div class="valor-estadistica correctos">0</div>
+            </div>
+            <div class="estadistica">
+                <div class="etiqueta-estadistica">Fallos</div>
+                <div class="valor-estadistica fallos">0</div>
+            </div>
+            <div class="estadistica">
+                <div class="etiqueta-estadistica">Total</div>
+                <div class="valor-estadistica total">0</div>
+            </div>
+        </div> <!-- estadisticas -->
+        <div class="ejercicio">
+            <div class="problema" id="problema">7+3 x 2 
+            </div>
+            <div class="respuesta">               
+                <input type="number" id="respuesta1" placeholder="Escribe tu respuesta" autofocus>
+                <button onclick="verificarRespuesta()">Verificar</button>
+            </div> <!-- respuesta -->
+            <div id="feedback"> <p>observaciones a la respuestaobservaciones a la respuestaobservaciones a la 
+                respuestaobservaciones a la respuestaobservaciones a la respuestaobservaciones a la respuestaobservaciones
+                a la respuestaobservaciones a la respuesta 
+                observaciones a la respuestaobservaciones a la respuesta
+
+                
+                </p>
+            </div> <!-- feedback -->
+        </div> <!-- ejercicio -->
+    </div> <!-- contenedor -->
+
+    <script >
+
+
+
+        let aciertos = 0;
+        let fallos = 0;
+        let total = 0;
+        let respuestaCorrecta = 0;
+        //let problema ="";
+        
+
+        function generarProblema() {
+            const tipoProblema = [
+                generaAdicionMultiplicacion,
+               /* generaProblemaParentesis,
+                generaProblemaComplejo,
+                generaProblemaDivision */
+            ];
+
+            const tipoProblemaSeleccionado = Math.floor(Math.random() * tipoProblema.length); // 0, 1, 2 o 3
+            tipoProblema[tipoProblemaSeleccionado]();
+        }
+
+        function generaAdicionMultiplicacion() {          
+            let a = Math.floor(Math.random() * 10) +1;
+            let b = Math.floor(Math.random() * 10) +1;
+           
+            let c = Math.floor(Math.random() * 10) +1;
+            let sumaResta="";
+            let problemaTexto="";
+            
+            if(Math.random()<0.5){
+                b = b * -1; 
+            } 
+            if(Math.random()<0.5){
+                c = c * -1; 
+            }  
+            if(b<0){
+                sumaResta=" - ";
+                
+            } else {
+                sumaResta=" + ";
+                }   
+
+            
+            
+            
+            if(b>0 && c>0){
+                problemaTexto =  a + " " + sumaResta + " " + b + " × " + c ;
+            } else if(b>0 && c<0){
+                problemaTexto =  a + " " + sumaResta + " " + b + " × (" + c +")";                  
+            } else if(b<0 && c>0){
+                 problemaTexto = a + " " + sumaResta + " (" + b + ") × " + c ;
+                
+            } else if(b<0 && c<0){
+                 problemaTexto = a + " " + sumaResta + " (" + b + ") × (" + c +")" ;
+            }
+            
+            //let problemaTexto = `${a} + ${b} × ${c}`;
+            const problema = problemaTexto;
+            if(sumaResta===" + "){
+                respuestaCorrecta = a + (b * c);
+            } else {
+                respuestaCorrecta = a - (b * c);
+            }
+
+            document.getElementById('problema').textContent = problema;
+
+            return{problema, respuestaCorrecta};
+        }
+
+        //Aquí deberán ir las otras funciones generadoras de problemas
+
+
+
+        function verificarRespuesta() {
+            const respuestaUsuario = parseInt(document.getElementById('respuesta1').value);
+            const feedback = document.getElementById('feedback');
+
+            total++;
+            if(isNaN(respuestaUsuario)) {
+                feedback.innerHTML = '<p style="color:red;">Por favor, ingresa un número válido.</p>';
+                total--; // No contar como intento
+                return;
+            }
+
+
+            if (respuestaUsuario === respuestaCorrecta) {
+                aciertos++;
+                feedback.innerHTML = '<p style="color:green;">¡Correcto!</p>';
+            } else {
+                fallos++;
+                feedback.innerHTML = `<p style="color:red;">Incorrecto. La respuesta correcta a ${generaAdicionMultiplicacion().problema} es ${respuestaCorrecta}.</p>`;
+            }
+
+            actualizarEstadisticas();
+            generarProblema();
+            document.getElementById('respuesta1').value = '';
+        }
+
+        function actualizarEstadisticas() {
+            document.querySelector('.valor-estadistica.correctos').textContent = aciertos;
+            document.querySelector('.valor-estadistica.fallos').textContent = fallos;
+            document.querySelector('.valor-estadistica.total').textContent = total;
+        }
+
+        document.getElementById('respuesta1').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                verificarRespuesta();
+            }
+        });
+        // Generar el primer problema al cargar la página
+        generarProblema();
+    </script>
+</body>
