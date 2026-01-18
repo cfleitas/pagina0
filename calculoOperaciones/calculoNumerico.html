@@ -180,6 +180,20 @@
             border: #ddd solid 2px;
             padding:10px;
         }
+
+        /* lo siguiente es para quitar las flechitas de los input de tipo numero */
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+         -moz-appearance: textfield;
+        }
+        
     </style>
 </head>
 <body>
