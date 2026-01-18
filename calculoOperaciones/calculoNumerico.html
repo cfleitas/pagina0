@@ -94,6 +94,7 @@
         input[type="number"] {
             flex: 1;
             padding: 10px;
+            
             border: 2px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
@@ -243,7 +244,7 @@
         <div class="exercise">
             <div class="problem" id="problem">5 + 3 × 2</div>
             <div class="input-group">
-                <input type="number" id="answer" placeholder="Escribe tu respuesta" autofocus>
+                <input type="number" id="answer" placeholder="Respuesta"  autofocus>
                 <button onclick="checkAnswer()">Comprobar</button>
             </div>
             <div id="feedback">XXXXXX </div>
@@ -443,7 +444,7 @@
 
             document.getElementById('detallesUltimoEjercicio').textContent = `${currentProblem} = ${currentAnswer}. Tu respuesta ha sido: ${userAnswer}`;
             
-            setTimeout(newProblem, 750);
+            newProblem();
         }
         
         // Enter para enviar respuesta sin tener quee pulsar el botón
