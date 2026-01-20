@@ -94,7 +94,6 @@
         input[type="number"] {
             flex: 1;
             padding: 10px;
-            
             border: 2px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
@@ -181,20 +180,6 @@
             border: #ddd solid 2px;
             padding:10px;
         }
-
-        /* lo siguiente es para quitar las flechitas de los input de tipo numero */
-        /* Chrome, Safari, Edge, Opera */
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        /* Firefox
-        input[type=number] {
-         -moz-appearance: textfield;
-        } */
-
     </style>
 </head>
 <body>
@@ -243,9 +228,8 @@
         
         <div class="exercise">
             <div class="problem" id="problem">5 + 3 × 2</div>
-            
             <div class="input-group">
-                <input type="number" id="answer" placeholder="Respuesta"  autofocus>
+                <input type="number" id="answer" placeholder="Escribe tu respuesta" autofocus>
                 <button onclick="checkAnswer()">Comprobar</button>
             </div>
             <div id="feedback">XXXXXX </div>
@@ -260,7 +244,7 @@
 
 </div> <!-- contenedor principal -->
 
-
+<!--  
 <div id="pruebasColocacion">
     <p> Desarrollo de habilidades matemáticas   </p>
 </div>
@@ -271,7 +255,7 @@
         <p >agfhhafha. BORRAR</p>
 </div>
 
-
+-->
     
     <script>
         let aciertos = 0;
@@ -282,7 +266,7 @@
         let multiplo=5;      
         // Generar problemas concrete eligiendo entre diferentes tipos:
         function generateProblem() {
-            const tipos = [
+            const types = [
                 generaAdicionMultimplicacion,
                 generaProblemasParentesis,
                 generaProblemaDivisonesCorchetes
@@ -290,26 +274,26 @@
             
             //elegimos el tipo de problema según la selección del usuario:
             if(document.getElementById('sumasRestas').checked){
-                const tipoDeEjercicio = tipos[0];
-                return tipoDeEjercicio();
+                const selectedType = types[0];
+                return selectedType();
             }
             else if (document.getElementById('conParentesisMultiplicaciones').checked){
-                const tipoDeEjercicio = tipos[1];
-                return tipoDeEjercicio();
+                const selectedType = types[1];
+                return selectedType();
             }
             else if (document.getElementById('conDivisionesCorchetes').checked){
-                const tipoDeEjercicio = tipos[2];
-                return tipoDeEjercicio();
+                const selectedType = types[2];
+                return selectedType();
             }
             else if (document.getElementById('deTodoUnPocoConNumerosMasGrandes').checked){
-                const randomIndex = Math.floor(Math.random() * tipos.length);
-                const tipoDeEjercicio = tipos[randomIndex];
-                return tipoDeEjercicio();
+                const randomIndex = Math.floor(Math.random() * types.length);
+                const selectedType = types[randomIndex];
+                return selectedType();
             }
             else {
-                //por defecto, si no hay ninguna selección, hacemos sumas y restas:
-                const tipoDeEjercicio = tipos[0];
-                return tipoDeEjercicio();
+                const randomIndex = Math.floor(Math.random() * types.length);
+                const selectedType = types[randomIndex];
+                return selectedType();
             }
 
         }
@@ -391,7 +375,7 @@
             const g = f*e;
             const g2 = f2*d;
             
-            const posibilidades = [
+            const types = [
                 { problem: ` [(${g2} ÷ ${d} - ${b}) - ${c}] + ${g} ÷ ${e}`, answer: ((f2 - b) - c) + (f) },
                 { problem: ` [(${g2} ÷ ${d}) × ${b} - ${c}] - ${g} ÷ ${e}`, answer: (f2*b  - c) - (f) },
                 { problem: `${a} × ${b} + ${c} - ${d}`, answer: (a * b) + c - d },
@@ -401,9 +385,8 @@
                 { problem: ` [(${a} + ${b}) - ${c}] + ${g} ÷ ${e}`, answer: ((a + b) - c) + (f) },
                 { problem: ` ${g} ÷ ${e} - [(${a} + ${g2} ÷ ${d}) - ${c}]`, answer: f - ((a + f2) - c) }
             ];
-           
-            const { problem, answer } = posibilidades[Math.floor(Math.random() * posibilidades.length)];
-            return { problem, answer };
+            
+            return types[Math.floor(Math.random() * types.length)];
         }
         
         function newProblem() {
@@ -422,7 +405,6 @@
         function checkAnswer() {
             const userAnswer = parseInt(document.getElementById('answer').value);
             const feedback = document.getElementById('feedback');
-            feedback.textContent = ' Procesando tu respuesta...';  
             
             
             if (isNaN(userAnswer)) {
@@ -433,14 +415,12 @@
             
             if (userAnswer === currentAnswer) {
                 aciertos++;
-                feedback.textContent = '✓ ¡Correcto!';
+                feedback.textContent += '✓ ¡Correcto!';
                 feedback.className = 'feedback correct';
-                document.getElementById('borrar').textContent += ' Correcto en: '+ currentProblem + ' ; ';
             } else {
                 errores++;
-                feedback.textContent =  `✗ Incorrecto.  ${currentProblem}  respuesta correcta es ${currentAnswer}`;
+                feedback.textContent +=  `✗ Incorrecto.  ${currentProblem}  respuesta correcta es ${currentAnswer}`;
                 feedback.className = 'feedback incorrect';
-                document.getElementById('borrar').textContent += ' Error en: '+ currentProblem + ' ; ';
             }
             
             document.getElementById('correct').textContent = aciertos;
@@ -449,7 +429,7 @@
 
             document.getElementById('detallesUltimoEjercicio').textContent = `${currentProblem} = ${currentAnswer}. Tu respuesta ha sido: ${userAnswer}`;
             
-            newProblem();
+            setTimeout(newProblem, 1500);
         }
         
         // Enter para enviar respuesta sin tener quee pulsar el botón
@@ -460,20 +440,18 @@
         //función para permitir solo un checkbox a la vez
         function seleccionaSoloUno(checkbox) {
             var checkboxes = document.getElementsByName(checkbox.name);
-            
-           document.getElementById('borrar').textContent = '';
+            //comento cosas que actuaban sobre un div de pruebas
+            //para controlar ejecución de código y que he ocultado
+           // document.getElementById('borrar').textContent = '';
             checkboxes.forEach((item) => {
             if (item !== checkbox) item.checked = false
                 })
-            checkboxes.forEach((item) => { 
-                //console.log(item.id + ": " + item.checked); 
+            /*checkboxes.forEach((item) => { 
+                console.log(item.id + ": " + item.checked); 
                 document.getElementById('borrar').textContent += ''+ item.id + ": " + item.checked+' ; ';
             
-            })
-           //reiniciar();
-          }
-
-        //función para reiniciar contadores y empezar de nuevo:       
+            })*/
+        }
 
         function reiniciar() {
             aciertos = 0;
