@@ -1,7 +1,6 @@
 <!--  Autor : Carlos F. Martínez
       Fecha creación: junio 2024
-      Descripción: Prueba de cálculo numérico para alumnos
-      de primaria y de primero de ESO
+      Descripción: Práctica de las tablas de multiplicar con números enteros
  -->
 
 <!DOCTYPE html>
@@ -10,12 +9,12 @@
 <head>  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Número enteros, operaciones con paréntesis y corchetes</title>    
+    <title>Sumas y restas de números naturales</title>    
     <style>
         body {
             font-family: Arial, sans-serif;
             padding: 20px;
-            background:whitesmoke;
+            background:rgb(185, 193, 230);
         }
         #output {
             margin-top: 20px;
@@ -149,22 +148,19 @@
 
 
     <div class="contenedor">
-        <h1>🧮Cálculo con números enteros 🧑‍🎓</h1>
+        <h1 class="encabezado">🧮Sumas y restas de números naturales 🧑‍🎓</h1>
        
         <div class="explicaciones">
-            <p>Ejercicios de cálculo con números enteros. Elige tipo (al cambiar se reinician los contadores):</p>
-            <input type="checkbox" id="sumasRestas" name="tipoEjercicio" value="" onclick="seleccionaSoloUno(this)" checked>
-            <label for="sumasRestas"> Sumas y restas</label><br>
-            <input type="checkbox" id="conParentesis" name="tipoEjercicio" value="" onclick=" seleccionaSoloUno(this)">
-            <label for="conParentesis"> Enteros con paréntesis </label><br>
-            <input type="checkbox" id="conDivisionesCorchetes" name="tipoEjercicio" value="" onclick="seleccionaSoloUno(this)">
-            <label for="conDivisionesCorchetes"> Con divisiones y corchetes</label><br>
-            <input type="checkbox" id="deTodoUnPoco" name="tipoEjercicio" value="" onclick="seleccionaSoloUno(this)">
-            <label for="deTodoUnPoco">Todas las opciones anteriores de forma aleatoria </label><br>
+            <p>Elige tipo de ejercicio (al cambiar se reinician los contadores):</p>
+            <input type="checkbox" id="multiplicaciones" name="tipoEjercicio" value="" onclick="seleccionaSoloUno(this)" checked>
+            <label for="multiplicaciones"> Multiplicaciones (tablas de multiplicar)</label><br>
+            <input type="checkbox" id="conNegativos" name="tipoEjercicio" value="" onclick=" seleccionaSoloUno(this)">
+            <label for="conNegativos"> También con números negativos </label><br>
+            
             
         </div>
         <div class="explicaciones">
-            <p>Si prefieres números más grandes:</p>
+            <p>Si prefieres números más grandes (incluyendo 11, 12 y 13):</p>
             <input type="checkbox" id="numerosAltos" name="numerosAltos" value="" onclick="actualizaNumeroMaximo()">
             <label for="numerosAltos"> Números más grandes (se reinician los contadores)</label><br>
         </div>
@@ -213,7 +209,7 @@
         let problema =" ";
         let numeroMaximo=10;
         let maxNormal=10;
-        let maxAlto=20;
+        let maxAlto=13;
         let multiplo=5;
         
 
@@ -221,15 +217,27 @@
             //Determino el ejercicio según la selección del usuario
             let i;
             const tipoProblema = [
-                generaAdicionMultiplicacion,
-                generaProblemaParentesis,
-                generaCorchetesDivisiones
+                generaEjerciciosMultiplicacion,
+                generaEjerciciosMultiplicacionConNegativos
+                //generaProblemaParentesis,
+                //generaCorchetesDivisiones
                 //generaProblemaDivision 
             ];
 
             document.getElementById('repuestaDelUsuario').focus();
 
-            if(document.getElementById('sumasRestas').checked){
+            if(document.getElementById('multiplicaciones').checked){
+                i = 0
+            }
+            else if (document.getElementById('conNegativos').checked){
+                i = 1;                
+            }
+            
+
+            /* Esto es para elegir entre varias opciones. De momento solo hay dos funciones.
+            
+            
+            if(document.getElementById('multiplicaciones').checked){
                 i = 0
             }
             else if (document.getElementById('conParentesis').checked){
@@ -244,8 +252,9 @@
             }
             else {
                 i = Math.floor(Math.random() * tipoProblema.length);
-            }          
-                        
+            }   
+           */        
+                   
             tipoProblema[i]();
             const {problema, respuestaCorrecta} = tipoProblema[i]();
             document.getElementById('problema').textContent = problema;
@@ -256,7 +265,7 @@
         }
 
         // Funciones para generar diferentes tipos de problemas
-        function generaAdicionMultiplicacion() {  
+        function generaEjerciciosMultiplicacion() {  
             if(document.getElementById('numerosAltos').checked){
                 numeroMaximo = maxAlto;
             } else {
@@ -264,11 +273,12 @@
             }        
             let a = Math.floor(Math.random() * numeroMaximo) +1;
             let b = Math.floor(Math.random() * numeroMaximo) +1;           
-            let c = Math.floor(Math.random() * numeroMaximo) +1;
-            let d = Math.floor(Math.random() * numeroMaximo) +1;
-            let e = Math.floor(Math.random() * numeroMaximo) +1;          
+                    
             
              const posibilidades = [
+                {problema: `${a} × ${b}`, respuestaCorrecta: a * b }
+                /*
+                De momento solo hay un tipo simple de multiplicación
                 {problema: `-${d} - ${a} × (${b} - ${c}) - ${e}` , respuestaCorrecta: -d - a * (b - c) - e} ,
                 { problema: `${a} + ${b} × ${c}`, respuestaCorrecta: a + (b * c) },
                 { problema: `${a} - ${b} × ${c} + ${e}`, respuestaCorrecta: a - (b * c) + e },
@@ -278,7 +288,8 @@
                 { problema: `-${a} × (${b} - ${c}) + ${e}`, respuestaCorrecta: -a * (b - c) + e },
                 { problema: `-${a} × (-${b} + ${c}) + ${d}`, respuestaCorrecta: -a * (-b + c) + d },
                 { problema: `-${a} × (${b} - ${c}) - ${d}`, respuestaCorrecta: -a * (b - c) - d },
-                { problema: `-${d} - ${a} × (${b} - ${c}) - ${e}`, respuestaCorrecta: -d - a * (b - c) - e }                           
+                { problema: `-${d} - ${a} × (${b} - ${c}) - ${e}`, respuestaCorrecta: -d - a * (b - c) - e }   
+                 */                        
 
             ];
 
@@ -289,57 +300,48 @@
             return{problema, respuestaCorrecta};
         }
 
-        
+        function generaEjerciciosMultiplicacionConNegativos() {  
+            if(document.getElementById('numerosAltos').checked){
+                numeroMaximo = maxAlto;
+            } else {
+                numeroMaximo = maxNormal;
+            }        
+            let a = Math.floor(Math.random() * numeroMaximo) +1;
+            let b = Math.floor(Math.random() * numeroMaximo) +1;           
+                
+            
+             const posibilidades = [
+                {problema: `${a} × ${b}`, respuestaCorrecta: a * b },
+                {problema: `(-${a}) × ${b}`, respuestaCorrecta:- a * b },
+                {problema: `${a} × (-${b})`, respuestaCorrecta: - a * b },
+                {problema: `(-${a}) × (-${b})`, respuestaCorrecta: a * b }
 
-        function generaProblemaParentesis() {
-            const a = Math.floor(Math.random() * numeroMaximo) + 1;
-            const b = Math.floor(Math.random() * numeroMaximo) + 1;
-            const c = Math.floor(Math.random() * numeroMaximo) + 1;
-            const d = Math.floor(Math.random() * numeroMaximo) + 1;
-            const e = Math.floor(Math.random() * numeroMaximo) + 1;
-            const f = Math.floor(Math.random() * numeroMaximo) + 1;
-            const posibilidades = [
-                { problema: `(${a} + ${b}) × ${c} + ${d}`, respuestaCorrecta: (a + b) * c + d },
-                { problema: `(${a} - ${b}) × ${c} - ${d}`, respuestaCorrecta: (a - b) * c - d },
-                { problema: `${d} × [(${a} + ${b}) - ${c}]`, respuestaCorrecta: d * ((a + b) - c) },
-                { problema: `(${a} + ${b}) + (${c} - ${d})`, respuestaCorrecta: (a + b) + (c - d) },
-                { problema: `(${a} + ${b}) - (${c} - ${d})`, respuestaCorrecta: (a + b) - (c - d) },
-                { problema: `(${a} - ${b}) × ${c} - ${d}`, respuestaCorrecta: (a - b) * c - d },
-                { problema: `-${d} × [(${a} + ${b}) - ${c}]`, respuestaCorrecta: -d * ((a + b) - c) },
-                { problema: `-${d} × [(${a} - ${b}) - ${c}]`, respuestaCorrecta: -d * ((a - b) - c) }
+
+                /*
+                De momento solo hay un tipo simple de multiplicación
+                {problema: `-${d} - ${a} × (${b} - ${c}) - ${e}` , respuestaCorrecta: -d - a * (b - c) - e} ,
+                { problema: `${a} + ${b} × ${c}`, respuestaCorrecta: a + (b * c) },
+                { problema: `${a} - ${b} × ${c} + ${e}`, respuestaCorrecta: a - (b * c) + e },
+                { problema: `${a} × (-${b}) - ${c}`, respuestaCorrecta: a * (-b) - c },
+                { problema: `${a} × (${b} + ${c})`, respuestaCorrecta: a * (b + c) },
+                { problema: `${a} × (${b} - ${c})`, respuestaCorrecta: a * (b - c) },
+                { problema: `-${a} × (${b} - ${c}) + ${e}`, respuestaCorrecta: -a * (b - c) + e },
+                { problema: `-${a} × (-${b} + ${c}) + ${d}`, respuestaCorrecta: -a * (-b + c) + d },
+                { problema: `-${a} × (${b} - ${c}) - ${d}`, respuestaCorrecta: -a * (b - c) - d },
+                { problema: `-${d} - ${a} × (${b} - ${c}) - ${e}`, respuestaCorrecta: -d - a * (b - c) - e }   
+                 */                        
+
             ];
+
             const ejercicio = posibilidades[Math.floor(Math.random() * posibilidades.length)];
             problema = ejercicio.problema;
             respuestaCorrecta = ejercicio.respuestaCorrecta;
-            return { problema, respuestaCorrecta };            
-        } 
-        
-        function generaCorchetesDivisiones() {
-           const a = Math.floor(Math.random() * numeroMaximo) + 1;
-            const b = Math.floor(Math.random() * numeroMaximo) + 1;
-            const c = Math.floor(Math.random() * numeroMaximo) + 1;
-            const d = Math.floor(Math.random() * numeroMaximo) + 1;
-            const e = Math.floor(Math.random() * numeroMaximo) + 1;
-            const f = Math.floor(Math.random() * multiplo) + 2;
-            const f2 = Math.floor(Math.random() * multiplo) + 2;
-            const g = f*e;
-            const g2 = f2*d;
-            
-            const posibilidades = [
-                { problema: ` [(${g2} ÷ ${d} - ${b}) - ${c}] + ${g} ÷ ${e}`, respuestaCorrecta: ((f2 - b) - c) + (f) },
-                { problema: ` [(${g2} ÷ ${d}) × ${b} - ${c}] - ${g} ÷ ${e}`, respuestaCorrecta: (f2*b  - c) - (f) },
-                { problema: `${a} × ${b} + ${c} - ${g} ÷ ${e}`, respuestaCorrecta: (a * b) + c - f },
-                { problema: `(${a} - ${b}) × (${c} + ${d})`, respuestaCorrecta: (a - b) * (c + d) },
-                { problema: `${a} × [${b} - ${c} × ${d}] + ${e}`, respuestaCorrecta: a * ( b - (c * d) ) + e},
-                { problema: `${a} × ${b} - ${c} × ${d}`, respuestaCorrecta: (a * b) - (c * d) },
-                { problema: ` [(${a} + ${b}) - ${c}] + ${g} ÷ ${e}`, respuestaCorrecta: ((a + b) - c) + (f) },
-                { problema: ` ${g} ÷ ${e} - [(${a} + ${g2} ÷ ${d}) - ${c}]`, respuestaCorrecta: f - ((a + f2) - c) }
-            ];
-             const ejercicio = posibilidades[Math.floor(Math.random() * posibilidades.length)];
-            problema = ejercicio.problema;
-            respuestaCorrecta = ejercicio.respuestaCorrecta;
-            return { problema, respuestaCorrecta };  
+                        
+            return{problema, respuestaCorrecta};
         }
+        
+
+        
         
         function compruebaRespuesta() {
             const respuestaUsuario = parseInt(document.getElementById('repuestaDelUsuario').value);
