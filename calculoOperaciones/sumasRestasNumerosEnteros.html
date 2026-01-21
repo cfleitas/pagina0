@@ -9,7 +9,7 @@
 <head>  
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sumas y restas de números naturales</title>    
+    <title>Sumas y restas de números enteros</title>    
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -148,12 +148,12 @@
 
 
     <div class="contenedor">
-        <h1 class="encabezado">🧮Sumas y restas de números naturales 🧑‍🎓</h1>
+        <h1 class="encabezado">🧮Sumas y restas de números enteros 🧑‍🎓</h1>
        
         <div class="explicaciones">
             <p>Elige tipo de ejercicio (al cambiar se reinician los contadores):</p>
-            <input type="checkbox" id="multiplicaciones" name="tipoEjercicio" value="" onclick="seleccionaSoloUno(this)" checked>
-            <label for="multiplicaciones"> Multiplicaciones (tablas de multiplicar)</label><br>
+            <input type="checkbox" id="sumas" name="tipoEjercicio" value="" onclick="seleccionaSoloUno(this)" checked>
+            <label for="sumas"> Sumas y restas (tablas de sumar y restar)</label><br>
             <input type="checkbox" id="conNegativos" name="tipoEjercicio" value="" onclick=" seleccionaSoloUno(this)">
             <label for="conNegativos"> También con números negativos </label><br>
             
@@ -204,12 +204,14 @@
 
         let aciertos = 0;
         let fallos = 0;
+
+
         let total = 0;
         let respuestaCorrecta = 0;
         let problema =" ";
         let numeroMaximo=10;
         let maxNormal=10;
-        let maxAlto=13;
+        let maxAlto=30;
         let multiplo=5;
         
 
@@ -217,8 +219,8 @@
             //Determino el ejercicio según la selección del usuario
             let i;
             const tipoProblema = [
-                generaEjerciciosMultiplicacion,
-                generaEjerciciosMultiplicacionConNegativos
+                generaEjerciciosSumas,
+                generaEjerciciosSumasConNegativos
                 //generaProblemaParentesis,
                 //generaCorchetesDivisiones
                 //generaProblemaDivision 
@@ -226,7 +228,7 @@
 
             document.getElementById('repuestaDelUsuario').focus();
 
-            if(document.getElementById('multiplicaciones').checked){
+            if(document.getElementById('sumas').checked){
                 i = 0
             }
             else if (document.getElementById('conNegativos').checked){
@@ -265,7 +267,7 @@
         }
 
         // Funciones para generar diferentes tipos de problemas
-        function generaEjerciciosMultiplicacion() {  
+        function generaEjerciciosSumas() {  
             if(document.getElementById('numerosAltos').checked){
                 numeroMaximo = maxAlto;
             } else {
@@ -276,7 +278,7 @@
                     
             
              const posibilidades = [
-                {problema: `${a} × ${b}`, respuestaCorrecta: a * b }
+                {problema: `${a} + ${b}`, respuestaCorrecta: a + b }
                 /*
                 De momento solo hay un tipo simple de multiplicación
                 {problema: `-${d} - ${a} × (${b} - ${c}) - ${e}` , respuestaCorrecta: -d - a * (b - c) - e} ,
@@ -300,37 +302,25 @@
             return{problema, respuestaCorrecta};
         }
 
-        function generaEjerciciosMultiplicacionConNegativos() {  
+        function generaEjerciciosSumasConNegativos() {  
             if(document.getElementById('numerosAltos').checked){
                 numeroMaximo = maxAlto;
             } else {
                 numeroMaximo = maxNormal;
             }        
             let a = Math.floor(Math.random() * numeroMaximo) +1;
-            let b = Math.floor(Math.random() * numeroMaximo) +1;           
+            let b = Math.floor(Math.random() * numeroMaximo) +1;   
+            if(b>a){
+                //Para evitar resultados negativos en restas
+                let temp = a;
+                a = b;
+                b = temp;   
+            }        
                 
             
              const posibilidades = [
-                {problema: `${a} × ${b}`, respuestaCorrecta: a * b },
-                {problema: `(-${a}) × ${b}`, respuestaCorrecta:- a * b },
-                {problema: `${a} × (-${b})`, respuestaCorrecta: - a * b },
-                {problema: `(-${a}) × (-${b})`, respuestaCorrecta: a * b }
-
-
-                /*
-                De momento solo hay un tipo simple de multiplicación
-                {problema: `-${d} - ${a} × (${b} - ${c}) - ${e}` , respuestaCorrecta: -d - a * (b - c) - e} ,
-                { problema: `${a} + ${b} × ${c}`, respuestaCorrecta: a + (b * c) },
-                { problema: `${a} - ${b} × ${c} + ${e}`, respuestaCorrecta: a - (b * c) + e },
-                { problema: `${a} × (-${b}) - ${c}`, respuestaCorrecta: a * (-b) - c },
-                { problema: `${a} × (${b} + ${c})`, respuestaCorrecta: a * (b + c) },
-                { problema: `${a} × (${b} - ${c})`, respuestaCorrecta: a * (b - c) },
-                { problema: `-${a} × (${b} - ${c}) + ${e}`, respuestaCorrecta: -a * (b - c) + e },
-                { problema: `-${a} × (-${b} + ${c}) + ${d}`, respuestaCorrecta: -a * (-b + c) + d },
-                { problema: `-${a} × (${b} - ${c}) - ${d}`, respuestaCorrecta: -a * (b - c) - d },
-                { problema: `-${d} - ${a} × (${b} - ${c}) - ${e}`, respuestaCorrecta: -d - a * (b - c) - e }   
-                 */                        
-
+                {problema: `${a} - ${b}`, respuestaCorrecta: a - b }              
+                                  
             ];
 
             const ejercicio = posibilidades[Math.floor(Math.random() * posibilidades.length)];
