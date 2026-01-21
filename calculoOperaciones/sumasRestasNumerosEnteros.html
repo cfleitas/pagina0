@@ -1,6 +1,11 @@
-<!--  Autor : Carlos F. Martínez
-      Fecha creación: junio 2024
-      Descripción: Práctica de las tablas de multiplicar con números enteros
+<!--  Autor : Carlos Fleitas Cochoy
+      Fecha creación: enero 2026
+      Descripción: Sumas sencillas de números enteros
+
+      Falta: sustituir el deslizador por un input numérico para el valor máximo de los números
+      para permitir ejecutar reinicar() al cambiar el valor máximo
+      Con el deslizador no se puede hacer eso porque al moverlo se ejecuta el evento 'input' muchas veces
+      y se reinicia el ejercicio muchas veces, lo que no es deseable.
  -->
 
 <!DOCTYPE html>
@@ -38,6 +43,11 @@
         .explicaciones {
             margin: 40px 100px 40px 100px;
         }
+        .control-numeroMaximo {
+             margin: 40px 100px 40px 100px;
+           
+            text-align: center;
+        }   
         .estadisticas {
             display: flex;
             justify-content: space-around;
@@ -159,11 +169,12 @@
             
             
         </div>
-        <div class="explicaciones">
-            <p>Si prefieres números más grandes (incluyendo 11, 12 y 13):</p>
-            <input type="checkbox" id="numerosAltos" name="numerosAltos" value="" onclick="actualizaNumeroMaximo()">
-            <label for="numerosAltos"> Números más grandes (se reinician los contadores)</label><br>
-        </div>
+
+        <div class="control-numeroMaximo">
+                <p><label>Valor máximo de los números:</label></p>
+                <input type="range" id="maximo" min="4" max="100" value="10" step="1">
+                <span class="value-display" id="valorMaximoMostrado">10</span>
+            </div>
         <div class="explicaciones">
             
             <button onclick="reiniciar()">Reiniciar </button>
@@ -205,15 +216,25 @@
         let aciertos = 0;
         let fallos = 0;
 
-
+        let numeroMaximo=document.getElementById('maximo').value;
+        let numeroMaximoMostrado= document.getElementById('valorMaximoMostrado').textContent = numeroMaximo;
         let total = 0;
         let respuestaCorrecta = 0;
         let problema =" ";
-        let numeroMaximo=10;
+        //let numeroMaximo=10;
         let maxNormal=10;
-        let maxAlto=30;
+        
         let multiplo=5;
         
+        document.getElementById('maximo').addEventListener('input', function() {
+            numeroMaximo=this.value;
+            numeroMaximoMostrado= document.getElementById('valorMaximoMostrado').textContent = numeroMaximo;
+          
+        });
+       
+
+
+
 
         function generarProblema() {
             //Determino el ejercicio según la selección del usuario
@@ -236,26 +257,7 @@
             }
             
 
-            /* Esto es para elegir entre varias opciones. De momento solo hay dos funciones.
-            
-            
-            if(document.getElementById('multiplicaciones').checked){
-                i = 0
-            }
-            else if (document.getElementById('conParentesis').checked){
-                i = 1;                
-            }
-            
-            else if (document.getElementById('conDivisionesCorchetes').checked){
-                i = 2;
-            }
-            else if (document.getElementById('deTodoUnPoco').checked){
-              i = Math.floor(Math.random() * tipoProblema.length);
-            }
-            else {
-                i = Math.floor(Math.random() * tipoProblema.length);
-            }   
-           */        
+                  
                    
             tipoProblema[i]();
             const {problema, respuestaCorrecta} = tipoProblema[i]();
@@ -268,30 +270,13 @@
 
         // Funciones para generar diferentes tipos de problemas
         function generaEjerciciosSumas() {  
-            if(document.getElementById('numerosAltos').checked){
-                numeroMaximo = maxAlto;
-            } else {
-                numeroMaximo = maxNormal;
-            }        
+                 
             let a = Math.floor(Math.random() * numeroMaximo) +1;
             let b = Math.floor(Math.random() * numeroMaximo) +1;           
                     
             
              const posibilidades = [
-                {problema: `${a} + ${b}`, respuestaCorrecta: a + b }
-                /*
-                De momento solo hay un tipo simple de multiplicación
-                {problema: `-${d} - ${a} × (${b} - ${c}) - ${e}` , respuestaCorrecta: -d - a * (b - c) - e} ,
-                { problema: `${a} + ${b} × ${c}`, respuestaCorrecta: a + (b * c) },
-                { problema: `${a} - ${b} × ${c} + ${e}`, respuestaCorrecta: a - (b * c) + e },
-                { problema: `${a} × (-${b}) - ${c}`, respuestaCorrecta: a * (-b) - c },
-                { problema: `${a} × (${b} + ${c})`, respuestaCorrecta: a * (b + c) },
-                { problema: `${a} × (${b} - ${c})`, respuestaCorrecta: a * (b - c) },
-                { problema: `-${a} × (${b} - ${c}) + ${e}`, respuestaCorrecta: -a * (b - c) + e },
-                { problema: `-${a} × (-${b} + ${c}) + ${d}`, respuestaCorrecta: -a * (-b + c) + d },
-                { problema: `-${a} × (${b} - ${c}) - ${d}`, respuestaCorrecta: -a * (b - c) - d },
-                { problema: `-${d} - ${a} × (${b} - ${c}) - ${e}`, respuestaCorrecta: -d - a * (b - c) - e }   
-                 */                        
+                {problema: `${a} + ${b}`, respuestaCorrecta: a + b }                                       
 
             ];
 
@@ -303,11 +288,7 @@
         }
 
         function generaEjerciciosSumasConNegativos() {  
-            if(document.getElementById('numerosAltos').checked){
-                numeroMaximo = maxAlto;
-            } else {
-                numeroMaximo = maxNormal;
-            }        
+               
             let a = Math.floor(Math.random() * numeroMaximo) +1;
             let b = Math.floor(Math.random() * numeroMaximo) +1;   
             if(b>a){
@@ -377,15 +358,7 @@
             reiniciar();         
         }
 
-        function actualizaNumeroMaximo() {
-            //Esta función no hace falta que genere de nuevo el problema, solo cambia el número máximo
-            if(document.getElementById('numerosAltos').checked){
-                numeroMaximo = maxAlto;
-            } else {
-                numeroMaximo = maxNormal;
-            } 
-            reiniciar();       
-        }   
+         
         //comprobar bien eso:
         function reiniciar() {
             aciertos = 0;
