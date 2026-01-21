@@ -1,12 +1,7 @@
 <!--  Autor : Carlos Fleitas Cochoy
       Fecha creación: enero 2026
       Descripción: Sumas sencillas de números enteros
-
-      Falta: sustituir el deslizador por un input numérico para el valor máximo de los números
-      para permitir ejecutar reinicar() al cambiar el valor máximo
-      Con el deslizador no se puede hacer eso porque al moverlo se ejecuta el evento 'input' muchas veces
-      y se reinicia el ejercicio muchas veces, lo que no es deseable.
- -->
+-->
 
 <!DOCTYPE html>
 <html lang="es">
@@ -178,13 +173,13 @@
         </div>
 
         <div class="control-numeroMaximo">
-                <p><label>Valor máximo de los números:</label></p>
-                <input type="range" id="maximo" min="4" max="100" value="10" step="1">
-                <span class="value-display" id="valorMaximoMostrado">10</span>
+                <p><label>Valor máximo de los números, por defecto 10, se pueden usar valores enteros entre 4 y 100:</label></p>
+                <input type="number" id="val" placeholder="Enteros entre 4 y 100" min="4" max="100" value="10">
+                <button onclick="establecerMaximo()">Establecer</button>
             </div>
         <div class="explicaciones">
             
-            <button onclick="reiniciar()">Reiniciar </button>
+            Para poner los contadores a cero: <button onclick="reiniciar()">Reiniciar </button>
         </div>      
 
 
@@ -207,7 +202,7 @@
             </div>
             <div class="respuesta">               
                 <input type="number" id="repuestaDelUsuario" placeholder="Escribe tu respuesta" autofocus>
-                <button onclick="compruebaRespuesta()">Verificar</button>
+                <button onclick="compruebaRespuesta()">Comprobar</button>
             </div> <!-- respuesta -->
             <div id="feedback">
                  <p>                
@@ -230,22 +225,36 @@
         let aciertos = 0;
         let fallos = 0;
 
-        let numeroMaximo=document.getElementById('maximo').value;
-        let numeroMaximoMostrado= document.getElementById('valorMaximoMostrado').textContent = numeroMaximo;
+        //let numeroMaximo=document.getElementById('maximo').value;
+        //let numeroMaximoMostrado= document.getElementById('valorMaximoMostrado').textContent = numeroMaximo;
         let total = 0;
         let respuestaCorrecta = 0;
         let problema =" ";
-        //let numeroMaximo=10;
+        let numeroMaximo=10;
         let maxNormal=10;
         
         let multiplo=5;
         
-        document.getElementById('maximo').addEventListener('input', function() {
+        /*document.getElementById('maximo').addEventListener('input', function() {
             numeroMaximo=this.value;
             numeroMaximoMostrado= document.getElementById('valorMaximoMostrado').textContent = numeroMaximo;
           
-        });
-       
+        });*/
+       function establecerMaximo(){
+            let valorInput=document.getElementById('val').value;
+            let valorInputNum=Math.floor(parseInt(valorInput));
+
+            if(valorInputNum>=4 && valorInputNum<=100){
+                numeroMaximo=valorInputNum;
+                document.getElementById('val').value = numeroMaximo;
+                reiniciar();
+            }
+            else{
+                //la siguiente fila hace que se borre el valor erróneo del input y aparece el placeholder
+                document.getElementById('val').value = '';
+                alert("Por favor, introduce un número entre 4 y 100");
+            }
+        }
 
 
 
@@ -358,6 +367,12 @@
             document.querySelector('.valor-estadistica.total').textContent = total;
         }
 
+        document.getElementById('val').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                establecerMaximo();
+            }
+        });
+
         document.getElementById('repuestaDelUsuario').addEventListener('keypress', function(event) {
             if (event.key === 'Enter') {
                 compruebaRespuesta();
@@ -375,7 +390,7 @@
          
         //comprobar bien eso:
         function reiniciar() {
-            aciertos = 0;
+            aciertos = 0;val
             fallos = 0;
             total = 0;
             actualizarEstadisticas();
