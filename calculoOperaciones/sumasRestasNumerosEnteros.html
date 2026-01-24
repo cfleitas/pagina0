@@ -210,12 +210,13 @@
             </div> <!-- feedback -->
         </div> <!-- ejercicio -->
     </div> <!-- contenedor -->
-    <div id="enlaces">Operaciones con números enteros relacionadas:
-        <ul>
-        <li>Sumas con números enteros (esta página):  <a href="sumasRestasNumerosEnteros.html">Sumas con números enteros</a></li>
-        <li>Multiplicaciones con números enteros: <a href="MultiplicacionesNumerosEnteros.html">Multiplicaciones con números enteros</a></li>
-        <li>Cálculo de números enteros, con divisiones y paréntesis y corchetes: <a href="CalculoNumerosEnteros.html">Cálculo con paréntesis y corchetes</a></li>
-        </ul>
+    <div id="enlaces">Para practicar con operaciones con números enteros para 1º de ESO y cursos anteriores:
+        <ol>
+        <li><a href="sumasRestasNumerosEnteros.html">Sumas con números enteros</a></li>
+        <li><a href="tablasDeMultiplicar.html">Tablas de Multiplicar</a></li>
+        <li><a href="MultiplicacionesNumerosEnteros.html">Multiplicaciones con números enteros</a></li>
+        <li><a href="CalculoNumerosEnteros.html">Cálculo con paréntesis y corchetes</a></li>
+        </ol>
     </div>
 
     <script >
@@ -354,7 +355,7 @@
                 feedback.innerHTML = `<p style="color:green;"> ✓ ¡Correcto!   ${problema} = ${respuestaCorrecta}</p>`;
             } else {
                 fallos++;
-                feedback.innerHTML = `<p style="color:red;"> ✗ Incorrecto. La respuesta correcta a ${problema} es ${respuestaCorrecta}.</p>`;
+                feedback.innerHTML = `<p style="color:red;"> ✗ Incorrecto. La respuesta correcta a ${problema} es ${respuestaCorrecta}. Respondiste ${respuestaUsuario}</p>`;
             }
             actualizarEstadisticas();
             generarProblema();

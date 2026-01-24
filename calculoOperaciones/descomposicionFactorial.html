@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descomposición en Factores Primos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .aciertos { color: green; }
+        .fallos { color: red; }
+        .question {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 20px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .feedback {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .correcto {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .incorrecto {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .respuesta-correcta {
+            background-color: #cfe2ff;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Descomposición en Factores Primos</h1>
+        
+        <div class="stats">
+            <div>Aciertos: <span class="aciertos" id="aciertos">0</span></div>
+            <div>Fallos: <span class="fallos" id="fallos">0</span></div>
+        </div>
+
+        <div class="question">
+            Descompón en factores primos: <strong id="numero">12</strong>
+        </div>
+
+        <div class="input-group">
+            <input type="text" id="respuesta" placeholder="Ej: 2 × 2 × 3 o 2^2 × 3" autocomplete="off">
+            <button onclick="verificarRespuesta()">Verificar</button>
+        </div>
+
+        <div id="feedback"></div>
+        <div id="respuestaCorrecta"></div>
+
+        <button onclick="generarNuevoProblem()" style="width: 100%; margin-top: 20px;">Siguiente Problema</button>
+    </div>
+
+    <script>
+        let numeroActual = 0;
+        let aciertos = 0;
+        let fallos = 0;
+
+        function generarNumeroAleatorio() {
+            return Math.floor(Math.random() * 100) + 2;
+        }
+
+        function descomponerFactores(num) {
+            const factores = [];
+            let divisor = 2;
+            let n = num;
+
+            while (divisor * divisor <= n) {
+                while (n % divisor === 0) {
+                    factores.push(divisor);
+                    n /= divisor;
+                }
+                divisor++;
+            }
+            if (n > 1) factores.push(n);
+            return factores;
+        }
+
+        function formatearRespuestaCorrecta(factores) {
+            const contar = {};
+            factores.forEach(f => {
+                contar[f] = (contar[f] || 0) + 1;
+            });
+
+            return Object.entries(contar)
+                .map(([factor, count]) => count > 1 ? `${factor}^${count}` : factor)
+                .join(" × ");
+        }
+
+        function normalizarRespuesta(texto) {
+            return texto.replace(/\s+/g, '').toLowerCase()
+                .replace(/×|x|\*|·/g, '*')
+                .replace(/\^/g, '^');
+        }
+
+        function verificarRespuesta() {
+            const respuestaUsuario = document.getElementById('respuesta').value.trim();
+            const factoresCorrectos = descomponerFactores(numeroActual);
+            
+            if (!respuestaUsuario) {
+                mostrarFeedback('Por favor ingresa una respuesta', 'incorrecto');
+                return;
+            }
+
+            const respuestaNormalizada = normalizarRespuesta(respuestaUsuario);
+            const respuestaEsperada = normalizarRespuesta(formatearRespuestaCorrecta(factoresCorrectos));
+
+            const esCorrecto = respuestaNormalizada === respuestaEsperada;
+
+            if (esCorrecto) {
+                aciertos++;
+                mostrarFeedback('¡Correcto!', 'correcto');
+            } else {
+                fallos++;
+                mostrarFeedback('Incorrecto, intenta de nuevo', 'incorrecto');
+                const respuestaDiv = document.getElementById('respuestaCorrecta');
+                respuestaDiv.className = 'respuesta-correcta';
+                respuestaDiv.innerHTML = `<strong>Respuesta correcta:</strong> ${formatearRespuestaCorrecta(factoresCorrectos)}`;
+            }
+
+            actualizarEstadisticas();
+        }
+
+        function mostrarFeedback(mensaje, tipo) {
+            const feedbackDiv = document.getElementById('feedback');
+            feedbackDiv.className = `feedback ${tipo}`;
+            feedbackDiv.textContent = mensaje;
+        }
+
+        function actualizarEstadisticas() {
+            document.getElementById('aciertos').textContent = aciertos;
+            document.getElementById('fallos').textContent = fallos;
+        }
+
+        function generarNuevoProblem() {
+            numeroActual = generarNumeroAleatorio();
+            document.getElementById('numero').textContent = numeroActual;
+            document.getElementById('respuesta').value = '';
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('respuestaCorrecta').textContent = '';
+            document.getElementById('respuesta').focus();
+        }
+
+        // Permitir Enter para enviar
+        document.getElementById('respuesta').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') verificarRespuesta();
+        });
+
+        // Inicializar
+        generarNuevoProblem();
+    </script>
+</body>
+</html>

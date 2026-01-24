@@ -1,0 +1,367 @@
+ <!--  Autor : Carlos Fleitas Cochoy
+      Fecha creación: enero 2026
+      Descripción: Práctica de tablas de multiplicar para niños de primaria y 1º de ESO
+-->
+<!--Cuando cambias de tabla debería reiniciar contadores en el momento
+También debería mostrar en un div adicional el último input del usuario y la solución correcta en caso de error.
+Una vez hecho tengo que crear otro archivo idéntico para tabla de sumas
+
+NO FUNCIONA BIEN: 
+ 1. al cambiar de tabla no se reinician los contadores Ya está arreglado
+
+2. El límite de juegos no funciona bien, permite más juegos de los indicados. Solucionad:
+document.getElementById('input-grupo').classList.add('hidden') y 
+document.getElementById('input-grupo').classList.remove('hidden') 
+en las funciones finJuego() e iniciaJuego(); 
+
+3. hay que hacer que el resultado de la multiplicación, el correcto y el del usuario, 
+se mantenga hasta que el usuario responda a la siguiente cuestión
+
+
+
+-->
+
+
+<!DOCTYPE html>
+
+<html lang="es">
+   
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica de Tablas de Multiplicar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .contenedor {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .setup {
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .setup.active {
+            display: block;
+        }
+        
+        label {
+            display: block;
+            margin: 15px 0 5px 0;
+            color: #555;
+            font-weight: bold;
+        }
+        
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #764ba2;
+        }
+        
+        .juego {
+            display: none;
+        }
+        
+        .juego.active {
+            display: block;
+        }
+        
+        .question {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 28px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .input-grupo {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .las-estadisticas {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .estadistica {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .estadistica-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .estadistica-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .estadistica-value.aciertos {
+            color: #27ae60;
+        }
+        
+        .estadistica-value.fallos {
+            color: #e74c3c;
+        }
+        
+        .mensaje {
+            text-align: center;
+            margin: 15px 0;
+            font-size: 16px;
+            font-weight: bold;
+            min-height: 24px;
+        }
+        
+        .mensaje.correcto {
+            color: #27ae60;
+        }
+        
+        .mensaje.incorrecto {
+            color: #e74c3c;
+        }
+        
+        .button-grupo {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .hidden {
+        display: none;
+}
+    </style>
+</head>
+<body>
+    
+    <div class="contenedor">
+        <h1>🧮 Tablas de Multiplicar</h1>
+        
+        <div class="setup active">
+            <label for="tabla">¿Qué tabla deseas practicar? (1-12)</label>
+            <input type="number" id="tabla" min="1" max="12" value="2">
+            
+            <label for="intentos">¿Cuántos intentos deseas? (1-50)</label>
+            <input type="number" id="intentos" min="1" max="50" value="10">
+            
+            <button onclick="iniciaJuego()">Comenzar</button>
+        </div>
+        
+        <div class="juego">
+            <div class="question" id="question"></div>
+            
+            <div id="input-grupo" class="input-grupo">
+                <input type="text" id="answer" placeholder="Tu respuesta" autofocus>
+                <button onclick="checkAnswer()" style="width: auto; padding: 12px 20px;">Enviar</button>
+            </div>
+            
+            <div class="mensaje" id="mensaje"></div>
+            
+            <div class="las-estadisticas">
+                <div class="estadistica">
+                    <div class="estadistica-label">Aciertos</div>
+                    <div class="estadistica-value aciertos" id="correctCount">0</div>
+                </div>
+                <div class="estadistica">
+                    <div class="estadistica-label">Fallos</div>
+                    <div class="estadistica-value fallos" id="wrongCount">0</div>
+                </div>
+                <div class="estadistica">
+                    <div class="estadistica-label">Total</div>
+                    <div class="estadistica-value" id="totalCount">0</div>
+                </div>
+            </div>
+            
+            <div class="button-grupo">
+                <button onclick="reiniciaJuego()">Reiniciar</button>
+                <button onclick="changeTable()">Cambiar tabla</button>
+            </div>
+        </div>
+    </div>
+    <div id="enlaces">Para practicar con operaciones con números enteros para 1º de ESO y cursos anteriores:
+        <ol>
+        <li><a href="sumasRestasNumerosEnteros.html">Sumas con números enteros</a></li>
+        <li><a href="tablasDeMultiplicar.html">Tablas de Multiplicar</a></li>
+        <li><a href="MultiplicacionesNumerosEnteros.html">Multiplicaciones con números enteros</a></li>
+        <li><a href="CalculoNumerosEnteros.html">Cálculo con paréntesis y corchetes</a></li>
+        </ol>
+    </div>
+    
+    <script>
+        let tablaActual = 0;
+        let totalintentos = 0;
+        let intentoActual = 0;
+        let nrRespuestasCorrectas = 0;
+        let nrRespuestasIncorrectas = 0;
+        let numeroActual = 0;
+        
+        function iniciaJuego() {
+            tablaActual = parseInt(document.getElementById('tabla').value);
+            totalintentos = parseInt(document.getElementById('intentos').value);
+            
+            if (tablaActual < 1 || tablaActual > 12) {
+                alert('Por favor, elige un número entre 1 y 12');
+                return;
+            }
+            
+            if (totalintentos < 1 || totalintentos > 50) {
+                alert('Por favor, elige entre 1 y 50 intentos');
+                return;
+            }
+            
+            intentoActual = 0;
+            nrRespuestasCorrectas = 0;
+            nrRespuestasIncorrectas = 0;
+            
+            document.querySelector('.setup').classList.remove('active');
+            document.querySelector('.juego').classList.add('active');
+            
+            document.getElementById('input-grupo').classList.remove('hidden');
+            preguntaSiguiente();
+        }
+        
+        function preguntaSiguiente() {
+            intentoActual++;
+            numeroActual = Math.floor(Math.random() * 12) + 1;
+            
+            document.getElementById('question').textContent = 
+                `${tablaActual} × ${numeroActual} = ?`;
+            document.getElementById('answer').value = '';
+            document.getElementById('answer').focus();
+            //document.getElementById('mensaje').textContent = '';
+        }
+        
+        function checkAnswer() {
+            const userAnswer = parseInt(document.getElementById('answer').value);
+            const respuestaCorrecta = tablaActual * numeroActual;
+            
+            if (isNaN(userAnswer)) {
+                document.getElementById('mensaje').textContent = 'Por favor, escribe un número';
+                return;
+            }
+            
+            if (userAnswer === respuestaCorrecta) {
+                nrRespuestasCorrectas++;
+                document.getElementById('mensaje').textContent = '✓ ¡Correcto! ' + `${tablaActual} × ${numeroActual} = ${respuestaCorrecta}`;
+                document.getElementById('mensaje').className = 'mensaje correcto';
+            } else {
+                nrRespuestasIncorrectas++;
+                document.getElementById('mensaje').textContent = 
+                    `✗ Incorrecto.  ${tablaActual} × ${numeroActual} = ${respuestaCorrecta}. Respondiste: ${userAnswer}`;
+                document.getElementById('mensaje').className = 'mensaje incorrecto';
+            }
+            
+            actualizaEstadisticas();
+            
+            if (intentoActual < totalintentos) {
+                setTimeout(preguntaSiguiente, 1500);
+            } else {
+                setTimeout(finJuego, 1500);
+            }
+        }
+        
+        function actualizaEstadisticas() {
+            document.getElementById('correctCount').textContent = nrRespuestasCorrectas;
+            document.getElementById('wrongCount').textContent = nrRespuestasIncorrectas;
+            document.getElementById('totalCount').textContent = intentoActual;
+        }
+        
+        function finJuego() {
+            document.getElementById('question').textContent = 
+                `¡Juego terminado! Acertaste ${nrRespuestasCorrectas} de ${totalintentos}`;
+            document.getElementById('mensaje').textContent = '';
+            document.getElementById('input-grupo').classList.add('hidden');
+        }
+        
+        function reiniciaJuego() {
+            document.querySelector('.setup').classList.add('active');
+            document.querySelector('.juego').classList.remove('active');
+            document.getElementById('tabla').focus();
+            document.getElementById('correctCount').textContent = 0;
+            document.getElementById('wrongCount').textContent = 0;
+            document.getElementById('totalCount').textContent = 0;
+            document.getElementById('mensaje').textContent = '';
+        }
+        
+        function changeTable() {
+            document.querySelector('.setup').classList.add('active');
+            document.querySelector('.juego').classList.remove('active');
+            document.getElementById('tabla').focus();
+            document.getElementById('correctCount').textContent = 0;
+            document.getElementById('wrongCount').textContent = 0;
+            document.getElementById('totalCount').textContent = 0;
+            document.getElementById('mensaje').textContent = '';
+        }
+        
+        // Permitir enviar con Enter
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('answer').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkAnswer();
+            });
+        });
+    </script>
+</body>
+</html>
