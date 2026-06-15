@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tangram Interactivo</title>
+    <style>
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f0f0; }
+        canvas { background: #fff; border: 2px solid #333; }
+    </style>
+</head>
+<body>
+<canvas id="tangram" width="400" height="400"></canvas>
+<script>
+const canvas = document.getElementById('tangram');
+const ctx = canvas.getContext('2d');
+
+const COLORS = [
+    "#e74c3c", // rojo
+    "#3498db", // azul
+    "#2ecc71", // verde
+    "#f1c40f", // amarillo
+    "#9b59b6", // violeta
+    "#e67e22", // naranja
+    "#1abc9c"  // turquesa
+];
+
+// Definición de las 7 piezas del tangram (coordenadas relativas a 400x400)
+const pieces = [
+    // Triángulo grande 1
+    { points: [[0,0],[200,0],[0,200]], color: COLORS[0], dx: 0, dy: 0 },
+    // Triángulo grande 2
+    { points: [[400,400],[200,400],[400,200]], color: COLORS[1], dx: 0, dy: 0 },
+    // Triángulo mediano
+    { points: [[200,0],[400,0],[400,200]], color: COLORS[2], dx: 0, dy: 0 },
+    // Triángulo pequeño 1
+    { points: [[0,200],[100,300],[0,400]], color: COLORS[3], dx: 0, dy: 0 },
+    // Triángulo pequeño 2
+    { points: [[400,200],[300,300],[400,400]], color: COLORS[4], dx: 0, dy: 0 },
+    // Cuadrado
+    { points: [[100,300],[200,200],[300,300],[200,400]], color: COLORS[5], dx: 0, dy: 0 },
+    // Paralelogramo
+    { points: [[200,0],[300,100],[200,200],[100,100]], color: COLORS[6], dx: 0, dy: 0 }
+];
+
+let draggingPiece = null;
+let offset = {x:0, y:0};
+
+function drawPiece(piece) {
+    ctx.beginPath();
+    ctx.moveTo(piece.points[0][0] + piece.dx, piece.points[0][1] + piece.dy);
+    for (let i = 1; i < piece.points.length; i++) {
+        ctx.lineTo(piece.points[i][0] + piece.dx, piece.points[i][1] + piece.dy);
+    }
+    ctx.closePath();
+    ctx.fillStyle = piece.color;
+    ctx.fill();
+    ctx.strokeStyle = "#333";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+}
+
+function drawAll() {
+    ctx.clearRect(0,0,400,400);
+    for (const piece of pieces) {
+        drawPiece(piece);
+    }
+}
+
+function pointInPiece(x, y, piece) {
+    // Ray-casting algorithm
+    let inside = false;
+    let pts = piece.points.map(p => [p[0] + piece.dx, p[1] + piece.dy]);
+    for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+        let xi = pts[i][0], yi = pts[i][1];
+        let xj = pts[j][0], yj = pts[j][1];
+        let intersect = ((yi > y) !== (yj > y)) &&
+            (x < (xj - xi) * (y - yi) / (yj - yi + 0.00001) + xi);
+        if (intersect) inside = !inside;
+    }
+    return inside;
+}
+
+canvas.addEventListener('mousedown', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    // Buscar la pieza superior bajo el mouse
+    for (let i = pieces.length - 1; i >= 0; i--) {
+        if (pointInPiece(mx, my, pieces[i])) {
+            draggingPiece = pieces[i];
+            // Llevar la pieza al frente
+            pieces.push(pieces.splice(i,1)[0]);
+            offset.x = mx - (draggingPiece.points[0][0] + draggingPiece.dx);
+            offset.y = my - (draggingPiece.points[0][1] + draggingPiece.dy);
+            break;
+        }
+    }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (draggingPiece) {
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        // Calcular desplazamiento relativo al primer punto
+        draggingPiece.dx = mx - draggingPiece.points[0][0] - offset.x;
+        draggingPiece.dy = my - draggingPiece.points[0][1] - offset.y;
+        drawAll();
+    }
+});
+
+canvas.addEventListener('mouseup', () => {
+    if (draggingPiece) {
+        // "Pegar" la pieza si está cerca de otra (snap)
+        for (const other of pieces) {
+            if (other === draggingPiece) continue;
+            for (const [i, p1] of draggingPiece.points.entries()) {
+                const p1x = p1[0] + draggingPiece.dx;
+                const p1y = p1[1] + draggingPiece.dy;
+                for (const [j, p2] of other.points.entries()) {
+                    const p2x = p2[0] + other.dx;
+                    const p2y = p2[1] + other.dy;
+                    const dist = Math.hypot(p1x - p2x, p1y - p2y);
+                    if (dist < 15) { // Si está cerca, pegar
+                        draggingPiece.dx += p2x - p1x;
+                        draggingPiece.dy += p2y - p1y;
+                        drawAll();
+                        break;
+                    }
+                }
+            }
+        }
+        draggingPiece = null;
+    }
+});
+
+drawAll();
+</script>
+</body>
+</html>
