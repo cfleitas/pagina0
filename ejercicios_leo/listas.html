@@ -17,11 +17,11 @@
             <ol>
                 <li>
             <p>Para crear una lista de números, puedes hacerlo directamente. Por ejemplo, para crear una lista de los primeros 10 números enteros, puedes escribir:</p>
-            <pre><code>lista2 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}</code></pre>
+            <pre><code>lista1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}</code></pre>
                 </li>
                 <li>
             <p>Para crear una lista de números, puedes usar la función List. Por ejemplo, para crear una lista de los primeros 10 números enteros, puedes escribir:</p>
-            <pre><code>lista1 = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)</code></pre>
+            <pre><code>lista1 = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10). Normalmente usarás el método anterior, método directo.</code></pre>
                 </li>
                 <li>
             <p>También puedes crear listas de números usando la función Sequence. Por ejemplo, para crear una lista de los primeros 10 números enteros pares, puedes escribir:</p>
@@ -56,7 +56,7 @@
             <h2>Ejercicios prácticos</h2>
             <ol>
                 <li>
-                    <p>Crea una lista con los números pares del 2 al 20 usando <code>Sequence</code>. Calcula después su suma y su promedio.</p>
+                    <p>Crea una lista con los números pares del 2 al 40 usando <code>Sequence</code>. Calcula después su suma y su promedio.</p>
                 </li>
                 <li>
                     <p>Crea una lista con los cuadrados de los números del 1 al 10. Obtén el valor máximo, el valor mínimo y la longitud de la lista.</p>
@@ -81,21 +81,21 @@
                 <li>
                     <p>Para obtener un elemento específico de una lista, puedes usar la función Element. Por ejemplo, para obtener el tercer elemento de la lista, puedes escribir:</p>
                     <pre><code>elTercero=Element(lista1, 3)</code></pre>
-                    <p>la nueva variable es: <strong>elTercero</strong>contendrá el valor del tercer elemento de la lista y se actualizará cuando cambie la lista.</p>
+                    <p>la nueva variable es: <strong>elTercero</strong> contendrá el valor del tercer elemento de la lista y se actualizará cuando cambie la lista.</p>
                 </li>
                 <li>
-                    <p>Para modificar un elemento específico de una lista, puedes usar la función SetElement. Por ejemplo, para modificar el segundo elemento de la lista y asignarle el valor 15, puedes escribir:</p>
-                    <pre><code>SetElement(lista1, 2, 15)</code></pre>
+                    <p>Para modificar un elemento específico de una  lista libre, como notas, puedes usar la función SetElement. Por ejemplo, para modificar el segundo elemento de la lista y asignarle el valor 15, puedes escribir:</p>
+                    <pre><code>SetElement(notas, 2, 10)</code></pre>
                 </li>
                 <li>
                     <p>Para añadir un elemento a una lista existente, puedes usar la función Append. Por ejemplo, para añadir el número 11 a la lista existente (ojo, esto crea una lista nueva):</p>
                     <pre><code>Append(lista1, 11)</code></pre>
                 </li>
                 <li>
-                    <p>Para añadir un elemento a una lista existente sin crear una nueva, puedes usar la función SetValue. Por ejemplo, para añadir el número 505 a la lista llamada lista2, si esta es de longitud 10, puedes hacer: </p>
-                    <pre><code>SetValue(lista2, 11, 505)</code></pre>    
+                    <p>Para añadir un elemento a una lista existente sin crear una nueva, puedes usar la función SetValue (siempre que la lista sea libre, no dependiente). Por ejemplo, para añadir el número 505 a la lista llamada lista2, si esta es de longitud 10, puedes hacer: </p>
+                    <pre><code>SetValue(lista1, 11, 505)</code></pre>    
                     <p>Si no tienes ganas de contar los elementos, puedes usar la función Length para obtener la longitud de la lista y sumarle 1:</p>
-                    <pre><code>SetValue(lista2, Length(lista2) + 1, 505)</code></pre>
+                    <pre><code>SetValue(lista1, Length(lista1) + 1, 505)</code></pre>
                 </li>
             </ol>
         </section>
@@ -111,7 +111,7 @@
                 <li>
                     <p>A partir de <code>colores</code>, crea una nueva lista añadiendo <code>"violeta"</code> con <code>Append</code>. Comprueba que la lista original conserva cuatro elementos.</p>
                     <p>Nota: <code>Append</code> crea una nueva lista, no modifica la original. </p>
-                    <p>Hazlo ahora de forma que se modifique la lista original (colores ):</p>
+                    <p>Modifica la lista original (colores ) añadiendo un nuevo elemento ("negro"):</p>
                 </li>
                 <li>
                     <p>Usa <code>Append</code> para añadir el número 40 a <code>temperaturas</code> y guarda el resultado en una nueva lista llamada <code>temperaturasAmpliada</code>.</p>
@@ -128,7 +128,7 @@
             </ol>
         </section>
         <section>
-            <h2>Construir listas usando "IterationList" </h2>
+            <h2>Construir listas usando "IterationList" (Esto está pendiente de ser redactado, así que de momento no tenerlo en cuenta</h2>
             <ol>
                 <li>
                     <p>La función <code>IterationList</code> permite construir listas de manera iterativa. Por ejemplo, para crear una lista en la que cada elemento sea el doble del anteriorlos primeros 10 números enteros, puedes escribir:</p>
