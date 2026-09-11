@@ -11,7 +11,7 @@
     </header>
     <main>
         <section>
-            <h2>Lista de números. Pasos iniciales, definirla a pelo y definirla con Sequence</h2>
+            <h2>Lista de números. Pasos iniciales, definirla a pelo y definirla con Sequence. Obtener sumas, promedios, máximos y mínimos  </h2>
             <section>
             <p>Vamos a trabajar con listas de números en Geogebra. </p>
             <ol>
@@ -43,6 +43,31 @@
             <li>
             <p>¿Y para calcular el producto ¿cómo lo harías? (pista: usa la función Product) </p>
             </li>
+            <li>
+            <p>¿Y para calcular el número de elementos de la lista, es decir, su longitud, ¿cómo lo harías? (pista: usa la función Length) </p>
+            </li>
+            </ol>
+        <section>
+            <h2>Ejercicios prácticos</h2>
+            <ol>
+                <li>
+                    <p>Crea una lista con los números pares del 2 al 20 usando <code>Sequence</code>. Calcula después su suma y su promedio.</p>
+                </li>
+                <li>
+                    <p>Crea una lista con los cuadrados de los números del 1 al 10. Obtén el valor máximo, el valor mínimo y la longitud de la lista.</p>
+                </li>
+                <li>
+                    <p>Define la lista <code>notas = {4, 7, 9, 5, 8}</code>. Calcula la media y modifica la primera nota para que sea 6 usando <code>SetElement</code>.</p>
+                </li>
+                <li>
+                    <p>A partir de <code>lista1</code>, crea una nueva lista añadiendo el número 11 con <code>Append</code>. Comprueba que la lista original no ha cambiado.</p>
+                </li>
+                <li>
+                    <p>Crea una lista de 10 números aleatorios entre 1 y 100. Encuentra el mayor y el menor, y calcula el producto de todos sus elementos.</p>
+                </li>
+                <li>
+                    <p>Modifica el último elemento de <code>lista2</code> usando <code>SetValue</code>, sin escribir directamente su posición. Pista: utiliza <code>Length(lista2)</code>.</p>
+                </li>
             </ol>
         </section>
         <section>
@@ -50,15 +75,50 @@
             <ol>
                 <li>
                     <p>Para obtener un elemento específico de una lista, puedes usar la función Element. Por ejemplo, para obtener el tercer elemento de la lista, puedes escribir:</p>
-                    <pre><code>Element(lista1, 3)</code></pre>
+                    <pre><code>elTercero=Element(lista1, 3)</code></pre>
+                    <p>la nueva variable es: <strong>elTercero</strong>contendrá el valor del tercer elemento de la lista y se actualizará cuando cambie la lista.</p>
                 </li>
                 <li>
-                    <p>Para modificar un elemento específico de una lista, puedes usar la función SetElement. Por ejemplo, para modificar el tercer elemento de la lista y ponerle el valor 15, puedes escribir:</p>
-                    <pre><code>SetElement(lista1, 3, 15)</code></pre>
+                    <p>Para modificar un elemento específico de una lista, puedes usar la función SetElement. Por ejemplo, para modificar el segundo elemento de la lista y asignarle el valor 15, puedes escribir:</p>
+                    <pre><code>SetElement(lista1, 2, 15)</code></pre>
                 </li>
                 <li>
-                    <p>Para añadir un elemento a una lista existente, puedes usar la función Append. Por ejemplo, para añadir el número 11 a la lista existente:</p>
+                    <p>Para añadir un elemento a una lista existente, puedes usar la función Append. Por ejemplo, para añadir el número 11 a la lista existente (ojo, esto crea una lista nueva):</p>
                     <pre><code>Append(lista1, 11)</code></pre>
+                </li>
+                <li>
+                    <p>Para añadir un elemento a una lista existente sin crear una nueva, puedes usar la función SetValue. Por ejemplo, para añadir el número 505 a la lista llamada lista2, si esta es de longitud 10, puedes hacer: </p>
+                    <pre><code>SetValue(lista2, 11, 505)</code></pre>    
+                    <p>Si no tienes ganas de contar los elementos, puedes usar la función Length para obtener la longitud de la lista y sumarle 1:</p>
+                    <pre><code>SetValue(lista2, Length(lista2) + 1, 505)</code></pre>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>Ejercicios prácticos: Element, Append y SetValue</h2>
+            <ol>
+                <li>
+                    <p>Define la lista <code>colores = {"rojo", "verde", "azul", "amarillo"}</code> y obtén su segundo elemento usando <code>Element</code>.</p>
+                </li>
+                <li>
+                    <p>Crea la lista <code>temperaturas = {18, 21, 24}</code>. Obtén el último elemento sin escribir directamente su posición; utiliza <code>Element</code> y <code>Length</code>.</p>
+                </li>
+                <li>
+                    <p>A partir de <code>colores</code>, crea una nueva lista añadiendo <code>"violeta"</code> con <code>Append</code>. Comprueba que la lista original conserva cuatro elementos.</p>
+                    <p>Nota: <code>Append</code> crea una nueva lista, no modifica la original. </p>
+                    <p>Hazlo ahora de forma que se modifique la lista original (colores ):</p>
+                </li>
+                <li>
+                    <p>Usa <code>Append</code> para añadir el número 40 a <code>temperaturas</code> y guarda el resultado en una nueva lista llamada <code>temperaturasAmpliada</code>.</p>
+                </li>
+                <li>
+                    <p>Modifica el tercer elemento de <code>temperaturasAmpliada</code> para que sea 25 usando <code>SetValue</code>. Comprueba el resultado con <code>Element</code>.</p>
+                </li>
+                <li>
+                    <p>Añade el valor 30 al final de <code>temperaturasAmpliada</code> usando <code>SetValue</code> y <code>Length</code>, sin indicar directamente la posición.</p>
+                </li>
+                <li>
+                    <p>Crea una lista de cinco nombres. Obtén el primero y el último con <code>Element</code>, añade un sexto nombre con <code>Append</code> y modifica el segundo con <code>SetValue</code>.</p>
                 </li>
             </ol>
         </section>
