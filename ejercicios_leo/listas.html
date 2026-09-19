@@ -27,24 +27,30 @@
             <pre><code>lista1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}</code></pre>
                 </li>
                 <li>
-            <p>Para crear una lista de números, puedes usar la función List. Por ejemplo, para crear una lista de los primeros 10 números enteros, puedes escribir:</p>
+            <p><b>Sáltate esto en una primera lectura</b>Para crear una lista de números, puedes usar la función List. Por ejemplo, para crear una lista de los primeros 10 números enteros, puedes escribir:</p>
             <pre><code>lista1 = List(1, 2, 3, 4, 5, 6, 7, 8, 9, 10). Normalmente usarás el método del apartado anterior, método directo.</code></pre>
                 </li>
                 <li>
-            <p>También puedes crear listas de números usando la función <a href="https://geogebra.github.io/docs/manual/es/commands/Secuencia/">Sequence</a>. Por ejemplo, para crear una lista de los primeros 10 números enteros pares, puedes escribir:</p>
+            <p>También puedes crear listas de números usando la función 
+                <a href="https://geogebra.github.io/docs/manual/es/commands/Secuencia/">Sequence</a>
+                (En enlace anterior explican muy bien el comando <b>Sequence</b>). 
+                Por ejemplo, para crear una lista de los primeros 10 números enteros pares, puedes escribir:</p>
             <pre><code>lista2 = Sequence(2 i, i, 0, 9)</code></pre>
             <p>Este comando crea una lista con los primeros 10 números enteros pares.</p>   
             <p>Si quieres crear una lista de los primeros 10 números enteros impares, puedes escribir:</p>
             <pre><code>lista3 = Sequence(2 i + 1, i, 0, 9)</code></pre>
             </li>
             <li>
-            <p> Para cosas geométricas el comando Sequence es muy útil. Por ejemplo, puedes usarlo para crear una lista de puntos en una línea o en un círculo.</p>
+            <p> Para cosas geométricas el comando Sequence es muy útil. Por ejemplo, puedes usarlo para 
+                crear una lista de puntos en una línea o en un círculo.</p>
             <p>Un ejemplo de cómo crear una lista de puntos en un círculo con centro en el origen "O", punto inicial "A" y ángulo de giro "angulo":</p>
             <pre><code>listaPuntos = Sequence(Rotate(A, angulo i, O), i, 0,5)</code></pre>
             </li>
             <li>
-            <p>Cuando tienes una lista de números, puedes realizar varias operaciones con ella, como por ejemplo calcular la suma, el promedio, o encontrar el valor máximo o mínimo. 
-                Por ejemplo, para calcular la suma de los elementos de la lista, puedes usar la función Sum:</p>
+            <p>Cuando tienes una lista de números, puedes realizar varias operaciones con ella, 
+                como por ejemplo calcular la suma, el promedio, o encontrar el valor máximo o mínimo. 
+                Por ejemplo, para calcular la suma de los elementos de la lista, puedes usar la 
+                función Sum:</p>
             <pre><code>Sum(lista1)</code></pre>
             </li>
             <li>
@@ -63,18 +69,21 @@
             <p>¿Y para calcular el producto ¿cómo lo harías? (pista: usa la función Product) </p>
             </li>
             <li>
-            <p>¿Y para calcular el número de elementos de la lista, es decir, su longitud, ¿cómo lo harías? (pista: usa la función Length) </p>
+            <p>¿Y para calcular el número de elementos de la lista, es decir, su longitud, 
+                ¿cómo lo harías? (pista, es fácil: usa la función <b>Length</b>) </p>
             </li>
             </ol>
         </section>
         <section>
-            <h2>Ejercicios prácticos</h2>
+            <h2>Algunos Ejercicios prácticos</h2>
             <ol>
                 <li>
-                    <p>Crea una lista con los números pares del 2 al 40 usando <code>Sequence</code>. Calcula después su suma y su promedio.</p>
+                    <p>Crea una lista con los números pares del 2 al 40 usando <code>Sequence</code>. 
+                        Calcula después su suma y su promedio.</p>
                 </li>
                 <li>
-                    <p>Crea una lista con los cuadrados de los números del 1 al 10. Obtén el valor máximo, el valor mínimo y la longitud de la lista.</p>
+                    <p>Crea una lista con los cuadrados de los números del 1 al 10. 
+                        Obtén el valor máximo, el valor mínimo y la longitud de la lista.</p>
                 </li>
                 <li>
                     <p>Define la lista <code>notas = {4, 7, 9, 5, 8}</code>. Calcula la media y modifica la primera nota para que sea 6 usando 
