@@ -18,7 +18,9 @@
     </header>
     <main>
         <section>
-            <h2>Lista de números. Pasos iniciales, definirla a pelo y definirla con Sequence. Obtener sumas, promedios, máximos y mínimos  </h2>
+            <h2>Lista de números. Pasos iniciales, definirla a pelo y definirla con Sequence. 
+                Obtener sumas, promedios, máximos y mínimos.
+                También uso con objetos geométricos: puntos, triángulos, circunferencias ...  </h2>
             <section>
             <p>Vamos a trabajar con listas de números en Geogebra. </p>
             <ol>
@@ -40,25 +42,23 @@
             <p>Si quieres crear una lista de los primeros 10 números enteros impares, puedes escribir:</p>
             <pre><code>lista3 = Sequence(2 i + 1, i, 0, 9)</code></pre>
             </li>
-            <li>
+            <li><p>OBSERVACIÓN:
                 El comando Sequence que hemos usado hasta aquí usa 4 argumentos: a) el primero es
                 el valor del término general que va cambiando de una vez a otra, b) el segundo indica
                 qué variable va a ir cambiando de una vez a otra, en el ejemplo anterior es la variable 
                 <i>i</i>, c) el tercer argumento indica el valor inicial de la variable que va cambiando 
                 y d) el cuarto argumento indica el valor final de la variable que va cambiando. En este
-                caso la variable <i>i</i> va subiendo de valor de 1 en 1.
+                caso la variable <i>i</i> va subiendo de valor de 1 en 1.</p>
             </li>
             <li>
-                Si quieres que al usar el comado <li>Sequence</li> la variable vaya subiendo
-                de 2 en 2, debes añadir un quinto argumento. Como ejemplo comprueba lo que consigues con:
-                <pre>><code>lista4 = Sequence(3 i, i, 0, 12, 3)</code></pre>.
+                <p>Si quieres que al usar el comado <li>Sequence</li> la variable vaya subiendo
+                de 3 en 3, debes añadir un quinto argumento. Como ejemplo comprueba lo que consigues con:
+                <pre>><code>lista4 = Sequence(3 i, i, 0, 12, 3)</code></pre>.</p>
+                <p>¿Sabrías usar ahora el comando Sequence para obtener la lista siguiente: 
+                    {5, 3, 1, -1,-3,-5}?
+                </p>
             </li>
-            <li>
-            <p> Para cosas geométricas el comando Sequence es muy útil. Por ejemplo, puedes usarlo para 
-                crear una lista de puntos en una línea o en un círculo.</p>
-            <p>Un ejemplo de cómo crear una lista de puntos en un círculo con centro en el origen "O", punto inicial "A" y ángulo de giro "angulo":</p>
-            <pre><code>listaPuntos = Sequence(Rotate(A, angulo i, O), i, 0,5)</code></pre>
-            </li>
+           
             <li>
             <p>Cuando tienes una lista de números, puedes realizar varias operaciones con ella, 
                 como por ejemplo calcular la suma, el promedio, o encontrar el valor máximo o mínimo. 
@@ -84,6 +84,16 @@
             <li>
             <p>¿Y para calcular el número de elementos de la lista, es decir, su longitud, 
                 ¿cómo lo harías? (pista, es fácil: usa la función <b>Length</b>) </p>
+            </li>
+             <li>
+            <p> Para cosas geométricas el comando Sequence es muy útil y "vistoso". Por ejemplo, 
+                puedes usarlo para 
+                crear una lista de puntos en una línea o en un círculo.</p>
+            <p>Un ejemplo de cómo crear una lista de puntos en un círculo con centro en el origen "O", 
+                punto inicial "A" (que tienes que definir, por ejemplo, asÍ. A = (2, 4) )
+                y ángulo de giro variable "ang" e incrementos de 10º, haciendo que el primer giro sea 
+                de 20º y el último de 360º:</p>
+            <pre><code>listaPuntos = Sequence(Rotate(A, ang), ang, 20º,360º, 10º)</code></pre>
             </li>
             </ol>
         </section>
