@@ -40,13 +40,52 @@
             <p>Comprueba que A y B se pueden mover sobre las semirrectas y que no se pueden sacar de ahí</p>
             <p>Oculta las dos semirrectas y los ejes de coordenadas</p>
             <p>Ahora solo estarán visibles los puntos A y B que serán los vértices de partida del polígono regular.</p>
-            <p>Crea una lista con los valores 3, 4, ..., 13. (nrVertices = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}; 
+            <p>Crea una lista con los valores 3, 4, ..., 13. (listaNrVertices = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}; 
                 también se puede hacer esto directamente con Sequence(3, 13)).</p>
-            <p>En las propiedades básicas de la lista anterior (listaNrVertices) elige "draw as drop-down list" así tendrás en la pantalla la posibilidad de elegir el número de vértices que deseas dibujar para construir un polígono regular.</p>
-            <p>Escribe nrVertices = SelectedElement(listaNrVertices). Al cambiar el número de vértices elegido cambiará el valor de la variable nrVertices.</p>
+            <p>En las propiedades básicas de la lista anterior (listaNrVertices) elige "draw as drop-down list" así tendrás en la pantalla 
+                la posibilidad de elegir el número de vértices que deseas dibujar para construir el polígono regular.</p>
+            <p>Escribe nrVertices = SelectedElement(listaNrVertices). Al cambiar el número de vértices elegido cambiará el valor de 
+                la variable nrVertices.</p>
             <p>Lo que necesitamos ahora es localizar el centro, O, del polígono regular</p>
 			<p>Para ello tenemos que calcular el valor de los dos ángulos iguales del triángulo central isósceles. Observa el dibujo:</p>
 			<img src="../ASSETS/images/Construcción Polígono Regular (paso a paso) def1.jpg" alt="Triángulo central isósceles del polígono regular" style="display: block; max-width: 100%; height: auto; margin: 1rem auto;">
+            <p>
+                El ángulo central del triángulo isósceles, O, mide 360°/nrVertices (¿por qué?). 
+                Por lo tanto, los ángulos iguales del triángulo isósceles miden (180° - 360°/nrVertices)/2 (¿por qué?).
+            </p>
+            Debemos calcular el valor de ese ángulo y guardarlo en una variable. Para ello escribimos:
+            <p>
+                ánguloBase = (180° - 360°/nrVertices)/2
+            </p>
+            <p>
+                Ahora nos interesa localizar el punto O. Para ello, primero podemos girar B alrededor de A con un ángulo igual
+                al ánguloBase. Escribimos:  Rotate(B, ánguloBase, A) y 
+                obtenemos un punto que nos sirve para dibujar una semirrecta con origen en A.
+            </p>
+            <p>
+                Ahora dibujamos la semirrecta que pasa por A y por el punto que hemos obtenido al girar B alrededor de A.                 
+            </p>
+            <p>
+                Ahora hacemos lo mismo con el punto A, girándolo alrededor de B con un ángulo igual al ánguloBase. 
+                Escribimos: Rotate(A, ¿?, B) y obtenemos un punto que nos sirve para dibujar una semirrecta con origen en B 
+                (ojo aquí con el sentido de rotación: cuando es positivo el giro es en sentido antihorario).
+            </p>
+            <p>
+                La intersección de las dos semirrectas que hemos dibujado es el centro del polígono regular, O.
+            </p>
+            <p>
+                Ahora nos interesa dibujar el polígono regular. Para ello, 
+                primero debemos calcular el valor del ángulo central del triángulo isósceles que hemos dibujado antes. 
+                Ese ángulo mide 360°/nrVertices.
+                Definimos anguloCentral = 360°/nrVertices.
+            </p>
+            <p>
+                Ahora con el comando Sequence podemos dibujar el polígono regular.
+                ¿Cómo? No es difícil. Tenemos que obtener una lista de puntos que sean los vértices del polígono regular.
+                Para ello, giramos el punto A alrededor del centro O con un ángulo igual a  
+                anguloCentral, 2*anguloCentral, 3*anguloCentral, ..., (nrVertices-1)*anguloCentral.
+                
+            </p>
 
 
             
