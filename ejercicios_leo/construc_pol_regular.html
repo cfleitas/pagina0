@@ -53,7 +53,6 @@
                 El ángulo central del triángulo isósceles, O, mide 360°/nrVertices (¿por qué?). 
                 Por lo tanto, los ángulos iguales del triángulo isósceles miden (180° - 360°/nrVertices)/2 (¿por qué?).
             </p>
-            Debemos calcular el valor de ese ángulo y guardarlo en una variable. Para ello escribimos:
             <p>
                 ánguloBase = (180° - 360°/nrVertices)/2
             </p>
@@ -72,23 +71,33 @@
             </p>
             <p>
                 La intersección de las dos semirrectas que hemos dibujado es el centro del polígono regular, O.
+                <img src="../ASSETS/images/Construcción Polígono Regular (paso a paso) def2.jpg" alt="Intersección de semirrectas para encontrar 
+                el centro del polígono regular" style="display: block; max-width: 100%; height: auto; margin: 1rem auto;">
             </p>
             <p>
                 Ahora nos interesa dibujar el polígono regular. Para ello, 
                 primero debemos calcular el valor del ángulo central del triángulo isósceles que hemos dibujado antes. 
                 Ese ángulo mide 360°/nrVertices.
-                Definimos anguloCentral = 360°/nrVertices.
+                Definimos ánguloCentral = 360°/nrVertices.
             </p>
             <p>
                 Ahora con el comando Sequence podemos dibujar el polígono regular.
                 ¿Cómo? No es difícil. Tenemos que obtener una lista de puntos que sean los vértices del polígono regular.
                 Para ello, giramos el punto A alrededor del centro O con un ángulo igual a  
-                anguloCentral, 2*anguloCentral, 3*anguloCentral, ..., (nrVertices-1)*anguloCentral.
+                ánguloCentral, 2*ánguloCentral, 3*ánguloCentral, ..., (nrVertices-1)*ánguloCentral.
+                Con el comando Sequence podemos hacer esto de manera sencilla utilizando Rotate.
+                La lista de vértices podemos llamarla listaVértices. Dejamos los detalles para que los descubras tú.
+            </p>
+            <p> 
+                Luego con el comando Polygon podemos dibujar el polígono regular a partir de la lista de vértices que hemos obtenido. 
+                Solo hace falta escribir Polygon(listaVértices) y obtendremos el polígono regular que deseamos.
                 
             </p>
 
 
-            
+        <h2><a href="../index.html">Enlace a página principal</a></h2>
+        <h2><a href="principal_leo.html">Enlace a página primera de Leo: Ejercicios con triángulos usando Geogebra</a></h2>
+    
 
 		
 	</main>
