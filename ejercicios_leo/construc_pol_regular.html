@@ -49,15 +49,15 @@
             </p>
             </section>
             <section>
-                <h2>Instrucciones paso a paso </h2>
-            <p>Ocultar rejilla</p>
-            <p>Poner un punto  K en el origen (se puede hacer con K=(0, 0)).</p>
-            <p>Poner un punto L en la parte positiva del eje de las x (L = (7, 0)).</p>
-            <p>Poner un punto M en la parte negativa del eje de las x (M = (-7, 0)).</p>
+                <h2>Instrucciones paso a paso (se puede hacer de muchas maneras, esta es una de ellas)</h2>
+            <p>Oculta la rejilla</p>
+            <p>Pon un punto  K en el origen (se puede hacer con K=(0, 0)).</p>
+            <p>Pon un punto L en la parte positiva del eje de las x (L = (7, 0)).</p>
+            <p>Pon un punto M en la parte negativa del eje de las x (M = (-7, 0)).</p>
             <p>Ahora dibuja las semirrectas KM y KL, oculta los puntos K, L y M (se puede hacer con el ratón o con Ray(K, M) y Ray(K, L)). Pon sobre cada semirrecta un punto (A y B, si te salen con otra letra cambia el nombre en propiedades de los puntos).</p>
             <p>Comprueba que A y B se pueden mover sobre las semirrectas y que no se pueden sacar de ahí</p>
             <p>Oculta las dos semirrectas y los ejes de coordenadas</p>
-            <p>Ahora solo estarán visibles los puntos A y B que serán los vértices de partida del polígono regular.</p>
+            <p>En este momento solo estarán visibles los puntos A y B que serán los vértices de partida del polígono regular.</p>
             <p>Crea una lista con los valores 3, 4, ..., 13. (listaNrVértices = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}; 
                 también se puede hacer esto directamente con Sequence(3, 13)).</p>
             <p>En las propiedades básicas de la lista anterior (listaNrVértices) elige "draw as drop-down list" así tendrás en la pantalla 
@@ -75,12 +75,12 @@
                 ánguloBase = (180° - 360°/nrVértices)/2
             </p>
             <p>
-                Ahora nos interesa localizar el punto O. Para ello, primero podemos girar B alrededor de A con un ángulo igual
+                En este momento nos interesa localizar el punto O (que será el centro del polígono regular). Para ello, primero podemos girar B alrededor de A con un ángulo igual
                 al ánguloBase. Escribimos:  Rotate(B, ánguloBase, A) y 
                 obtenemos un punto que nos sirve para dibujar una semirrecta con origen en A.
             </p>
             <p>
-                Ahora dibujamos la semirrecta que pasa por A y por el punto que hemos obtenido al girar B alrededor de A.                 
+                Dibujamos la semirrecta que pasa por A y por el punto que hemos obtenido al girar B alrededor de A.                 
             </p>
             <p>
                 Ahora hacemos lo mismo con el punto A, girándolo alrededor de B con un ángulo igual al ánguloBase. 
@@ -93,7 +93,7 @@
                 el centro del polígono regular" style="display: block; max-width: 100%; height: auto; margin: 1rem auto;">
             </p>
             <p>
-                Ahora nos interesa dibujar el polígono regular. Para ello, 
+                Queremos dibujar el polígono regular. Para ello, 
                 primero debemos calcular el valor del ángulo central del triángulo isósceles que hemos dibujado antes. 
                 Ese ángulo mide 360°/nrVértices.
                 Definimos ánguloCentral = 360°/nrVértices.
