@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Construcción de un polígono regular</title>
+    <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
+       <link rel="stylesheet" href="../ASSETS/CSS/general.css"/>
+       <link rel="stylesheet" href="../ASSETS/CSS/pc.css"/>
+       <link rel="stylesheet" href="../ASSETS/CSS/mobile.css"/>
+	<style>
+		:root { font-family: Arial, sans-serif; color: #17324d; background: #f3f7fb; }
+		body { margin: 0; }
+		header { padding: 3rem 1.5rem; text-align: center; background: #176b87; color: white; }
+		main { max-width: 900px; margin: 2rem auto; padding: 0 1.5rem; }
+		section { background: white; padding: 1.5rem; margin-bottom: 1.5rem; border-radius: 12px; box-shadow: 0 3px 12px #17324d18; }
+		h1, h2 { margin-top: 0; }
+		label, input, button { display: block; margin: .7rem 0; }
+		input { width: 100%; max-width: 260px; padding: .6rem; box-sizing: border-box; }
+		button { padding: .7rem 1rem; border: 0; border-radius: 6px; background: #e67e22; color: white; cursor: pointer; }
+		button:hover { background: #cf6610; }
+		#resultado { font-weight: bold; color: #176b87; }
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Construcción de un polígono regular con Geogebra explicada paso a paso</h1>
+		
+	</header>
+    <div id="menu-contenedor"></div>
+
+	<main>
+		<section>
+			<h2>¿Qué queremos hacer?</h2>
+            <p>El objetivo es dibujar un polígono con el número de vértices que elija el usuario.</p>
+            <p>Existirán 2 puntos libres, A y B que serán dos vértices del polígono.</p>
+            <p>A partir de la posición de esos dos vértices se obtendrá el polígono con el número de vértices elegido.</p> 
+        </section>
+        <section>
+            <h2>¿Cómo lo haremos? Indicaciones para hacerlo paso a paso</h2>
+            <p>
+                El resultado será algo parecido a lo que puedes ver en el siguiente enlace:
+                <a href="https://www.geogebra.org/m/uy94beg6">https://www.geogebra.org/m/uy94beg6</a>
+            </p>
+            <p>
+                Que es lo mismo que ver a continuación:
+            </p>
+            <p align="center">
+                <iframe scrolling="no" title="Construcción Polígono Regular (paso a paso)" 
+                src="https://www.geogebra.org/material/iframe/id/uy94beg6/width/595/height/581/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="595px" height="581px" style="border:0px;"> </iframe>
+            </p>
+            </section>
+            <section>
+                <h2>Instrucciones paso a paso (se puede hacer de muchas maneras, esta es una de ellas)</h2>
+            <p>Oculta la rejilla</p>
+            <p>Pon un punto  K en el origen (se puede hacer con K=(0, 0)).</p>
+            <p>Pon un punto L en la parte positiva del eje de las x (L = (7, 0)).</p>
+            <p>Pon un punto M en la parte negativa del eje de las x (M = (-7, 0)).</p>
+            <p>Ahora dibuja las semirrectas KM y KL, oculta los puntos K, L y M (se puede hacer con el ratón o con Ray(K, M) y Ray(K, L)). Pon sobre cada semirrecta un punto (A y B, si te salen con otra letra cambia el nombre en propiedades de los puntos).</p>
+            <p>Comprueba que A y B se pueden mover sobre las semirrectas y que no se pueden sacar de ahí</p>
+            <p>Oculta las dos semirrectas y los ejes de coordenadas</p>
+            <p>En este momento solo estarán visibles los puntos A y B que serán los vértices de partida del polígono regular.</p>
+            <p>Crea una lista con los valores 3, 4, ..., 13. (listaNrVértices = {3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13}; 
+                también se puede hacer esto directamente con Sequence(3, 13)).</p>
+            <p>En las propiedades básicas de la lista anterior (listaNrVértices) elige "draw as drop-down list" así tendrás en la pantalla 
+                la posibilidad de elegir el número de vértices que deseas dibujar para construir el polígono regular.</p>
+            <p>Escribe nrVértices = SelectedElement(listaNrVértices). Al cambiar el número de vértices elegido cambiará el valor de 
+                la variable nrVértices.</p>
+            <p>Lo que necesitamos ahora es localizar el centro, O, del polígono regular</p>
+			<p>Para ello tenemos que calcular el valor de los dos ángulos iguales del triángulo central isósceles. Observa el dibujo:</p>
+			<img src="../ASSETS/images/Construcción Polígono Regular (paso a paso) def1.jpg" alt="Triángulo central isósceles del polígono regular" style="display: block; max-width: 100%; height: auto; margin: 1rem auto;">
+            <p>
+                El ángulo central del triángulo isósceles, O, mide 360°/nrVértices (¿por qué?). 
+                Por lo tanto, los ángulos iguales del triángulo isósceles (los que se ven en color rojo) miden (180° - 360°/nrVértices)/2 (¿por qué?).
+            </p>
+            <p>
+                ánguloBase = (180° - 360°/nrVértices)/2
+            </p>
+            <p>
+                En este momento nos interesa localizar el punto O (que será el centro del polígono regular). Para ello, primero podemos girar B alrededor de A con un ángulo igual
+                al ánguloBase. Escribimos:  Rotate(B, ánguloBase, A) y 
+                obtenemos un punto que nos sirve para dibujar una semirrecta con origen en A.
+            </p>
+            <p>
+                Dibujamos la semirrecta que pasa por A y por el punto que hemos obtenido al girar B alrededor de A.                 
+            </p>
+            <p>
+                Ahora hacemos lo mismo con el punto A, girándolo alrededor de B con un ángulo igual al ánguloBase. 
+                Escribimos: Rotate(A, ¿?, B) y obtenemos un punto que nos sirve para dibujar una semirrecta con origen en B 
+                (ojo aquí con el sentido de rotación: cuando es positivo el giro es en sentido antihorario).
+            </p>
+            <p>
+                La intersección de las dos semirrectas que hemos dibujado es el centro del polígono regular, O.
+                <img src="../ASSETS/images/Construcción Polígono Regular (paso a paso) def2.jpg" alt="Intersección de semirrectas para encontrar 
+                el centro del polígono regular" style="display: block; max-width: 100%; height: auto; margin: 1rem auto;">
+            </p>
+            <p>
+                Queremos dibujar el polígono regular. Para ello, 
+                primero debemos calcular el valor del ángulo central del triángulo isósceles que hemos dibujado antes. 
+                Ese ángulo mide 360°/nrVértices.
+                Definimos ánguloCentral = 360°/nrVértices.
+            </p>
+            <p>
+                Ahora con el comando Sequence podemos dibujar el polígono regular.
+                ¿Cómo? No es difícil. Tenemos que obtener una lista de puntos que sean los vértices del polígono regular.
+                Para ello, giramos el punto A alrededor del centro O con un ángulo igual a  
+                ánguloCentral, 2*ánguloCentral, 3*ánguloCentral, ..., (nrVértices-1)*ánguloCentral.
+                Con el comando Sequence podemos hacer esto de manera sencilla utilizando Rotate.
+                La lista de vértices podemos llamarla listaVértices. Dejamos los detalles para que los descubras tú.
+            </p>
+            <p> 
+                Luego con el comando Polygon podemos dibujar el polígono regular a partir de la lista de vértices que hemos obtenido. 
+                Solo hace falta escribir Polygon(listaVértices) y obtendremos el polígono regular que deseamos.
+                
+            </p>
+
+
+        </section>
+        <section>
+            <h2>
+    <a href="../index.html">Enlace a página principal, la inicial de este sitio</a>
+</h2>
+<h2>
+    <a href="https://pagina0.vercel.app/ejercicios_leo/principal_leo.html">
+        Enlace a página principal de ejercicios de Leo  
+    </a>
+</h2>
+<h2>
+    <a href="listas.html">Enlace a página de listas</a>
+</h2>
+    </section>
+    
+
+		
+	</main>
+
+    <footer>Matemáticas en la ESO</footer>
+	<script>
+		// Cargar el contenido del menú desde nav.html	
+		fetch('nav.html')
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById('menu-contenedor').innerHTML = data;
+				// Añadir funcionalidad de desplegable a los botones del menú
+				document.querySelectorAll('.menu-button').forEach(function (button) {
+					button.addEventListener('click', function () {
+						var submenu = document.getElementById(button.getAttribute('aria-controls'));
+						var expanded = button.getAttribute('aria-expanded') === 'true';
+						button.setAttribute('aria-expanded', String(!expanded));
+						submenu.classList.toggle('open', !expanded);
+					});
+				});
+			})
+			.catch(error => console.error('Error al cargar el menú:', error));	
+
+		
+	</script>
+
+</body>
+</html>
