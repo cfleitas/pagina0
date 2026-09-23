@@ -71,24 +71,7 @@
 			</section>
 		</main>
 	</div>
-	<script>
-		const canvas = document.getElementById('polygon'), ctx = canvas.getContext('2d');
-		function draw() {
-			let n = Math.round(Number(document.getElementById('sides').value));
-			n = Math.max(3, Math.min(20, n));
-			document.getElementById('sides').value = n;
-			const rotation = Number(document.getElementById('rotation').value || 0) * Math.PI / 180;
-			const cx = canvas.width / 2, cy = canvas.height / 2, r = Math.min(canvas.width, canvas.height) * .36;
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.strokeStyle = '#9aaabd'; ctx.setLineDash([6, 5]); ctx.stroke(); ctx.setLineDash([]);
-			ctx.beginPath();
-			for (let i = 0; i < n; i++) { const a = rotation + i * Math.PI * 2 / n, x = cx + r * Math.cos(a), y = cy + r * Math.sin(a); i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); }
-			ctx.closePath(); ctx.fillStyle = '#dcecf8'; ctx.fill(); ctx.strokeStyle = '#173f67'; ctx.lineWidth = 3; ctx.stroke();
-			ctx.fillStyle = '#e9b949'; ctx.beginPath(); ctx.arc(cx, cy, 5, 0, Math.PI*2); ctx.fill();
-			document.getElementById('info').textContent = `Polígono de ${n} lados · Ángulo central: ${(360/n).toFixed(2)}°`;
-		}
-		document.getElementById('draw').addEventListener('click', draw); draw();
-	</script>
+	
 </body>
 </html>
 
