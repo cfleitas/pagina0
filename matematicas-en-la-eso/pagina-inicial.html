@@ -3,65 +3,78 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Construcción de polígonos regulares</title>
-    <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
-       
+	<title>Matemáticas en la ESO</title>
 	<style>
-		:root { --blue:#173f67; --light:#f4f7fb; --gold:#e9b949; }
-		* { box-sizing:border-box; }
-		body { margin:0; font-family:Arial,sans-serif; color:#243447; background:var(--light); }
-		.layout { display:flex; min-height:100vh; }
-		aside { width:245px; flex-shrink:0; padding:24px 16px; color:white; background:var(--blue); }
-		aside h2 { margin:0 8px 24px; font-size:1.2rem; }
-		nav a { display:block; padding:12px 14px; margin:4px 0; border-radius:5px; color:white; text-decoration:none; }
-		nav a:hover, nav a.active { background:#28618f; }
-		main { width:100%; max-width:1100px; margin:0 auto; padding:28px 34px 45px; }
-		header { border-bottom:3px solid var(--gold); margin-bottom:24px; }
-		h1 { margin:0 0 8px; color:var(--blue); }
-		.subtitle { margin:0 0 20px; }
-		.controls { display:flex; flex-wrap:wrap; gap:14px; align-items:end; padding:18px; background:white; border-radius:8px; box-shadow:0 2px 8px #0001; }
-		label { display:flex; flex-direction:column; gap:6px; font-weight:bold; }
-		input, button { min-height:38px; padding:8px 12px; border:1px solid #bbc8d5; border-radius:4px; font-size:1rem; }
-		button { cursor:pointer; color:white; border:0; background:var(--blue); }
-		button:hover { background:#28618f; }
-		.drawing { margin-top:22px; padding:18px; background:white; border-radius:8px; box-shadow:0 2px 8px #0001; text-align:center; }
-		canvas { display:block; width:100%; max-width:700px; height:auto; margin:auto; border:1px solid #d4dde6; background:#fff; }
-		#info { margin:14px 0 0; color:#526579; }
-		.steps { margin-top:22px; padding:18px 25px; background:white; border-left:5px solid var(--gold); border-radius:4px; }
-		.steps h2 { margin-top:0; color:var(--blue); }
-		@media (max-width:700px) { .layout { display:block; } aside { width:100%; padding:14px; } aside h2 { margin-bottom:10px; } nav { display:flex; flex-wrap:wrap; } nav a { padding:9px 10px; } main { padding:22px 16px; } }
+		:root { --azul: #174a7c; --azul-claro: #eaf3fb; --texto: #222; }
+		* { box-sizing: border-box; }
+		body { margin: 0; font-family: Arial, sans-serif; color: var(--texto); background: #f5f5f5; }
+		header { padding: 28px 20px; text-align: center; color: white; background: var(--azul); }
+		header h1 { margin: 0 0 8px; font-size: 2rem; }
+		header p { margin: 0; }
+		.layout { display: flex; max-width: 1200px; margin: 24px auto; padding: 0 16px; gap: 24px; }
+		nav { flex: 0 0 245px; align-self: flex-start; overflow: hidden; border: 1px solid #ccd7e2; border-radius: 6px; background: white; }
+		nav h2 { margin: 0; padding: 15px; color: white; font-size: 1.15rem; background: #23679d; }
+		.menu-button { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 13px 15px; border: 0; border-bottom: 1px solid #dbe3ea; color: #123b62; font-size: 1rem; text-align: left; cursor: pointer; background: white; }
+		.menu-button:hover, .menu-button[aria-expanded="true"] { background: var(--azul-claro); }
+		.arrow { transition: transform .2s; }
+		.menu-button[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+		.submenu { max-height: 0; overflow: hidden; margin: 0; padding: 0; list-style: none; background: #f8fbfe; transition: max-height .25s ease; }
+		.submenu.open { max-height: 240px; }
+		.submenu a { display: block; padding: 9px 15px 9px 30px; color: #245b89; text-decoration: none; }
+		.submenu a:hover, .submenu a:focus { color: #102f4b; background: #e1eef9; }
+		main { flex: 1; min-width: 0; padding: 28px; border: 1px solid #ddd; border-radius: 6px; background: white; }
+		main h2 { margin-top: 0; color: var(--azul); }
+		main h3 { color: #23679d; }
+		footer { padding: 18px; color: #666; text-align: center; font-size: .9rem; }
+		@media (max-width: 700px) { .layout { display: block; } nav { margin-bottom: 20px; } main { padding: 20px; } }
 	</style>
 </head>
 <body>
+	<header>
+		<h1>Matemáticas en la ESO</h1>
+		<p>Recursos y actividades para aprender matemáticas</p>
+	</header>
+
 	<div class="layout">
-		<aside>
-			<h2>Matemática interactiva en la ESO</h2>
-			<nav aria-label="Navegación principal">
-				<a href="index.html">Inicio</a>
-				<a class="active" href="construc_pol_regular.html">Polígonos regulares</a>
-				<a href="construc_pol_regularBIS.html">Esta construcción</a>
-				<a href="ejercicios.html">Ejercicios</a>
-				<a href="teoria.html">Teoría</a>
-				<a href="contacto.html">Contacto</a>
-			</nav>
-		</aside>
+		<nav aria-label="Navegación principal">
+			<h2>Contenidos</h2>
+			<div class="menu-item">
+				<button class="menu-button" type="button" aria-expanded="false" aria-controls="submenu-1">1.º ESO <span class="arrow" aria-hidden="true">▼</span></button>
+				<ul class="submenu" id="submenu-1"><li><a href="#numeros">Números</a></li><li><a href="#algebra">Álgebra</a></li><li><a href="#geometria">Geometría</a></li></ul>
+			</div>
+			<div class="menu-item">
+				<button class="menu-button" type="button" aria-expanded="false" aria-controls="submenu-2">2.º ESO <span class="arrow" aria-hidden="true">▼</span></button>
+				<ul class="submenu" id="submenu-2"><li><a href="#fracciones">Fracciones</a></li><li><a href="#ecuaciones">Ecuaciones</a></li><li><a href="#proporcionalidad">Proporcionalidad</a></li></ul>
+			</div>
+			<div class="menu-item">
+				<button class="menu-button" type="button" aria-expanded="false" aria-controls="submenu-3">3.º y 4.º ESO <span class="arrow" aria-hidden="true">▼</span></button>
+				<ul class="submenu" id="submenu-3"><li><a href="#funciones">Funciones</a></li><li><a href="#estadistica">Estadística</a></li><li><a href="#probabilidad">Probabilidad</a></li></ul>
+			</div>
+			<div class="menu-item">
+				<button class="menu-button" type="button" aria-expanded="false" aria-controls="submenu-4">Recursos <span class="arrow" aria-hidden="true">▼</span></button>
+				<ul class="submenu" id="submenu-4"><li><a href="#ejercicios">Ejercicios</a></li><li><a href="#enlaces">Enlaces de interés</a></li></ul>
+			</div>
+		</nav>
+
 		<main>
-			<header>
-				<h1>Construcción de un polígono regular</h1>
-				<p class="subtitle">Selecciona el número de lados y observa su construcción a partir de una circunferencia.</p>
-			</header>
-			
-			<section class="steps">
-				<h2>Procedimiento</h2>
-				<ol>
-					<li>Dibuja una circunferencia y marca su centro.</li>
-					<li>Divide los 360° de la circunferencia entre el número de lados.</li>
-					<li>Marca puntos separados por ese ángulo y únelos consecutivamente.</li>
-				</ol>
-			</section>
+			<h2>Bienvenidos a Matemáticas en la ESO</h2>
+			<p>En esta página encontrarás materiales, explicaciones y ejercicios para repasar los contenidos de matemáticas de la Educación Secundaria Obligatoria.</p>
+			<h3>¿Cómo utilizar la página?</h3>
+			<p>Selecciona un curso en el menú de la izquierda para desplegar sus temas. Pulsa de nuevo sobre la categoría para ocultar sus enlaces.</p>
+			<p>Los contenidos están organizados para facilitar el aprendizaje y la práctica de los conceptos fundamentales.</p>
 		</main>
 	</div>
-	
+	<footer>Matemáticas en la ESO</footer>
+	<script>
+		document.querySelectorAll('.menu-button').forEach(function (button) {
+			button.addEventListener('click', function () {
+				var submenu = document.getElementById(button.getAttribute('aria-controls'));
+				var expanded = button.getAttribute('aria-expanded') === 'true';
+				button.setAttribute('aria-expanded', String(!expanded));
+				submenu.classList.toggle('open', !expanded);
+			});
+		});
+	</script>
 </body>
 </html>
 

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Matemática interactiva en la ESO</title>
+    <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
+       
+	<style>
+		:root { --blue:#173f67; --light:#f4f7fb; --gold:#e9b949; }
+		* { box-sizing:border-box; }
+		body { margin:0; font-family:Arial,sans-serif; color:#243447; background:var(--light); }
+		.layout { display:flex; min-height:100vh; }
+		aside { width:245px; flex-shrink:0; padding:24px 16px; color:white; background:var(--blue); }
+		aside h2 { margin:0 8px 24px; font-size:1.2rem; }
+		nav a { display:block; padding:12px 14px; margin:4px 0; border-radius:5px; color:white; text-decoration:none; }
+		nav a:hover, nav a.active { background:#28618f; }
+		main { width:100%; max-width:1100px; margin:0 auto; padding:28px 34px 45px; }
+		header { border-bottom:3px solid var(--gold); margin-bottom:24px; }
+		h1 { margin:0 0 8px; color:var(--blue); }
+		.subtitle { margin:0 0 20px; }
+		.controls { display:flex; flex-wrap:wrap; gap:14px; align-items:end; padding:18px; background:white; border-radius:8px; box-shadow:0 2px 8px #0001; }
+		label { display:flex; flex-direction:column; gap:6px; font-weight:bold; }
+		input, button { min-height:38px; padding:8px 12px; border:1px solid #bbc8d5; border-radius:4px; font-size:1rem; }
+		button { cursor:pointer; color:white; border:0; background:var(--blue); }
+		button:hover { background:#28618f; }
+		.drawing { margin-top:22px; padding:18px; background:white; border-radius:8px; box-shadow:0 2px 8px #0001; text-align:center; }
+		canvas { display:block; width:100%; max-width:700px; height:auto; margin:auto; border:1px solid #d4dde6; background:#fff; }
+		#info { margin:14px 0 0; color:#526579; }
+		.steps { margin-top:22px; padding:18px 25px; background:white; border-left:5px solid var(--gold); border-radius:4px; }
+		.steps h2 { margin-top:0; color:var(--blue); }
+		@media (max-width:700px) { .layout { display:block; } aside { width:100%; padding:14px; } aside h2 { margin-bottom:10px; } nav { display:flex; flex-wrap:wrap; } nav a { padding:9px 10px; } main { padding:22px 16px; } }
+	</style>
+</head>
+<body>
+	<div class="layout">
+		<aside>
+			<h2>Matemática interactiva en la ESO</h2>
+			<nav aria-label="Navegación principal">
+				<a href="index.html">Inicio</a>                
+				<a class="active" href="construc_pol_regular.html">Polígonos regulares</a>
+				<a href="construc_pol_regularBIS.html">Esta construcción</a>
+				<a href="ejercicios.html">Ejercicios</a>
+				<a href="teoria.html">Teoría</a>
+				<a href="contacto.html">Contacto</a>
+			</nav>
+		</aside>
+		<main>
+			<header>
+				<h1>Construcción de un polígono regular</h1>
+				<p class="subtitle">Selecciona el número de lados y observa su construcción a partir de una circunferencia.</p>
+			</header>
+			
+			<section class="steps">
+				<h2>Procedimiento</h2>
+				<ol>
+					<li>Dibuja una circunferencia y marca su centro.</li>
+					<li>Divide los 360° de la circunferencia entre el número de lados.</li>
+					<li>Marca puntos separados por ese ángulo y únelos consecutivamente.</li>
+				</ol>
+			</section>
+		</main>
+	</div>
+	
+</body>
+</html>
+
