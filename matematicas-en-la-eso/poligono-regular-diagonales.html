@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
+	<meta  charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Matemáticas en la ESO</title>
-	 <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
+	<title>Construcción de un polígono regular</title>
+    <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
 	<style>
 		:root { --azul: #174a7c; --azul-claro: #eaf3fb; --texto: #222; }
 		* { box-sizing: border-box; }
@@ -32,27 +32,45 @@
 </head>
 <body>
 	<header>
-		<h1>Matemáticas en la ESO</h1>
-		<p>Recursos y actividades para aprender matemáticas</p>
+		<h1>Obtención de diagonales en un polígono regular usando Geogebra  </h1>
+		
 	</header>
+    <div class="layout">
+    <div id="menu-contenedor"></div>
 
-	<div class="layout">
-		<div id="menu-contenedor"></div>
+	<main>
+		<section>
+			<h2>¿Qué queremos hacer?</h2>
+            <p>El objetivo es dibujar un polígono con el número de vértices que elija el usuario.</p>
+            <p>Lo haremos usando el origen como centro del polígono con un radio determinado.</p>
+            <p>Fijados el centro O, el radio r, el número de vértices n y un vértice A del polígono, podemos construir el polígono regular.</p>
+            <p>A partir de estos datos, haremos toda la construcción paso a paso.</p>
+            <p>Haremos uso del comando <code>Sequence</code> y del comando <code>Rotate</code>.</p>
+        </section>
+        <section>
+            <h2>¿Cómo lo haremos? Indicaciones para hacerlo paso a paso</h2>
+            <p align="center">
+                <iframe scrolling="no" title="Diagonales de un polígono regular" 
+                src="https://www.geogebra.org/material/iframe/id/sujujbsh/width/717/height/709/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false" width="717px" height="709px" style="border:0px;"> 
+                </iframe>
+            </p>            
+        </section>
+        <section>
+            <h2>Instrucciones paso a paso (se puede hacer de muchas maneras, esta es una de ellas ESTAMOS REDACTANDO ESTO)</h2>
+            
+            
+            
 
-		<main>
-			<section>
-				<h2>Bienvenidos a Matemáticas en la ESO</h2>
-				<p>En esta página encontrarás materiales, explicaciones y ejercicios para repasar los contenidos de matemáticas de la Educación Secundaria Obligatoria.</p>
-			</section>
-			<section>
-				<h2>¿Cómo utilizar la página?</h2>
-				<p>Selecciona un curso en el menú de la izquierda para desplegar sus temas. Pulsa de nuevo sobre la categoría para ocultar sus enlaces.</p>
-				<p>Los contenidos están organizados para facilitar el aprendizaje y la práctica de los conceptos fundamentales.</p>
-			</section>
-			
-		</main>
-	</div>
-	<footer>Matemáticas en la ESO</footer>
+
+        </section>
+        
+    
+
+		
+	</main>
+    </div>
+
+    <footer>Matemáticas en la ESO</footer>
 	<script>
 		// Cargar el contenido del menú desde nav.html	
 		fetch('nav.html')
@@ -73,6 +91,6 @@
 
 		
 	</script>
+
 </body>
 </html>
-
