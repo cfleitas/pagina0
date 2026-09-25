@@ -55,7 +55,57 @@
         </section>
         <section>
             <h2>Instrucciones paso a paso (se puede hacer de muchas maneras, ... ESTAMOS REDACTANDO ESTO y en breve estarán disponibles)</h2>
-            
+			<p>
+				Lo más razonable es empezar colocando el centro en el origen de coordenadas (los giros después serán más sencillos) y utilizar un deslizador para que 
+				el usuario pueda elegir el radio del polígono regular (yo lo he llamado Radio; valores mayores que cero, claro).
+			</p>
+			<p>
+				Después, creamos una lista para que el usuario pueda elegir el número de vértices del polígono regular. 
+				Lalista puede ir desde el 3 hasta el número de vértices máximo que nos dé la gana (yo he puesto 21).
+				La lista la podemos llamar, por ejemplo, listaNrVértices. La lista se puede crear con el comando <code>Sequence</code> de la siguiente manera: 
+				<code>Sequence(i, i, 3, 21)</code>, 
+				o más fácil todavía con el comando <pre><code>Sequence(3, 21)</code></pre> que genera la lista 
+				{3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21}. Nosotros la hemos llamado listaNrVértices, pero se puede llamar como queramos.
+				
+			</p>
+			<p>
+				En propiedades de la lista seleccionamos que se despligue como un menú desplegable (drop-down-menu). 
+				Así se añade a la pantalla para que el usuario pueda elegir el número de vértices del polígono regular.
+				El valor elegido por el usuario se almacenará en una variable que podremos utilizar en las construcciones posteriores.
+				Esto lo hemos hecho con el comando <pre><code>nrVértices = SelectedElement(listaNrVértices)</code></pre>.
+			</p>
+			<p>
+				A continuación colocaremos un punto A sobre la circunferencia de radio r y centro O. Este punto A será uno de los vértices del polígono regular. 
+				Lo más cómodo es colocar el punto A en el eje X positivo,haciendo, por ejemplo A=(Radio,0).
+			</p>
+            <p>
+				A partir del punto A, mediante giros (¿de qué ángulo?), obtendremos, usando el comando <code>Sequence</code> y el comando <code>Rotate</code> 
+				los demás vértices del polígono regular.				
+			</p>
+			<p>
+				Definimos el ángulo de giro como <code>ánguloGiro = 360°/nrVértices</code> y obtenemos los vértices del 
+				polígono regular con el comando <pre><code>coordenadasVértices = Sequence(Rotate(A, ánguloGiro i, O), i, 1, nrVértices)</code></pre>.
+			</p>
+			<p>
+				Con esto tenemos todos los vértices del polígono regular y podemos dibujar el polígono regular con el comando <code>Polygon</code> y la lista de vértices obtenida:
+				<pre><code>polígonoRegular = Polygon(coordenadasVértices)</code></pre>
+
+			</p>
+			<p>
+				Ahora creamos un deslizador entero (valores enteros de uno en uno) que nos permita elegir el número de vértices del polígono regular. 
+				El valor mínimo  será 1 y el valor máximo será el número de vértices del polígono regular (nrVértices). 
+				Este deslizador lo podemos llamar, por ejemplo, nrVérticeSeleccionado. 
+				El valor elegido por el usuario se almacenará en una variable que podremos utilizar después.
+			</p>	
+			
+			
+			<p>
+				Ahora podemos dibujar las diagonales del polígono regular. 
+				Para ello, creamos un segmento que una el vértice seleccionado por el usuario (con el deslizador nrVérticeSeleccionado) con todos los demás vértices del polígono regular. 
+				Esto lo hacemos con el comando <pre><code>diagonales = Segment(coordenadasVértices(nrVérticeSeleccionado), coordenadasVértices)</code></pre>.
+
+				
+			</p>
             
             
 
