@@ -23,6 +23,7 @@
 		.submenu.open { max-height: 240px; }
 		.submenu a { display: block; padding: 9px 15px 9px 30px; color: #245b89; text-decoration: none; }
 		.submenu a:hover, .submenu a:focus { color: #102f4b; background: #e1eef9; }
+		section {margin-bottom: 3cm;}
 		main { flex: 1; min-width: 0; padding: 28px; border: 1px solid #ddd; border-radius: 6px; background: white; }
 		main h2 { margin-top: 0; color: var(--azul); }
 		main h3 { color: #23679d; }
@@ -100,16 +101,40 @@
 			
 			
 			<p>
+				<code>vérticeSeleccionado = Element(coordenadasVértices, nrVérticeSeleccionado)</code> nos dará  las coordenadas del vértice seleccionado por el usuario.
 				Ahora podemos dibujar las diagonales del polígono regular. 
-				 ......PENDIENTE DE REDACTAR ESTO.
-
 				
+			</p>
+			<p>
+				<code>Sequence(Rotate(vérticeSeleccionado, ánguloGiro i, O), i, 2, nrVértices - 2)</code> nos dará una lista conlas coordenadas de los vértices a los que se 
+				puede unir el vértice seleccionado para formar las diagonales del polígono regular (los dos vértices adyacentes los excluimos, así como el vértice seleccionado
+				del que van a partir todas las diagonales).
+				
+			</p>
+			<p>
+				Con esto podemos dibujar las diagonales del polígono regular con el comando. Lo hacemcos calculando segmentos y almacenando los segmentos en una lista de la siguiente manera:
+				<pre><code>Sequence(Segment(vérticeSeleccionado, Element(listaVérticesReducida, i)), i, 1, Length(listaVérticesReducida))</code></pre>
+				
+			</p>
+			<p>
+				Esta es solo una manera de dibujar las diagonales de un polígono regular. Se puede hacer de muchas otras maneras.
 			</p>
             
             
 
 
         </section>
+		<section>
+			<h2>Algunas cosas para pensar y resolver</h2>
+			<ol>
+				<li>¿Cuántas diagonales tiene un polígono regular de 7 vértices?</li>
+				<li>¿Y de 11 vértices?</li>
+				<li>¿Y de n vértices? Calcula una fórmula general que de la respuesta para cualquir número de vértines "n"</li>
+				<li>¿Cuánto mide el ángulo central de un polígono regular de n vértices?</li>
+				<li>¿Cuánto mide el ángulo interior de un polígono regular de 8 vértices (esto es: el ángulo formado por dos lados consecutivos)?</li>
+				<li>¿Cuánto mide el ángulo interior de un polígono regular de n vértices?</li>
+			</ol>
+		</section>
         
     
 
