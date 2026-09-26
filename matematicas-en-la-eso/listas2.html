@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Matemáticas en la ESO y Bachillerato</title>
+	 <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
+	<style>
+		:root { --azul: #174a7c; --azul-claro: #eaf3fb; --texto: #222; }
+		* { box-sizing: border-box; }
+		body { margin: 0; font-family: Arial, sans-serif; color: var(--texto); background: #f5f5f5; }
+		header { padding: 28px 20px; text-align: center; color: white; background: var(--azul); }
+		header h1 { margin: 0 0 8px; font-size: 2rem; }
+		header p { margin: 0; }
+		.layout { display: flex; max-width: 1200px; margin: 24px auto; padding: 0 16px; gap: 24px; }
+		nav { flex: 0 0 245px; align-self: flex-start; overflow: hidden; border: 1px solid #ccd7e2; border-radius: 6px; background: white; }
+		nav h2 { margin: 0; padding: 15px; color: white; font-size: 1.15rem; background: #23679d; }
+		.menu-button { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 13px 15px; border: 0; border-bottom: 1px solid #dbe3ea; color: #123b62; font-size: 1rem; text-align: left; cursor: pointer; background: white; }
+		.menu-button:hover, .menu-button[aria-expanded="true"] { background: var(--azul-claro); }
+		.arrow { transition: transform .2s; }
+		.menu-button[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+		.submenu { max-height: 0; overflow: hidden; margin: 0; padding: 0; list-style: none; background: #f8fbfe; transition: max-height .25s ease; }
+		.submenu.open { max-height: 240px; }
+		.submenu a { display: block; padding: 9px 15px 9px 30px; color: #245b89; text-decoration: none; }
+		.submenu a:hover, .submenu a:focus { color: #102f4b; background: #e1eef9; }
+		main { flex: 1; min-width: 0; padding: 28px; border: 1px solid #ddd; border-radius: 6px; background: white; }
+		main h2 { margin-top: 0; color: var(--azul); }
+		main h3 { color: #23679d; }
+        section {margin-bottom: 3cm;} 
+
+		footer { padding: 18px; color: #666; text-align: center; font-size: .9rem; }
+		@media (max-width: 700px) { .layout { display: block; } nav { margin-bottom: 20px; } main { padding: 20px; } }
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Matemáticas en la ESO y Bachillerato</h1>
+		<p>Recursos y actividades para aprender matemáticas</p>
+	</header>
+
+	<div class="layout">
+		<div id="menu-contenedor"></div>
+
+		<main>
+			
+			 
+
+
+        <section>
+            <h2>4. Obtener elementos de una lista, modificar elementos de una lista y añadir elementos a una lista</h2>
+            <ol>
+                <li>
+                    <p>Para obtener un elemento específico de una lista, puedes usar la función Element. Por ejemplo, para obtener el tercer elemento de la lista, puedes escribir:</p>
+                    <pre><code>elTercero=Element(lista1, 3)</code></pre>
+                    <p>la nueva variable es: <strong>elTercero</strong> contendrá el valor del tercer elemento de la lista y se actualizará cuando cambie la lista.</p>
+                </li>
+                <li>
+                    <p>Para modificar un elemento específico de una  lista libre, como notas, puedes usar la función SetElement. Por ejemplo, para modificar el segundo elemento de la lista y asignarle el valor 15, puedes escribir:</p>
+                    <pre><code>SetElement(notas, 2, 10)</code></pre>
+                </li>
+                <li>
+                    <p>Para añadir un elemento a una lista existente, puedes usar la función Append. Por ejemplo, para añadir el número 11 a la lista existente (ojo, esto crea una lista nueva):</p>
+                    <pre><code>Append(lista1, 11)</code></pre>
+                </li>
+                <li>
+                    <p>Para añadir un elemento a una lista existente sin crear una nueva, puedes usar la función SetValue (siempre que la lista sea libre, no dependiente). Por ejemplo, para añadir el número 505 a la lista llamada lista2, si esta es de longitud 10, puedes hacer: </p>
+                    <pre><code>SetValue(lista1, 11, 505)</code></pre>    
+                    <p>Si no tienes ganas de contar los elementos, puedes usar la función Length para obtener la longitud de la lista y sumarle 1:</p>
+                    <pre><code>SetValue(lista1, Length(lista1) + 1, 505)</code></pre>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>5. Ejercicios prácticos: Element, Append y SetValue</h2>
+            <ol>
+                <li>
+                    <p>Define la lista <code>colores = {"rojo", "verde", "azul", "amarillo"}</code> y obtén su segundo elemento usando <code>Element</code>.</p>
+                </li>
+                <li>
+                    <p>Crea la lista <code>temperaturas = {18, 21, 24}</code>. Obtén el último elemento sin escribir directamente su posición; utiliza <code>Element</code> y <code>Length</code>.</p>
+                </li>
+                <li>
+                    <p>A partir de <code>colores</code>, crea una nueva lista añadiendo <code>"violeta"</code> con <code>Append</code>. Comprueba que la lista original conserva cuatro elementos.</p>
+                    <p>Nota: <code>Append</code> crea una nueva lista, no modifica la original. </p>
+                    <p>Modifica la lista original (colores ) añadiendo un nuevo elemento ("negro"):</p>
+                </li>
+                <li>
+                    <p>Usa <code>Append</code> para añadir el número 40 a <code>temperaturas</code> y guarda el resultado en una nueva lista llamada <code>temperaturasAmpliada</code>.</p>
+                </li>
+                <li>
+                    <p>Modifica el tercer elemento de <code>temperaturasAmpliada</code> para que sea 25 usando <code>SetValue</code>. Comprueba el resultado con <code>Element</code>.</p>
+                </li>
+                <li>
+                    <p>Añade el valor 30 al final de <code>temperaturasAmpliada</code> usando <code>SetValue</code> y <code>Length</code>, sin indicar directamente la posición.</p>
+                </li>
+                <li>
+                    <p>Crea una lista de cinco nombres. Obtén el primero y el último con <code>Element</code>, añade un sexto nombre con <code>Append</code> y modifica el segundo con <code>SetValue</code>.</p>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>6. Construir listas usando "IterationList" (Esto está pendiente de ser redactado, así que de momento no tenerlo en cuenta</h2>
+            <ol>
+                <li>
+                    <p>La función <code>IterationList</code> permite construir listas de manera iterativa. Por ejemplo, para crear una lista en la que cada elemento sea el doble del anteriorlos primeros 10 números enteros, puedes escribir:</p>
+
+                    <pre><code>lista4 = IterationList(i, 2 i, 1, 10)</code></pre>
+                </li>
+                <li>
+                    <p> Comprueba la diferencia entre lo que acabas de hacer y lo que obtendrías con <code>Sequence(i, 2 i, 1, 10)</code> directamente:</p>
+                </li>
+            </ol>
+        </section>
+        <section>
+            <h2>7. Ejercicios prácticos: IterationList</h2>
+            <ol>
+                <li>
+                    <p>Crea una lista de los primeros 10 números impares usando <code>IterationList</code>.</p>
+                </li>
+                
+            </ol>
+        </section>
+
+        
+			
+		</main>
+	</div>
+	<footer>Matemáticas en la ESO y Bachillerato</footer>
+	<script>
+		// Cargar el contenido del menú desde nav.html	
+		fetch('nav.html')
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById('menu-contenedor').innerHTML = data;
+				// Añadir funcionalidad de desplegable a los botones del menú
+				document.querySelectorAll('.menu-button').forEach(function (button) {
+					button.addEventListener('click', function () {
+						var submenu = document.getElementById(button.getAttribute('aria-controls'));
+						var expanded = button.getAttribute('aria-expanded') === 'true';
+						button.setAttribute('aria-expanded', String(!expanded));
+						submenu.classList.toggle('open', !expanded);
+					});
+				});
+			})
+			.catch(error => console.error('Error al cargar el menú:', error));	
+
+		
+	</script>
+</body>
+</html>
+
