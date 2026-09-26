@@ -56,11 +56,12 @@
                     <p>la nueva variable es: <strong>elTercero</strong> contendrá el valor del tercer elemento de la lista y se actualizará cuando cambie la lista.</p>
                 </li>
                 <li>
-                    <p>Para modificar un elemento específico de una  lista libre, como notas, puedes usar la función SetElement. Por ejemplo, para modificar el segundo elemento de la lista y asignarle el valor 15, puedes escribir:</p>
-                    <pre><code>SetElement(notas, 2, 10)</code></pre>
+                    <p>Para modificar un elemento específico de una  lista libre, como notas, puedes usar la función SetValue. Por ejemplo, para modificar el segundo elemento de la lista y asignarle el valor 15, puedes escribir:</p>
+                    <pre><code>SetValue(notas, 2, 10)</code></pre>
                 </li>
                 <li>
-                    <p>Para añadir un elemento a una lista existente, puedes usar la función Append. Por ejemplo, para añadir el número 11 a la lista existente (ojo, esto crea una lista nueva):</p>
+                    <p>Para añadir un elemento a una lista existente, puedes usar la función Append. Por ejemplo, para añadir el número 11 a la lista existente 
+                        (ojo, esto crea una lista nueva que además es dependiente de la primera, si modificas la primera, también se modificará la segunda):</p>
                     <pre><code>Append(lista1, 11)</code></pre>
                 </li>
                 <li>
