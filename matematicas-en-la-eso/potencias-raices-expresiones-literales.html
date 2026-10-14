@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Matemáticas en la ESO y Bachillerato</title>
+	 <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
+	<style>
+		:root { --azul: #174a7c; --azul-claro: #eaf3fb; --texto: #222; }
+		* { box-sizing: border-box; }
+		body { margin: 0; font-family: Arial, sans-serif; color: var(--texto); background: #f5f5f5; }
+		header { padding: 28px 20px; text-align: center; color: white; background: var(--azul); }
+		header h1 { margin: 0 0 8px; font-size: 2rem; }
+		header p { margin: 0; }
+		.layout { display: flex; max-width: 1200px; margin: 24px auto; padding: 0 16px; gap: 24px; }
+		nav { flex: 0 0 245px; align-self: flex-start; overflow: hidden; border: 1px solid #ccd7e2; border-radius: 6px; background: white; }
+		nav h2 { margin: 0; padding: 15px; color: white; font-size: 1.15rem; background: #23679d; }
+		.menu-button { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 13px 15px; border: 0; border-bottom: 1px solid #dbe3ea; color: #123b62; font-size: 1rem; text-align: left; cursor: pointer; background: white; }
+		.menu-button:hover, .menu-button[aria-expanded="true"] { background: var(--azul-claro); }
+		.arrow { transition: transform .2s; }
+		.menu-button[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+		.submenu { max-height: 0; overflow: hidden; margin: 0; padding: 0; list-style: none; background: #f8fbfe; transition: max-height .25s ease; }
+		.submenu.open { max-height: 240px; }
+		.submenu a { display: block; padding: 9px 15px 9px 30px; color: #245b89; text-decoration: none; }
+		.submenu a:hover, .submenu a:focus { color: #102f4b; background: #e1eef9; }
+		main { flex: 1; min-width: 0; padding: 28px; border: 1px solid #ddd; border-radius: 6px; background: white; }
+		main h2 { margin-top: 0; color: var(--azul); }
+		main h3 { color: #23679d; }
+        section {margin-bottom: 3cm;} 
+
+		footer { padding: 18px; color: #666; text-align: center; font-size: .9rem; }
+		@media (max-width: 700px) { .layout { display: block; } nav { margin-bottom: 20px; } main { padding: 20px; } }
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Matemáticas en la ESO y Bachillerato</h1>
+        <h1>Listas (I): Generalidades</h1>
+		<p>Recursos y actividades para aprender matemáticas</p>
+	</header>
+
+	<div class="layout">
+		<div id="menu-contenedor"></div>
+
+		<main>
+			
+			 
+                
+                
+                
+            
+        <section>
+			<h2>Practica potencias y raíces cuadradas</h2>
+			<p>Resuelve el ejercicio y escribe el resultado. En las raíces de monomios, expresa la respuesta simplificada (por ejemplo, <strong>3x</strong>).</p>
+			<div id="ejercicio" aria-live="polite" style="margin: 20px 0; padding: 18px; border: 1px solid #ccd7e2; border-radius: 6px; background: #f8fbfe;">
+				<strong id="enunciado"></strong>
+				<form id="formulario-ejercicio" style="margin-top: 14px;">
+					<label for="respuesta">Tu respuesta:</label>
+					<input id="respuesta" type="text" autocomplete="off" required style="margin: 0 8px; padding: 9px; font-size: 1rem;">
+					<button type="submit" style="padding: 9px 14px; color: white; border: 0; border-radius: 4px; background: #23679d; cursor: pointer;">Comprobar</button>
+					<button type="button" id="nuevo-ejercicio" style="padding: 9px 14px; border: 1px solid #23679d; border-radius: 4px; color: #123b62; background: white; cursor: pointer;">Otro ejercicio</button>
+				</form>
+				<p id="resultado" role="status"></p>
+			</div>
+			<p><strong>Aciertos:</strong> <span id="aciertos">0</span> &nbsp; <strong>Fallos:</strong> <span id="fallos">0</span></p>
+        </section>
+
+
+        
+        
+			
+		</main>
+	</div>
+	<footer>Matemáticas en la ESO y Bachillerato</footer>
+	<script>
+		// Cargar el contenido del menú desde nav.html	
+		fetch('nav.html')
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById('menu-contenedor').innerHTML = data;
+				// Añadir funcionalidad de desplegable a los botones del menú
+				document.querySelectorAll('.menu-button').forEach(function (button) {
+					button.addEventListener('click', function () {
+						var submenu = document.getElementById(button.getAttribute('aria-controls'));
+						var expanded = button.getAttribute('aria-expanded') === 'true';
+						button.setAttribute('aria-expanded', String(!expanded));
+						submenu.classList.toggle('open', !expanded);
+					});
+				});
+			})
+			.catch(error => console.error('Error al cargar el menú:', error));	
+
+			// Generador y corrector de ejercicios.
+			(function () {
+				var actual, aciertos = 0, fallos = 0;
+				var enunciado = document.getElementById('enunciado');
+				var campo = document.getElementById('respuesta');
+				var resultado = document.getElementById('resultado');
+				function entero(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+				function generar() {
+					var tipo = entero(0, 2);
+					if (tipo === 0) {
+						var base = entero(-9, 9), exponente = entero(2, 5);
+						actual = { respuesta: String(Math.pow(base, exponente)) };
+						enunciado.textContent = 'Calcula: (' + base + ')^' + exponente;
+					} else if (tipo === 1) {
+						var raiz = entero(1, 15), signo = Math.random() < 0.5 ? -1 : 1;
+						actual = { respuesta: String(raiz), alternativa: String(-raiz) };
+						enunciado.textContent = 'Calcula: √' + (raiz * raiz);
+					} else {
+						var coef = entero(1, 9), variable = ['x', 'y', 'a', 'b'][entero(0, 3)], raizCoef = entero(1, 6), raizVar = entero(1, 5);
+						var radicando = coef * raizCoef * raizCoef;
+						var dentro = variable + (raizVar * raizVar === 1 ? '' : '^' + (raizVar * raizVar));
+						actual = { respuesta: String(raizCoef * (raizVar * raizVar === 1 ? 1 : 1)) + variable + (raizVar === 1 ? '' : '^' + raizVar) };
+						if (raizCoef === 1) actual.respuesta = variable + (raizVar === 1 ? '' : '^' + raizVar);
+						enunciado.textContent = 'Simplifica: √(' + radicando + variable + (raizVar * raizVar === 1 ? '' : '^' + (raizVar * raizVar)) + ')';
+					}
+					campo.value = '';
+					campo.disabled = false;
+					resultado.textContent = '';
+					campo.focus();
+				}
+                
+				document.getElementById('formulario-ejercicio').addEventListener('submit', function (evento) {
+					evento.preventDefault();
+					var valor = campo.value.trim().toLowerCase().replace(/\s+/g, '').replace(/\*/g, '');
+					if (valor === actual.respuesta.toLowerCase() || (actual.alternativa && valor === actual.alternativa)) {
+						aciertos++;
+						resultado.textContent = '¡Correcto!';
+						resultado.style.color = '#18713a';
+					} else {
+						fallos++;
+						resultado.textContent = 'No es correcto. La respuesta es ' + actual.respuesta + '.';
+						resultado.style.color = '#a12622';
+					}
+					document.getElementById('aciertos').textContent = aciertos;
+					document.getElementById('fallos').textContent = fallos;
+					campo.disabled = true;
+				});
+				document.getElementById('nuevo-ejercicio').addEventListener('click', generar);
+				generar();
+			})();
+
+		
+	</script>
+</body>
+</html>
+
