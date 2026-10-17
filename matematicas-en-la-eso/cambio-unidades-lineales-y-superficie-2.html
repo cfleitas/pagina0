@@ -1,0 +1,193 @@
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Matemáticas en la ESO y Bachillerato</title>
+	 <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
+	<style>
+		:root { --azul: #174a7c; --azul-claro: #eaf3fb; --texto: #222; }
+		* { box-sizing: border-box; }
+		body { margin: 0; font-family: Arial, sans-serif; color: var(--texto); background: #f5f5f5; }
+		header { padding: 28px 20px; text-align: center; color: white; background: var(--azul); }
+		header h1 { margin: 0 0 8px; font-size: 2rem; }
+		header p { margin: 0; }
+		.layout { display: flex; max-width: 1200px; margin: 24px auto; padding: 0 16px; gap: 24px; }
+		nav { flex: 0 0 245px; align-self: flex-start; overflow: hidden; border: 1px solid #ccd7e2; border-radius: 6px; background: white; }
+		nav h2 { margin: 0; padding: 15px; color: white; font-size: 1.15rem; background: #23679d; }
+		.menu-button { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 13px 15px; border: 0; border-bottom: 1px solid #dbe3ea; color: #123b62; font-size: 1rem; text-align: left; cursor: pointer; background: white; }
+		.menu-button:hover, .menu-button[aria-expanded="true"] { background: var(--azul-claro); }
+		.arrow { transition: transform .2s; }
+		.menu-button[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+		.submenu { max-height: 0; overflow: hidden; margin: 0; padding: 0; list-style: none; background: #f8fbfe; transition: max-height .25s ease; }
+		.submenu.open { max-height: 240px; }
+		.submenu a { display: block; padding: 9px 15px 9px 30px; color: #245b89; text-decoration: none; }
+		.submenu a:hover, .submenu a:focus { color: #102f4b; background: #e1eef9; }
+		main { flex: 1; min-width: 0; padding: 28px; border: 1px solid #ddd; border-radius: 6px; background: white; }
+		main h2 { margin-top: 0; color: var(--azul); }
+		main h3 { color: #23679d; }
+        section {margin-bottom: 3cm;} 
+		#enunciado { min-height: 100px; display: flex; flex-direction: column; justify-content: center; padding: 20px; border: 1px solid #ccd7e2; border-radius: 6px; background: #f8fbfe; }
+		#pregunta { margin: 0 0 10px; color: #222; font-size: 1.35rem; font-weight: bold; }
+		#tipo-unidad { margin: 0; color: #52677a; }
+		.controles { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+		#respuesta { width: 180px; padding: 10px; border: 1px solid #9aabba; border-radius: 4px; font: inherit; }
+		.controles button { padding: 10px 15px; border: 0; border-radius: 4px; color: white; font: inherit; cursor: pointer; background: var(--azul); }
+		.controles button:disabled { cursor: not-allowed; opacity: .55; }
+		#resultado { min-height: 1.5em; font-weight: bold; }
+
+		footer { padding: 18px; color: #666; text-align: center; font-size: .9rem; }
+		@media (max-width: 700px) { .layout { display: block; } nav { margin-bottom: 20px; } main { padding: 20px; } }
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Matemáticas en la ESO y Bachillerato</h1>
+        <h1>Ejercicios prácticos</h1>
+		<p>Enlaces a páginas web con ejercicios varios  </p>
+	</header>
+
+	<div class="layout">
+		<div id="menu-contenedor"></div>
+
+		<main>
+			<section>
+				<h2>Conversión de unidades de volumen</h2>
+				<p>Resuelve los 10 ejercicios aleatorios conversión entre unidades de volumen. Escribe el valor numérico.</p>
+				<p> Si la conversión pedida es entre litros y unidades cúbicas del metro, utiliza siempre 1 L = 1 dm³ para hacer la conversión pedida. 
+					Evitarás errores en los cálculos.</p>
+				<div id="enunciado" aria-live="polite">
+					<p id="pregunta"></p>
+					<p id="tipo-unidad"></p>
+				</div>
+				<div class="controles">
+					<label for="respuesta">Respuesta:</label>
+					<input id="respuesta" type="text" inputmode="decimal" autocomplete="off">
+					<button id="comprobar" type="button">Comprobar</button>
+					<button id="reiniciar" type="button">Empezar de nuevo</button>
+				</div>
+				<p id="marcador" aria-live="polite"></p>
+				<p id="resultado" aria-live="polite"></p>
+			</section>
+		</main>
+	</div>
+	<footer>Matemáticas en la ESO y Bachillerato</footer>
+	<script>
+		// Cargar el contenido del menú desde nav.html	
+		fetch('nav.html')
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById('menu-contenedor').innerHTML = data;
+				// Añadir funcionalidad de desplegable a los botones del menú
+				document.querySelectorAll('.menu-button').forEach(function (button) {
+					button.addEventListener('click', function () {
+						var submenu = document.getElementById(button.getAttribute('aria-controls'));
+						var expanded = button.getAttribute('aria-expanded') === 'true';
+						button.setAttribute('aria-expanded', String(!expanded));
+						submenu.classList.toggle('open', !expanded);
+					});
+				});
+			})
+			.catch(error => console.error('Error al cargar el menú:', error));	
+
+			const pregunta = document.getElementById('pregunta');
+			const tipoUnidad = document.getElementById('tipo-unidad');
+			const entrada = document.getElementById('respuesta');
+			const boton = document.getElementById('comprobar');
+			const marcador = document.getElementById('marcador');
+			const resultado = document.getElementById('resultado');
+			const unidades = [
+				{ nombre: 'kL', potencia: 0 }, { nombre: 'hL', potencia: -1 },
+				{ nombre: 'daL', potencia: -2 }, { nombre: 'L', potencia: -3 },
+				{ nombre: 'dL', potencia: -4 }, { nombre: 'cL', potencia: -5 },
+				{ nombre: 'mL', potencia: -6 }, { nombre: 'km³', potencia: 9 },
+				{ nombre: 'hm³', potencia: 6 }, { nombre: 'dam³', potencia: 3 },
+				{ nombre: 'm³', potencia: 0 }, { nombre: 'dm³', potencia: -3 },
+				{ nombre: 'cm³', potencia: -6 }
+			];
+			let numeroEjercicio = 0;
+			let aciertos = 0;
+			let errores = 0;
+			let ejercicioActual = null;
+			let bloqueado = false;
+			let temporizador = null;
+
+			function actualizarMarcador() {
+				marcador.textContent = (numeroEjercicio < 10 ? 'Ejercicio ' + (numeroEjercicio + 1) + ' de 10' : 'Completados: 10 ejercicios') + ' · Aciertos: ' + aciertos + ' · Errores: ' + errores;
+			}
+
+			function siguienteEjercicio() {
+				if (numeroEjercicio >= 10) {
+					ejercicioActual = null;
+					entrada.disabled = true;
+					boton.disabled = true;
+					pregunta.textContent = '¡Has terminado los 10 ejercicios!';
+					tipoUnidad.textContent = '';
+					resultado.textContent = 'Has terminado los 10 ejercicios.';
+					actualizarMarcador();
+					return;
+				}
+				const indiceOrigen = Math.floor(Math.random() * unidades.length);
+				let indiceDestino = Math.floor(Math.random() * (unidades.length - 1));
+				if (indiceDestino >= indiceOrigen) indiceDestino++;
+				const cantidad = Math.floor(Math.random() * 9) + 1;
+				const factor = Math.pow(10, unidades[indiceOrigen].potencia - unidades[indiceDestino].potencia);
+				ejercicioActual = {
+					cantidad: cantidad,
+					origen: unidades[indiceOrigen].nombre,
+					destino: unidades[indiceDestino].nombre,
+					valor: cantidad * factor
+				};
+				pregunta.textContent = cantidad + ' ' + ejercicioActual.origen + ' = ? ' + ejercicioActual.destino;
+				tipoUnidad.textContent = 'Unidades de volumen';
+				entrada.value = '';
+				entrada.disabled = false;
+				boton.disabled = false;
+				bloqueado = false;
+				resultado.textContent = '';
+				actualizarMarcador();
+				entrada.focus();
+			}
+
+			function comprobarRespuesta() {
+				if (bloqueado || !ejercicioActual) return;
+				const texto = entrada.value.trim().replace(',', '.');
+				const valor = Number(texto);
+				if (!texto || !Number.isFinite(valor)) {
+					resultado.textContent = 'Introduce un número válido.';
+					return;
+				}
+				bloqueado = true;
+				if (Math.abs(valor - ejercicioActual.valor) <= Math.max(Math.abs(ejercicioActual.valor), 1e-12) * 1e-9) {
+					aciertos++;
+					resultado.textContent = '¡Correcto! La solución es ' + ejercicioActual.valor + ' ' + ejercicioActual.destino + '.';
+				} else {
+					errores++;
+					resultado.textContent = 'Incorrecto. La solución correcta es ' + ejercicioActual.valor + ' ' + ejercicioActual.destino + '.';
+				}
+				numeroEjercicio++;
+				entrada.disabled = true;
+				boton.disabled = true;
+				actualizarMarcador();
+				temporizador = window.setTimeout(siguienteEjercicio, 4000);
+			}
+
+			boton.addEventListener('click', comprobarRespuesta);
+			entrada.addEventListener('keydown', function (event) {
+				if (event.key === 'Enter') comprobarRespuesta();
+			});
+			document.getElementById('reiniciar').addEventListener('click', function () {
+				window.clearTimeout(temporizador);
+				numeroEjercicio = 0;
+				aciertos = 0;
+				errores = 0;
+				resultado.textContent = '';
+				siguienteEjercicio();
+			});
+			siguienteEjercicio();
+	</script>
+</body>
+</html>
+
