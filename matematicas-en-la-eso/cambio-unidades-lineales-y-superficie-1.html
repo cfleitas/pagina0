@@ -29,7 +29,9 @@
 		main h2 { margin-top: 0; color: var(--azul); }
 		main h3 { color: #23679d; }
         section {margin-bottom: 3cm;} 
-		#canvas-unidades { display: block; width: 100%; height: 180px; border: 1px solid #ccd7e2; border-radius: 6px; background: #f8fbfe; }
+		#enunciado { min-height: 100px; display: flex; flex-direction: column; justify-content: center; padding: 20px; border: 1px solid #ccd7e2; border-radius: 6px; background: #f8fbfe; }
+		#pregunta { margin: 0 0 10px; color: #222; font-size: 1.35rem; font-weight: bold; }
+		#tipo-unidad { margin: 0; color: #52677a; }
 		.controles { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
 		#respuesta { width: 180px; padding: 10px; border: 1px solid #9aabba; border-radius: 4px; font: inherit; }
 		.controles button { padding: 10px 15px; border: 0; border-radius: 4px; color: white; font: inherit; cursor: pointer; background: var(--azul); }
@@ -54,7 +56,10 @@
 			<section>
 				<h2>Conversión de unidades</h2>
 				<p>Resuelve los 10 ejercicios aleatorios de unidades lineales y de superficie. Escribe el valor numérico.</p>
-				<canvas id="canvas-unidades" aria-label="Enunciado del ejercicio de conversión">Tu navegador no admite canvas.</canvas>
+				<div id="enunciado" aria-live="polite">
+					<p id="pregunta"></p>
+					<p id="tipo-unidad"></p>
+				</div>
 				<div class="controles">
 					<label for="respuesta">Respuesta:</label>
 					<input id="respuesta" type="text" inputmode="decimal" autocomplete="off">
@@ -85,8 +90,8 @@
 			})
 			.catch(error => console.error('Error al cargar el menú:', error));	
 
-			const canvas = document.getElementById('canvas-unidades');
-			const ctx = canvas.getContext('2d');
+			const pregunta = document.getElementById('pregunta');
+			const tipoUnidad = document.getElementById('tipo-unidad');
 			const entrada = document.getElementById('respuesta');
 			const boton = document.getElementById('comprobar');
 			const marcador = document.getElementById('marcador');
@@ -97,27 +102,7 @@
 			let errores = 0;
 			let ejercicioActual = null;
 			let bloqueado = false;
-
-			function dibujarEjercicio() {
-				const escala = window.devicePixelRatio || 1;
-				const ancho = canvas.clientWidth;
-				const alto = canvas.clientHeight;
-				canvas.width = ancho * escala;
-				canvas.height = alto * escala;
-				ctx.setTransform(escala, 0, 0, escala, 0, 0);
-				ctx.clearRect(0, 0, ancho, alto);
-				ctx.fillStyle = '#174a7c';
-				ctx.font = 'bold 18px Arial, sans-serif';
-				ctx.fillText(numeroEjercicio < 10 ? 'Ejercicio ' + (numeroEjercicio + 1) + ' de 10' : 'Ejercicios completados', 20, 38);
-				if (!ejercicioActual) return;
-				const potencia = ejercicioActual.superficie ? '²' : '';
-				ctx.fillStyle = '#222';
-				ctx.font = '22px Arial, sans-serif';
-				ctx.fillText(ejercicioActual.cantidad + ' ' + ejercicioActual.origen + potencia + ' = ? ' + ejercicioActual.destino + potencia, 20, 100);
-				ctx.fillStyle = '#52677a';
-				ctx.font = '15px Arial, sans-serif';
-				ctx.fillText(ejercicioActual.superficie ? 'Unidades de superficie' : 'Unidades lineales', 20, 140);
-			}
+			let temporizador = null;
 
 			function actualizarMarcador() {
 				marcador.textContent = (numeroEjercicio < 10 ? 'Ejercicio ' + (numeroEjercicio + 1) + ' de 10' : 'Completados: 10 ejercicios') + ' · Aciertos: ' + aciertos + ' · Errores: ' + errores;
@@ -128,9 +113,10 @@
 					ejercicioActual = null;
 					entrada.disabled = true;
 					boton.disabled = true;
+					pregunta.textContent = '¡Has terminado los 10 ejercicios!';
+					tipoUnidad.textContent = '';
 					resultado.textContent = 'Has terminado los 10 ejercicios.';
 					actualizarMarcador();
-					dibujarEjercicio();
 					return;
 				}
 				const superficie = Math.random() < 0.5;
@@ -138,7 +124,7 @@
 				let indiceDestino = Math.floor(Math.random() * (unidades.length - 1));
 				if (indiceDestino >= indiceOrigen) indiceDestino++;
 				const cantidad = Math.floor(Math.random() * 9) + 1;
-				const factor = Math.pow(10, (indiceOrigen - indiceDestino) * (superficie ? 2 : 1));
+				const factor = Math.pow(10, (indiceDestino - indiceOrigen) * (superficie ? 2 : 1));
 				ejercicioActual = {
 					cantidad: cantidad,
 					origen: unidades[indiceOrigen],
@@ -146,13 +132,15 @@
 					superficie: superficie,
 					valor: cantidad * factor
 				};
+				const potencia = superficie ? '²' : '';
+				pregunta.textContent = cantidad + ' ' + unidades[indiceOrigen] + potencia + ' = ? ' + unidades[indiceDestino] + potencia;
+				tipoUnidad.textContent = superficie ? 'Unidades de superficie' : 'Unidades lineales';
 				entrada.value = '';
 				entrada.disabled = false;
 				boton.disabled = false;
 				bloqueado = false;
 				resultado.textContent = '';
 				actualizarMarcador();
-				dibujarEjercicio();
 				entrada.focus();
 			}
 
@@ -165,9 +153,9 @@
 					return;
 				}
 				bloqueado = true;
-				if (Math.abs(valor - ejercicioActual.valor) <= Math.max(1, Math.abs(ejercicioActual.valor)) * 1e-9) {
+				if (Math.abs(valor - ejercicioActual.valor) <= Math.max(Math.abs(ejercicioActual.valor), 1e-12) * 1e-9) {
 					aciertos++;
-					resultado.textContent = '¡Correcto!';
+					resultado.textContent = '¡Correcto! La solución es ' + ejercicioActual.valor + ' ' + ejercicioActual.destino + (ejercicioActual.superficie ? '²' : '') + '.';
 				} else {
 					errores++;
 					resultado.textContent = 'Incorrecto. La solución correcta es ' + ejercicioActual.valor + ' ' + ejercicioActual.destino + (ejercicioActual.superficie ? '²' : '') + '.';
@@ -176,7 +164,7 @@
 				entrada.disabled = true;
 				boton.disabled = true;
 				actualizarMarcador();
-				window.setTimeout(siguienteEjercicio, 1200);
+				temporizador = window.setTimeout(siguienteEjercicio, 5000);
 			}
 
 			boton.addEventListener('click', comprobarRespuesta);
@@ -184,13 +172,13 @@
 				if (event.key === 'Enter') comprobarRespuesta();
 			});
 			document.getElementById('reiniciar').addEventListener('click', function () {
+				window.clearTimeout(temporizador);
 				numeroEjercicio = 0;
 				aciertos = 0;
 				errores = 0;
 				resultado.textContent = '';
 				siguienteEjercicio();
 			});
-			window.addEventListener('resize', dibujarEjercicio);
 			siguienteEjercicio();
 	</script>
 </body>
