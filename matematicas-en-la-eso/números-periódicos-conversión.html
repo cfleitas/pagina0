@@ -32,7 +32,8 @@
         section {margin-bottom: 3cm;} 
 		#enunciado { min-height: 100px; display: flex; flex-direction: column; justify-content: center; padding: 20px; border: 1px solid #ccd7e2; border-radius: 6px; background: #f8fbfe; }
 		#pregunta { margin: 0 0 10px; color: #222; font-size: 1.35rem; font-weight: bold; }
-		.periodo { text-decoration: overline; text-decoration-thickness: 1px; }
+		.periodo { position: relative; display: inline-block; text-decoration: none; }
+		.periodo::before { content: ""; position: absolute; top: -.25em; left: 0; width: 100%; height: .3em; border-top: 1px solid currentColor; border-radius: 50%; }
 		#tipo-unidad { margin: 0; color: #52677a; }
 		.controles { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
 		#respuesta { width: 180px; padding: 10px; border: 1px solid #9aabba; border-radius: 4px; font: inherit; }
@@ -58,9 +59,9 @@
 		<main>
 			<section>
 				<h2>Conversión de números decimales a fracción</h2>
-				<p>Resuelve tandas de diez ejercicios. Elige el tipo de número decimal que quieres practicar; escribe la fracción sin simplificar.</p>
-				<p>En los decimales periódicos, la parte periódica se distingue porque en la parte superior del decimal se coloca una línea sobre las 
-					cifras que se repiten. Por ejemplo, 0,(3) = 1/3 y 1,2(45) = 1,2<span class="periodo">45</span>.</p>
+				<p>Resuelve tandas de diez ejercicios. Elige el tipo de número decimal con el que quieres practicar; escribe la fracción sin simplificar.</p>
+				<p>En los decimales periódicos, distinguimos la parte periódica porque en la parte superior del decimal colocamos un arco sobre las 
+					cifras que se repiten. </p>
 				<label for="tipo-ejercicio">Tipo de ejercicios: </label>
 				<select id="tipo-ejercicio">
 					<option value="finito">a) Decimales sin periodo</option>
