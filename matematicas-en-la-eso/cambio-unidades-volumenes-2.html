@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -34,6 +35,7 @@
 		#tipo-unidad { margin: 0; color: #52677a; }
 		.controles { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
 		#respuesta { width: 180px; padding: 10px; border: 1px solid #9aabba; border-radius: 4px; font: inherit; }
+				#tipo-ejercicio { padding: 10px; border: 1px solid #9aabba; border-radius: 4px; font: inherit; background: white; }
 		.controles button { padding: 10px 15px; border: 0; border-radius: 4px; color: white; font: inherit; cursor: pointer; background: var(--azul); }
 		.controles button:disabled { cursor: not-allowed; opacity: .55; }
 		#resultado { min-height: 1.5em; font-weight: bold; }
@@ -54,42 +56,24 @@
 
 		<main>
 			<section>
-				<h2>Conversión de unidades de volumen</h2>
-				<p>Resuelve los  ejercicios aleatorios de conversión entre unidades de volumen. Son tandas de 10 ejercicios. </p>
-				<P>
-					Como símbolo del  litro se puede usar  l o L, ambos están permitidos; el uso de L se justifica por la posible confusion de la letra l con otros símbolos.
-					Aquí hemos decidido usar siempre L, para evitar confusiones. En la práctica, en los libros de texto y en la vida cotidiana se usan indistintamente l o L.
-				</P>
-				<p> Si la conversión pedida es entre litros y unidades cúbicas del metro (múltiplos y submúltiplos)	, 
-					utiliza siempre <b>1 L = 1 dm³</b> para hacer la conversión pedida. 
-					Evitarás errores en los cálculos.
-				</p>
-					<p>Por ejemplo, para calcular 2 cm³ = ? dL, primero calculamos 2 cm³ = 0,002 dm³ (o bien 2 cm³ = 2x10⁻³ dm³ = 2x10⁻³ L). Por tanto, 2 cm³ = 0,002 L y 						
-						ahora ya pasamos a decílitros: calculamos 0,002 L = 0,02 dL y asunto acabado, por tanto, 2 cm³ = 0,02 dL.
-					</p>
-					<p> Si controlamos bien las potencias de 10 lo razonable es hacer 2cm³ =  2x10⁻³ dm³ = 2x10⁻³ L = 2x10⁻³x10¹ dL = 2x10⁻² dL = 0,02 dL ; es lo más práctico. 
-						Es la forma más recomendable de hacer las conversiones de unidades de volumen, utilizando potencias de 10, unas veces con exponente positivo y 
-						otras con exponente negativo.
-					</p>
-					
-					<p>
-						<b>Si controlas el uso de las potencias de 10, es recomendable que hagas todas las conversiones de unidades de volumen utilizando potencias de 10, unas veces 
-						con exponete positivo y otras con exponete negativo. Es recomendable que hagas todos los cálculos despacio en papel y luegos escribas tu respuesta 
-						en la página para comprobar si está bien.</b>
-					</p>
-					<p>
-						Ya sabes que en las unidades expresadas en múltiplos y submúltiplos del metro cúbico, en cada cada paso de conversiónel factor que hay que usar es 10³ o 10⁻³.
-						 En cambio, en las unidades expresadas en múltiplos y submúltiplos del litro, el factor que hay que usar es 10¹ o 10⁻¹. 						
-					</p>
-					<p></p>
+				<h2>Conversión de números decimales a fracción</h2>
+				<p>Resuelve tandas de diez ejercicios. Elige el tipo de número decimal que quieres practicar; la fracción debe estar simplificada.</p>
+				<p>En los decimales periódicos, las cifras entre paréntesis se repiten indefinidamente. Por ejemplo, 0,(3) = 1/3 y 1,2(45) = 1,2̅45̅.</p>
+				<label for="tipo-ejercicio">Tipo de ejercicios: </label>
+				<select id="tipo-ejercicio">
+					<option value="finito">a) Decimales sin periodo</option>
+					<option value="puro">b) Periódicos puros</option>
+					<option value="mixto">c) Periódicos mixtos</option>
+					<option value="aleatorio" selected>d) Cualquiera de ellos, aleatoriamente</option>
+				</select>
 
 				<div id="enunciado" aria-live="polite">
 					<p id="pregunta"></p>
 					<p id="tipo-unidad"></p>
 				</div>
 				<div class="controles">
-					<label for="respuesta">Respuesta:</label>
-					<input id="respuesta" type="text" inputmode="decimal" autocomplete="off">
+					<label for="respuesta">Fracción (numerador/denominador):</label>
+					<input id="respuesta" type="text" inputmode="text" autocomplete="off" placeholder="por ejemplo, 7/12">
 					<button id="comprobar" type="button">Comprobar</button>
 					<button id="reiniciar" type="button">Empezar de nuevo</button>
 				</div>

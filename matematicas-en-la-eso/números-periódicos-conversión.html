@@ -1,0 +1,246 @@
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Matemáticas en la ESO y Bachillerato</title>
+	 <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
+	<style>
+		:root { --azul: #174a7c; --azul-claro: #eaf3fb; --texto: #222; }
+		* { box-sizing: border-box; }
+		body { margin: 0; font-family: Arial, sans-serif; color: var(--texto); background: #f5f5f5; }
+		header { padding: 28px 20px; text-align: center; color: white; background: var(--azul); }
+		header h1 { margin: 0 0 8px; font-size: 2rem; }
+		header p { margin: 0; }
+		.layout { display: flex; max-width: 1200px; margin: 24px auto; padding: 0 16px; gap: 24px; }
+		nav { flex: 0 0 245px; align-self: flex-start; overflow: hidden; border: 1px solid #ccd7e2; border-radius: 6px; background: white; }
+		nav h2 { margin: 0; padding: 15px; color: white; font-size: 1.15rem; background: #23679d; }
+		.menu-button { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 13px 15px; border: 0; border-bottom: 1px solid #dbe3ea; color: #123b62; font-size: 1rem; text-align: left; cursor: pointer; background: white; }
+		.menu-button:hover, .menu-button[aria-expanded="true"] { background: var(--azul-claro); }
+		.arrow { transition: transform .2s; }
+		.menu-button[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+		.submenu { max-height: 0; overflow: hidden; margin: 0; padding: 0; list-style: none; background: #f8fbfe; transition: max-height .25s ease; }
+		.submenu.open { max-height: 240px; }
+		.submenu a { display: block; padding: 9px 15px 9px 30px; color: #245b89; text-decoration: none; }
+		.submenu a:hover, .submenu a:focus { color: #102f4b; background: #e1eef9; }
+		main { flex: 1; min-width: 0; padding: 28px; border: 1px solid #ddd; border-radius: 6px; background: white; }
+		main h2 { margin-top: 0; color: var(--azul); }
+		main h3 { color: #23679d; }
+        section {margin-bottom: 3cm;} 
+		#enunciado { min-height: 100px; display: flex; flex-direction: column; justify-content: center; padding: 20px; border: 1px solid #ccd7e2; border-radius: 6px; background: #f8fbfe; }
+		#pregunta { margin: 0 0 10px; color: #222; font-size: 1.35rem; font-weight: bold; }
+		.periodo { text-decoration: overline; text-decoration-thickness: 1px; }
+		#tipo-unidad { margin: 0; color: #52677a; }
+		.controles { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+		#respuesta { width: 180px; padding: 10px; border: 1px solid #9aabba; border-radius: 4px; font: inherit; }
+				#tipo-ejercicio { padding: 10px; border: 1px solid #9aabba; border-radius: 4px; font: inherit; background: white; }
+		.controles button { padding: 10px 15px; border: 0; border-radius: 4px; color: white; font: inherit; cursor: pointer; background: var(--azul); }
+		.controles button:disabled { cursor: not-allowed; opacity: .55; }
+		#resultado { min-height: 1.5em; font-weight: bold; }
+
+		footer { padding: 18px; color: #666; text-align: center; font-size: .9rem; }
+		@media (max-width: 700px) { .layout { display: block; } nav { margin-bottom: 20px; } main { padding: 20px; } }
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Matemáticas en la ESO y Bachillerato</h1>
+        <h1>Ejercicios prácticos</h1>
+		<p>Enlaces a páginas web con ejercicios varios  </p>
+	</header>
+
+	<div class="layout">
+		<div id="menu-contenedor"></div>
+
+		<main>
+			<section>
+				<h2>Conversión de números decimales a fracción</h2>
+				<p>Resuelve tandas de diez ejercicios. Elige el tipo de número decimal que quieres practicar; escribe la fracción sin simplificar.</p>
+				<p>En los decimales periódicos, la parte periódica se distingue porque en la parte superior del decimal se coloca una línea sobre las 
+					cifras que se repiten. Por ejemplo, 0,(3) = 1/3 y 1,2(45) = 1,2<span class="periodo">45</span>.</p>
+				<label for="tipo-ejercicio">Tipo de ejercicios: </label>
+				<select id="tipo-ejercicio">
+					<option value="finito">a) Decimales sin periodo</option>
+					<option value="puro">b) Periódicos puros</option>
+					<option value="mixto">c) Periódicos mixtos</option>
+					<option value="aleatorio" selected>d) Cualquiera de ellos, aleatoriamente</option>
+				</select>
+
+				<div id="enunciado" aria-live="polite">
+					<p id="pregunta"></p>
+					<p id="tipo-unidad"></p>
+				</div>
+				<div class="controles">
+					<label for="respuesta">Fracción (numerador/denominador):</label>
+					<input id="respuesta" type="text" inputmode="text" autocomplete="off" placeholder="por ejemplo, 7/12">
+					<button id="comprobar" type="button">Comprobar</button>
+					<button id="reiniciar" type="button">Empezar de nuevo</button>
+				</div>
+				<p id="marcador" aria-live="polite"></p>
+				<p id="resultado" aria-live="polite"></p>
+			</section>
+		</main>
+	</div>
+	<footer>Matemáticas en la ESO y Bachillerato</footer>
+	<script>
+		// Cargar el contenido del menú desde nav.html	
+		fetch('nav.html')
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById('menu-contenedor').innerHTML = data;
+				// Añadir funcionalidad de desplegable a los botones del menú
+				document.querySelectorAll('.menu-button').forEach(function (button) {
+					button.addEventListener('click', function () {
+						var submenu = document.getElementById(button.getAttribute('aria-controls'));
+						var expanded = button.getAttribute('aria-expanded') === 'true';
+						button.setAttribute('aria-expanded', String(!expanded));
+						submenu.classList.toggle('open', !expanded);
+					});
+				});
+			})
+			.catch(error => console.error('Error al cargar el menú:', error));	
+
+			const pregunta = document.getElementById('pregunta');
+			const tipoUnidad = document.getElementById('tipo-unidad');
+			const entrada = document.getElementById('respuesta');
+			const boton = document.getElementById('comprobar');
+			const marcador = document.getElementById('marcador');
+			const resultado = document.getElementById('resultado');
+			const tipoEjercicio = document.getElementById('tipo-ejercicio');
+			let numeroEjercicio = 0;
+			let aciertos = 0;
+			let errores = 0;
+			let ejercicioActual = null;
+			let bloqueado = false;
+			let temporizador = null;
+
+			function actualizarMarcador() {
+				marcador.textContent = (numeroEjercicio < 10 ? 'Ejercicio ' + (numeroEjercicio + 1) + ' de 10' : 'Completados: 10 ejercicios') + ' · Aciertos: ' + aciertos + ' · Errores: ' + errores;
+			}
+
+			function mcd(a, b) {
+				a = Math.abs(a);
+				b = Math.abs(b);
+				while (b) [a, b] = [b, a % b];
+				return a || 1;
+			}
+
+			function simplificar(numerador, denominador) {
+				const divisor = mcd(numerador, denominador);
+				return { numerador: numerador / divisor, denominador: denominador / divisor };
+			}
+
+			function enteroAleatorio(maximo) {
+				return Math.floor(Math.random() * (maximo + 1));
+			}
+
+			function crearEjercicio(tipo) {
+				const parteEntera = enteroAleatorio(5);
+				let numerador;
+				let denominador;
+				let texto;
+
+				if (tipo === 'finito') {
+					const cifras = enteroAleatorio(2) + 1;
+					const divisor = Math.pow(10, cifras);
+					const decimal = Math.floor(Math.random() * (divisor - 1)) + 1;
+					texto = parteEntera + ',' + String(decimal).padStart(cifras, '0');
+					numerador = parteEntera * divisor + decimal;
+					denominador = divisor;
+				} else if (tipo === 'puro') {
+					const cifras = enteroAleatorio(2) + 1;
+					const divisor = Math.pow(10, cifras) - 1;
+					let periodo = enteroAleatorio(divisor - 1) + 1;
+					texto = parteEntera + ',<span class="periodo">' + String(periodo).padStart(cifras, '0') + '</span>';
+					numerador = parteEntera * divisor + periodo;
+					denominador = divisor;
+				} else {
+					const cifrasNoPeriodicas = enteroAleatorio(1) + 1;
+					const cifrasPeriodo = enteroAleatorio(1) + 1;
+					const potenciaNoPeriodica = Math.pow(10, cifrasNoPeriodicas);
+					const divisorPeriodo = Math.pow(10, cifrasPeriodo) - 1;
+					const noPeriodico = enteroAleatorio(potenciaNoPeriodica - 1);
+					let periodo = enteroAleatorio(divisorPeriodo - 1) + 1;
+					texto = parteEntera + ',' + String(noPeriodico).padStart(cifrasNoPeriodicas, '0') + '<span class="periodo">' + String(periodo).padStart(cifrasPeriodo, '0') + '</span>';
+					numerador = parteEntera * potenciaNoPeriodica * divisorPeriodo + noPeriodico * divisorPeriodo + periodo;
+					denominador = potenciaNoPeriodica * divisorPeriodo;
+				}
+
+				return { texto: texto, fraccion: { numerador: numerador, denominador: denominador } };
+			}
+
+			function siguienteEjercicio() {
+				if (numeroEjercicio >= 10) {
+					ejercicioActual = null;
+					entrada.disabled = true;
+					boton.disabled = true;
+					pregunta.textContent = '¡Has terminado los 10 ejercicios!';
+					tipoUnidad.textContent = '';
+					resultado.textContent = 'Has terminado los 10 ejercicios.';
+					actualizarMarcador();
+					return;
+				}
+				const tipo = tipoEjercicio.value === 'aleatorio'
+					? ['finito', 'puro', 'mixto'][enteroAleatorio(2)]
+					: tipoEjercicio.value;
+				ejercicioActual = crearEjercicio(tipo);
+				pregunta.innerHTML = ejercicioActual.texto + ' = ?';
+				tipoUnidad.textContent = 'Escribe la fracción sin simplificar.';
+				entrada.value = '';
+				entrada.disabled = false;
+				boton.disabled = false;
+				bloqueado = false;
+				resultado.textContent = '';
+				actualizarMarcador();
+				entrada.focus();
+			}
+
+			function comprobarRespuesta() {
+				if (bloqueado || !ejercicioActual) return;
+				const coincidencia = entrada.value.trim().match(/^([+-]?\d+)\s*\/\s*([+-]?\d+)$/);
+			let numerador = coincidencia ? Number(coincidencia[1]) : NaN;
+			let denominador = coincidencia ? Number(coincidencia[2]) : NaN;
+			const respuestaValida = Number.isSafeInteger(numerador) && Number.isSafeInteger(denominador) && denominador !== 0;
+			if (respuestaValida && denominador < 0) {
+				numerador = -numerador;
+				denominador = -denominador;
+			}
+				bloqueado = true;
+			const fraccionIntroducida = respuestaValida ? simplificar(numerador, denominador) : null;
+			const fraccionCorrecta = simplificar(ejercicioActual.fraccion.numerador, ejercicioActual.fraccion.denominador);
+			if (fraccionIntroducida && fraccionIntroducida.numerador === fraccionCorrecta.numerador && fraccionIntroducida.denominador === fraccionCorrecta.denominador) {
+					aciertos++;
+					resultado.textContent = '¡Correcto! La solución es ' + numerador + '/' + denominador + '.';
+				} else {
+					errores++;
+				resultado.textContent = (respuestaValida ? 'Incorrecto. ' : 'Respuesta no válida. ') + 'La solución correcta es ' + ejercicioActual.fraccion.numerador + '/' + ejercicioActual.fraccion.denominador + '.';
+				}
+				numeroEjercicio++;
+				entrada.disabled = true;
+				boton.disabled = true;
+				actualizarMarcador();
+				temporizador = window.setTimeout(siguienteEjercicio, 4000);
+			}
+
+			boton.addEventListener('click', comprobarRespuesta);
+			entrada.addEventListener('keydown', function (event) {
+				if (event.key === 'Enter') comprobarRespuesta();
+			});
+			function reiniciarEjercicios() {
+				window.clearTimeout(temporizador);
+				numeroEjercicio = 0;
+				aciertos = 0;
+				errores = 0;
+				resultado.textContent = '';
+				siguienteEjercicio();
+			}
+			document.getElementById('reiniciar').addEventListener('click', reiniciarEjercicios);
+			tipoEjercicio.addEventListener('change', reiniciarEjercicios);
+			siguienteEjercicio();
+	</script>
+</body>
+</html>
+
