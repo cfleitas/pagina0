@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Matemáticas en la ESO y Bachillerato</title>
+	 <link rel="icon" href="../ASSETS/images/icono.jpg" type="image/x-icon"/>
+	<style>
+		:root { --azul: #174a7c; --azul-claro: #eaf3fb; --texto: #222; }
+		* { box-sizing: border-box; }
+		body { margin: 0; font-family: Arial, sans-serif; color: var(--texto); background: #f5f5f5; }
+		header { padding: 28px 20px; text-align: center; color: white; background: var(--azul); }
+		header h1 { margin: 0 0 8px; font-size: 2rem; }
+		header p { margin: 0; }
+		.layout { display: flex; max-width: 1200px; margin: 24px auto; padding: 0 16px; gap: 24px; }
+		nav { flex: 0 0 245px; align-self: flex-start; overflow: hidden; border: 1px solid #ccd7e2; border-radius: 6px; background: white; }
+		nav h2 { margin: 0; padding: 15px; color: white; font-size: 1.15rem; background: #23679d; }
+		.menu-button { display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 13px 15px; border: 0; border-bottom: 1px solid #dbe3ea; color: #123b62; font-size: 1rem; text-align: left; cursor: pointer; background: white; }
+		.menu-button:hover, .menu-button[aria-expanded="true"] { background: var(--azul-claro); }
+		.arrow { transition: transform .2s; }
+		.menu-button[aria-expanded="true"] .arrow { transform: rotate(180deg); }
+		.submenu { max-height: 0; overflow: hidden; margin: 0; padding: 0; list-style: none; background: #f8fbfe; transition: max-height .25s ease; }
+		.submenu.open { max-height: 240px; }
+		.submenu a { display: block; padding: 9px 15px 9px 30px; color: #245b89; text-decoration: none; }
+		.submenu a:hover, .submenu a:focus { color: #102f4b; background: #e1eef9; }
+		main { flex: 1; min-width: 0; padding: 28px; border: 1px solid #ddd; border-radius: 6px; background: white; }
+		main h2 { margin-top: 0; color: var(--azul); }
+		main h3 { color: #23679d; }
+        section {margin-bottom: 3cm;} 
+		#enunciado { min-height: 100px; display: flex; flex-direction: column; justify-content: center; padding: 20px; border: 1px solid #ccd7e2; border-radius: 6px; background: #f8fbfe; }
+		#pregunta { margin: 0 0 10px; color: #222; font-size: 1.35rem; font-weight: bold; }
+		.periodo { position: relative; display: inline-block; text-decoration: none; }
+		.periodo::before { content: ""; position: absolute; top: -.25em; left: 0; width: 100%; height: .3em; border-top: 1px solid currentColor; border-radius: 50%; }
+		#tipo-unidad { margin: 0; color: #52677a; }
+		.controles { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+		#tipo-ejercicio, .respuesta-fila input { padding: 10px; border: 1px solid #9aabba; border-radius: 4px; font: inherit; background: white; }
+		.respuestas { display: grid; gap: 10px; max-width: 520px; margin-top: 16px; }
+		.respuesta-fila { display: grid; grid-template-columns: minmax(160px, 1fr) minmax(150px, 2fr); align-items: center; gap: 10px; }
+		.respuesta-fila[hidden] { display: none; }
+		.controles button { padding: 10px 15px; border: 0; border-radius: 4px; color: white; font: inherit; cursor: pointer; background: var(--azul); }
+		.controles button:disabled { cursor: not-allowed; opacity: .55; }
+		#resultado { min-height: 1.5em; font-weight: bold; }
+
+		footer { padding: 18px; color: #666; text-align: center; font-size: .9rem; }
+		@media (max-width: 700px) { .layout { display: block; } nav { margin-bottom: 20px; } main { padding: 20px; } }
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Matemáticas en la ESO y Bachillerato</h1>
+        <h1>Ejercicios prácticos</h1>
+		<p>Enlaces a páginas web con ejercicios varios  </p>
+	</header>
+
+	<div class="layout">
+		<div id="menu-contenedor"></div>
+
+		<main>
+			<section>
+				<h2>Descomposición en factores primos, MCD y MCM</h2>
+				<p>Resuelve tandas de diez ejercicios. Elige si quieres trabajar con un número o con dos. Escribe la descomposición como productos, por ejemplo: <strong>2^3 * 3^2 * 5</strong>.</p>
+				<label for="tipo-ejercicio">Número de números: </label>
+				<select id="tipo-ejercicio">
+					<option value="uno">Un número: descomposición en factores primos</option>
+					<option value="dos">Dos números: descomposiciones, MCD y MCM</option>
+				</select>
+				<div id="enunciado" aria-live="polite">
+					<p id="pregunta"></p>
+					<p id="tipo-unidad"></p>
+				</div>
+				<div class="respuestas">
+					<div class="respuesta-fila" id="fila-factor-1"><label for="factor-1">Descomposición:</label><input id="factor-1" type="text" autocomplete="off" placeholder="ej.: 2^3 * 3^2 * 5"></div>
+					<div class="respuesta-fila" id="fila-factor-2" hidden><label for="factor-2">Descomposición del segundo:</label><input id="factor-2" type="text" autocomplete="off" placeholder="ej.: 2 * 3^2"></div>
+					<div class="respuesta-fila" id="fila-mcd" hidden><label for="respuesta-mcd">MCD:</label><input id="respuesta-mcd" type="number" min="1" inputmode="numeric"></div>
+					<div class="respuesta-fila" id="fila-mcm" hidden><label for="respuesta-mcm">MCM:</label><input id="respuesta-mcm" type="number" min="1" inputmode="numeric"></div>
+				</div>
+				<div class="controles">
+					<button id="comprobar" type="button">Comprobar</button>
+					<button id="reiniciar" type="button">Empezar de nuevo</button>
+				</div>
+				<p id="marcador" aria-live="polite"></p>
+				<p id="resultado" aria-live="polite"></p>
+			</section>
+		</main>
+	</div>
+	<footer>Matemáticas en la ESO y Bachillerato</footer>
+	<script>
+		fetch('nav.html')
+			.then(response => response.text())
+			.then(data => {
+				document.getElementById('menu-contenedor').innerHTML = data;
+				document.querySelectorAll('.menu-button').forEach(button => {
+					button.addEventListener('click', function () {
+						const submenu = document.getElementById(button.getAttribute('aria-controls'));
+						const expanded = button.getAttribute('aria-expanded') === 'true';
+						button.setAttribute('aria-expanded', String(!expanded));
+						submenu.classList.toggle('open', !expanded);
+					});
+				});
+			})
+			.catch(error => console.error('Error al cargar el menú:', error));
+
+		const pregunta = document.getElementById('pregunta');
+		const tipoUnidad = document.getElementById('tipo-unidad');
+		const boton = document.getElementById('comprobar');
+		const marcador = document.getElementById('marcador');
+		const resultado = document.getElementById('resultado');
+		const tipoEjercicio = document.getElementById('tipo-ejercicio');
+		const entradas = ['factor-1', 'factor-2', 'respuesta-mcd', 'respuesta-mcm'].map(id => document.getElementById(id));
+		let numeroEjercicio = 0;
+		let aciertos = 0;
+		let errores = 0;
+		let ejercicioActual = null;
+		let bloqueado = false;
+		let temporizador = null;
+
+		function actualizarMarcador() {
+			marcador.textContent = (numeroEjercicio < 10 ? 'Ejercicio ' + (numeroEjercicio + 1) + ' de 10' : 'Completados: 10 ejercicios') + ' · Aciertos: ' + aciertos + ' · Fallos: ' + errores;
+		}
+
+		function mcd(a, b) {
+			while (b) [a, b] = [b, a % b];
+			return a;
+		}
+
+		function factorizar(numero) {
+			const factores = [];
+			for (let primo = 2; primo * primo <= numero; primo++) {
+				if (numero % primo !== 0) continue;
+				let exponente = 0;
+				while (numero % primo === 0) { numero /= primo; exponente++; }
+				factores.push({ primo, exponente });
+			}
+			if (numero > 1) factores.push({ primo: numero, exponente: 1 });
+			return factores;
+		}
+
+		function textoFactorizacion(numero) {
+			return factorizar(numero).map(({ primo, exponente }) => primo + (exponente > 1 ? '^' + exponente : '')).join(' · ');
+		}
+
+		function descomposicionCorrecta(texto, numero) {
+			const limpio = texto.trim().replace(/[·×]/g, '*');
+			if (!limpio) return false;
+			let producto = 1;
+			for (const termino of limpio.split('*')) {
+				const coincidencia = termino.trim().match(/^(\d+)(?:\^(\d+))?$/);
+				if (!coincidencia) return false;
+				const primo = Number(coincidencia[1]);
+				const exponente = coincidencia[2] ? Number(coincidencia[2]) : 1;
+				if (!Number.isSafeInteger(primo) || !Number.isSafeInteger(exponente) || exponente < 1 || exponente > 20) return false;
+				for (let divisor = 2; divisor * divisor <= primo; divisor++) if (primo % divisor === 0) return false;
+				producto *= Math.pow(primo, exponente);
+				if (!Number.isSafeInteger(producto) || producto > numero) return false;
+			}
+			return producto === numero;
+		}
+
+		function crearEjercicio() {
+			const primero = Math.floor(Math.random() * 109) + 12;
+			const ejercicio = { primero, dos: tipoEjercicio.value === 'dos' };
+			if (ejercicio.dos) {
+				ejercicio.segundo = Math.floor(Math.random() * 109) + 12;
+				ejercicio.mcd = mcd(primero, ejercicio.segundo);
+				ejercicio.mcm = primero / ejercicio.mcd * ejercicio.segundo;
+			}
+			return ejercicio;
+		}
+
+		function siguienteEjercicio() {
+			if (numeroEjercicio >= 10) {
+				ejercicioActual = null;
+				entradas.forEach(entrada => entrada.disabled = true);
+				boton.disabled = true;
+				pregunta.textContent = '¡Has terminado los 10 ejercicios!';
+				tipoUnidad.textContent = '';
+				resultado.textContent = 'Tanda completada.';
+				actualizarMarcador();
+				return;
+			}
+			ejercicioActual = crearEjercicio();
+			pregunta.textContent = ejercicioActual.dos
+				? 'Descompón ' + ejercicioActual.primero + ' y ' + ejercicioActual.segundo + ' en factores primos; calcula su MCD y MCM.'
+				: 'Descompón ' + ejercicioActual.primero + ' en factores primos.';
+			tipoUnidad.textContent = 'Debes usar * para multiplicar y ^ para indicar el exponente.';
+			document.getElementById('fila-factor-2').hidden = !ejercicioActual.dos;
+			document.getElementById('fila-mcd').hidden = !ejercicioActual.dos;
+			document.getElementById('fila-mcm').hidden = !ejercicioActual.dos;
+			entradas.forEach(entrada => { entrada.value = ''; entrada.disabled = false; });
+			bloqueado = false;
+			boton.disabled = false;
+			resultado.textContent = '';
+			actualizarMarcador();
+			entradas[0].focus();
+		}
+
+		function comprobarRespuesta() {
+			if (bloqueado || !ejercicioActual) return;
+			const correcta = descomposicionCorrecta(entradas[0].value, ejercicioActual.primero) &&
+				(!ejercicioActual.dos || (descomposicionCorrecta(entradas[1].value, ejercicioActual.segundo) &&
+				Number(entradas[2].value) === ejercicioActual.mcd && Number(entradas[3].value) === ejercicioActual.mcm));
+			bloqueado = true;
+			if (correcta) aciertos++; else errores++;
+			let solucion = ejercicioActual.primero + ' = ' + textoFactorizacion(ejercicioActual.primero);
+			if (ejercicioActual.dos) {
+				solucion += '; ' + ejercicioActual.segundo + ' = ' + textoFactorizacion(ejercicioActual.segundo) +
+					'; MCD = ' + ejercicioActual.mcd + '; MCM = ' + ejercicioActual.mcm;
+			}
+			resultado.textContent = (correcta ? '¡Correcto! ' : 'Incorrecto. ') + 'Solución: ' + solucion + '.';
+			numeroEjercicio++;
+			entradas.forEach(entrada => entrada.disabled = true);
+			boton.disabled = true;
+			actualizarMarcador();
+			temporizador = window.setTimeout(siguienteEjercicio, 5000);
+		}
+
+		boton.addEventListener('click', comprobarRespuesta);
+		entradas.forEach(entrada => entrada.addEventListener('keydown', event => {
+			if (event.key === 'Enter') comprobarRespuesta();
+		}));
+		function reiniciarEjercicios() {
+			window.clearTimeout(temporizador);
+			numeroEjercicio = 0;
+			aciertos = 0;
+			errores = 0;
+			resultado.textContent = '';
+			siguienteEjercicio();
+		}
+		document.getElementById('reiniciar').addEventListener('click', reiniciarEjercicios);
+		tipoEjercicio.addEventListener('change', reiniciarEjercicios);
+		siguienteEjercicio();
+	</script>
+</body>
+</html>
+
